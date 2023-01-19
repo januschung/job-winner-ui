@@ -1,70 +1,78 @@
-# Getting Started with Create React App
+# Job Winner
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Background
 
-In the project directory, you can run:
+I lost my job right before the holiday season in 2022. I need to look for a new job and apply for as many as I can while all the big techs are laying off talents.
 
-### `npm start`
+To keep track of job applications:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. Use Google Spreadsheet (I am using it before this project). It is ugly, hard to maintain and easy to mess up the layout.
+1. Use online tool like huntr.co. But it can only track 40 jobs and I don't want to spend a dime for the premium service.
+1. Use pen and paper. It works but I can't copy and paste information such as link job link and utilize it later.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+None of the about is fun or totally fit my use case.
 
-### `npm test`
+That's the reason for me to build something for myself, and potentially you, to get the job one (and to get a new job successfully!)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Benefit of Job Winner
 
-### `npm run build`
+With Job Winner, you can keep track of how many job applications you want, for free, without paying for a fee and have your personal data being sold.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Features
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Current function:
+1. An Index page to list all the job applications
+![index](https://github.com/januschung/job-winner/blob/main/readme-img/index.png)
+1. A Create page to create new job application entry
+![new](https://github.com/januschung/job-winner/blob/main/readme-img/new.png)
 
-### `npm run eject`
+Each job application has the following fields:
+1. Company Name
+1. Job Title
+1. Salary Range
+1. Applied Date
+1. Description
+1. Job Link
+1. Status
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Components
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Job Winner has two components
+1. UI (this repo)
+1. [Backend](https://github.com/januschung/job-winner)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## About this repo
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+This is the UI for Job Winner and here is the stack:
 
-## Learn More
+1. React
+1. Apollo Client
+1. Material UI
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## To build 
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Please follow the build instruction from the [UI repo](https://github.com/januschung/job-winner) to bring up the backend.
 
-### Code Splitting
+```console
+npm start
+```
+## This is a beta version
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+While it works if one just want to keep track of the job applications, it needs further development for some basic features:
+1. Delete a job application
+1. Update a job application
+1. Add interview
+1. Add job offer
+1. A list of interview page
+1. A list of offer page
+1. Unit test
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Contributing 
 
-### Making a Progressive Web App
+I would like your help and input.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+I appreciate all suggestions or PRs which will help this project better. Feel free to fork the project and create a pull request with your idea.
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
