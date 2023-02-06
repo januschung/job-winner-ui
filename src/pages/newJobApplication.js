@@ -16,41 +16,12 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { Link, Navigate } from "react-router-dom";
 
-import { gql, useMutation } from '@apollo/client';
-import GET_JOB_APPLICATIONS from './JobApplicationList'
-
-
-const ADD_JOB_APPLICATION = gql`
-    mutation AddJobApplication(
-        $companyName: String!,
-        $jobTitle: String!,
-        $description: String!,
-        $salaryRange: String!,
-        $status: String!,
-        $jobUrl: String!,
-        $appliedDate: String!
-    ){
-        addJobApplication(addJobApplicationInput: {
-        companyName: $companyName,
-        jobTitle: $jobTitle,
-        description: $description,
-        salaryRange: $salaryRange,
-        status: $status,
-        jobUrl: $jobUrl,
-        appliedDate: $appliedDate
-        }) {
-      id
-    }
-  }
-
-`
+import { useMutation } from '@apollo/client';
+import { ADD_JOB_APPLICATION } from '../graphql/mutation'
 
 
 export default function NewJobApplication() {
-    const [newJobApplication, {error, data, loading }] = useMutation(ADD_JOB_APPLICATION, {refreshQueries: [
-        {query: GET_JOB_APPLICATIONS},
-        'allJobApplication'
-    ]});
+    const [newJobApplication, { error, data, loading }] = useMutation(ADD_JOB_APPLICATION);
 
     const [companyName, setCompanyName] = useState("");
     const [jobTitle, setJobTitle] = useState("");
@@ -59,8 +30,6 @@ export default function NewJobApplication() {
     const [jobUrl, setjobUrl] = useState("");
     const [status, setStatus] = useState('open');
     const [appliedDate, setAppliedDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
-
-    console.log("DATE IS :" + appliedDate)
 
     const addJobApplication = () => {
         newJobApplication({
@@ -166,7 +135,6 @@ export default function NewJobApplication() {
                             multiline
                             rows={4}
                             fullWidth
-                            autoComplete="shipping address-line1"
                             variant="standard"
                             onChange={(e) => {
                                 setDescription(e.target.value);
@@ -182,7 +150,6 @@ export default function NewJobApplication() {
                             multiline
                             rows={4}
                             fullWidth
-                            autoComplete="shipping address-line2"
                             variant="standard"
                             onChange={(e) => {
                                 setjobUrl(e.target.value);
