@@ -27,6 +27,8 @@ Current function:
 ![index](https://github.com/januschung/job-winner/blob/main/readme-img/index.png)
 1. A Create page to create new job application entry
 ![new](https://github.com/januschung/job-winner/blob/main/readme-img/new.png)
+1. Delete a job application
+1. Edit a job application
 
 Each job application has the following fields:
 1. Company Name
@@ -58,11 +60,15 @@ Please follow the build instruction from the [UI repo](https://github.com/janusc
 ```console
 npm start
 ```
+or use docker
+```console
+docker build -t job-winner-ui .
+docker run -p 3000:3000 -d job-winner-ui
+```
+
 ## This is a beta version
 
 While it works if one just want to keep track of the job applications, it needs further development for some basic features:
-1. Delete a job application
-1. Update a job application
 1. Add interview
 1. Add job offer
 1. A list of interview page
