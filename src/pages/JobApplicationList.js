@@ -1,29 +1,64 @@
-import React from 'react'
-import { useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client";
+import React, { useState } from 'react';
 
+import { useMutation } from '@apollo/client';
+import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
+import DeleteIcon from '@mui/icons-material/Delete';
+import LinkRoundedIcon from '@mui/icons-material/LinkRounded';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import ReadMoreIcon from '@mui/icons-material/ReadMore';
+import SaveIcon from '@mui/icons-material/Save';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ReadMoreIcon from '@mui/icons-material/ReadMore';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
-import LinkRoundedIcon from '@mui/icons-material/LinkRounded';
-import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
-import ReactLoading from 'react-loading'
-import { GET_JOB_APPLICATIONS } from '../graphql/query'
-import { DELETE_JOB_APPLICATION } from '../graphql/mutation'
-import { useMutation } from '@apollo/client';
+import Typography from '@mui/material/Typography';
+import ReactLoading from 'react-loading';
+import { UPDATE_JOB_APPLICATION, DELETE_JOB_APPLICATION } from '../graphql/mutation';
+import { GET_JOB_APPLICATIONS } from '../graphql/query';
 
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
 
 
 export default function JobApplicationList() {
+
+    const [open, setOpen] = useState(false);
+    const [companyName, setCompanyName] = useState("");
+    const [jobTitle, setJobTitle] = useState("");
+    const [salaryRange, setSalaryRange] = useState("");
+    const [description, setDescription] = useState("");
+    const [jobUrl, setjobUrl] = useState("");
+    const [status, setStatus] = useState('open');
+    const [appliedDate, setAppliedDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
+    const [jobApplication, setJobApplication ] = useState("")
+    
+    function handleOpen(jobApplication) {
+        setOpen(true);
+        setJobApplication(jobApplication)
+        setStatus(jobApplication.status)
+        setAppliedDate(jobApplication.appliedDate)
+        console.log("edit id: " + jobApplication.id)
+    }
+    
+    const handleClose = () => setOpen(false);
 
     const { error, data, loading } = useQuery(GET_JOB_APPLICATIONS, {
         fetchPolicy: 'network-only'
@@ -37,6 +72,12 @@ export default function JobApplicationList() {
         ]
     });
 
+    const [updateJobApplication, { updateError, updateData, updateLoading }] = useMutation(UPDATE_JOB_APPLICATION, {
+        refetchQueries: [
+            {query: GET_JOB_APPLICATIONS}
+        ]
+    });
+
     function handleDeleteJobApplication(id) {
         console.log("delete id: " + id)
         deleteJobApplication({
@@ -44,6 +85,23 @@ export default function JobApplicationList() {
                 id: id
             }
         })
+    }
+
+    function handleUpdateJobApplication(id) {
+        console.log("update id: " + id)
+        updateJobApplication({
+            variables: {
+                id: id,
+                companyName: companyName,
+                jobTitle: jobTitle,
+                salaryRange: salaryRange,
+                description: description,
+                jobUrl: jobUrl,
+                appliedDate: appliedDate,
+                status: status,
+            }
+        })
+        setOpen(false);
     }
     
     if (loading) return <div>
@@ -76,6 +134,128 @@ export default function JobApplicationList() {
     return (
         <div>
             <main>
+                <div>
+                    <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <DialogTitle>Edit Job Application</DialogTitle>
+                        <DialogContent>
+                            <TextField
+                                required
+                                id="companyName"
+                                name="companyName"
+                                label="Company name"
+                                fullWidth
+                                autoComplete="given-name"
+                                variant="standard"
+                                onChange={(e) => {
+                                    setCompanyName(e.target.value);
+                                }}
+                                defaultValue={jobApplication.companyName}
+                            />
+
+                            <TextField
+                                required
+                                id="jobTitle"
+                                name="jobTitle"
+                                label="Job Title"
+                                fullWidth
+                                autoComplete="family-name"
+                                variant="standard"
+                                onChange={(e) => {
+                                    setJobTitle(e.target.value);
+                                }}
+                                defaultValue={jobApplication.jobTitle}
+                            />
+
+                            <TextField
+                                required
+                                id="salaryRange"
+                                name="salaryRange"
+                                label="Salary Range"
+                                fullWidth
+                                autoComplete="shipping address-level2"
+                                variant="standard"
+                                onChange={(e) => {
+                                    setSalaryRange(e.target.value);
+                                }}
+                                defaultValue={jobApplication.salaryRange}
+                            />
+                            <DialogContent />
+
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DesktopDatePicker
+                                label="Applied Date"
+                                inputFormat="MM/DD/YYYY"
+                                variant="standard"
+                                value={appliedDate}
+                                onChange={(e) => {
+                                    setAppliedDate(dayjs(e).format('YYYY-MM-DD'))
+                                } } 
+                                renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
+
+                            <TextField
+                                required
+                                id="description"
+                                name="description"
+                                label="Description"
+                                multiline
+                                rows={4}
+                                fullWidth
+                                variant="standard"
+                                onChange={(e) => {
+                                    setDescription(e.target.value);
+                                }}
+                                defaultValue={jobApplication.description}
+                            />
+
+                            <TextField
+                                required
+                                id="jobUrl"
+                                name="jobUrl"
+                                label="Job Link"
+                                multiline
+                                rows={4}
+                                fullWidth
+                                variant="standard"
+                                onChange={(e) => {
+                                    setjobUrl(e.target.value);
+                                }}
+                                defaultValue={jobApplication.jobUrl}
+
+                            />
+
+                            <DialogContent />
+                                <FormControl sx={{ minWidth: 120 }} variant="standard" size="small">
+                                    <InputLabel id="status-label">Status</InputLabel>
+                                    <Select
+                                        labelId="status-label"
+                                        id="status"
+                                        name="status"
+                                        value={status}
+                                        onChange={(e) => {
+                                            setStatus(e.target.value);
+                                        }}
+                                        defaultValue={jobApplication.status}
+                                        >
+                                        <MenuItem value="open">Open</MenuItem>
+                                        <MenuItem value="active">Active</MenuItem>
+                                        <MenuItem value="rejected">Rejected</MenuItem>
+                                    </Select>
+                                </FormControl>
+
+                                <DialogActions>
+                                    <Button color="info" variant="outlined" startIcon={<CancelIcon />} onClick={handleClose}>Cancel</Button>
+                                    <Button color="success" variant="outlined" startIcon={<SaveIcon />} onClick={() => handleUpdateJobApplication(jobApplication.id)} >Save</Button>
+                                </DialogActions>
+                        </DialogContent>
+                    </Dialog>
+                </div>
                 <Container sx={{ py: 8 }} maxWidth="md">
                     <Grid container spacing={4}>
 
@@ -111,7 +291,7 @@ export default function JobApplicationList() {
                                         <LinkRoundedIcon fontSize="inherit"/> <Link href={jobApplication.jobUrl} underline="hover" color="inherit">job link</Link>
                                         </Typography>
                                         <CardActions>
-                                            <Button size="small" color="info" variant="outlined" startIcon={<ReadMoreIcon />}>View</Button>
+                                            <Button size="small" color="info" variant="outlined" startIcon={<ReadMoreIcon />} onClick={() => handleOpen(jobApplication)}>Edit</Button>
                                             <Button size="small" color="warning" variant="outlined" startIcon={<DeleteIcon />}  onClick={() => handleDeleteJobApplication(jobApplication.id)}>Delete</Button>
                                         </CardActions>
                                     </CardContent>
