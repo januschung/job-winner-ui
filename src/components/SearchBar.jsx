@@ -1,22 +1,22 @@
-import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Link } from "react-router-dom"
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import MailIcon from '@mui/icons-material/Mail';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import SearchIcon from '@mui/icons-material/Search';
+import AppBar from '@mui/material/AppBar';
+import Badge from '@mui/material/Badge';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import InputBase from '@mui/material/InputBase';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { alpha, styled } from '@mui/material/styles';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import React, { useState } from 'react';
+import JobApplicationDialog from '../components/JobApplicationDialog';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -62,6 +62,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [open, setOpen] = useState(false);
+  const [jobApplication] = useState({status:'open'})
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -83,6 +85,13 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  function handleOpen() {
+    setOpen(true);
+  }
+
+  const handleClose = () => setOpen(false);
+
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -101,7 +110,6 @@ export default function PrimarySearchAppBar() {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
 
@@ -122,7 +130,7 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem component={Link} to="/new">
+      <MenuItem onClick={() => handleOpen()}>
         <IconButton size="large" aria-label="New" color="inherit">
             <AddCircleIcon />
         </IconButton>
@@ -165,6 +173,7 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
+      <JobApplicationDialog jobApplication={jobApplication} handleClose={handleClose} open={open} setOpen={setOpen} isNew={true}/>
       <AppBar position="static">
         <Toolbar>
           <EmojiEventsIcon sx={{ mr: 2 }} />
@@ -196,7 +205,7 @@ export default function PrimarySearchAppBar() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="New" color="inherit" component={Link} to="/new" >
+            <IconButton size="large" aria-label="New" color="inherit" onClick={() => handleOpen()} >
                 <AddCircleIcon />
             </IconButton>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">

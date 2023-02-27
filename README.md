@@ -24,11 +24,12 @@ With Job Winner, you can keep track of how many job applications you want, for f
 
 Current function:
 1. An Index page to list all the job applications
-![index](https://github.com/januschung/job-winner/blob/main/readme-img/index.png)
-1. A Create page to create new job application entry
-![new](https://github.com/januschung/job-winner/blob/main/readme-img/new.png)
+![index](readme-img/index.png)
+1. Create new job application
+![new](readme-img/add.png)
 1. Delete a job application
-1. Edit a job application
+1. Edit an existing job application
+![edit](readme-img/edit.png)
 
 Each job application has the following fields:
 1. Company Name
@@ -66,9 +67,8 @@ docker build -t job-winner-ui .
 docker run -p 3000:3000 -d job-winner-ui
 ```
 
-## This is a beta version
+## Future features
 
-While it works if one just want to keep track of the job applications, it needs further development for some basic features:
 1. Add interview
 1. Add job offer
 1. A list of interview page
@@ -81,4 +81,3 @@ While it works if one just want to keep track of the job applications, it needs 
 I would like your help and input.
 
 I appreciate all suggestions or PRs which will help this project better. Feel free to fork the project and create a pull request with your idea.
-
