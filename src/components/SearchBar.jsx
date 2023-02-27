@@ -130,8 +130,7 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {/* <MenuItem component={Link} to="/new"> */}
-      <MenuItem onClick={() => handleOpen()} to="/new">
+      <MenuItem onClick={() => handleOpen()}>
         <IconButton size="large" aria-label="New" color="inherit">
             <AddCircleIcon />
         </IconButton>
@@ -174,7 +173,6 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      {/* <JobApplicationDialog jobApplication={jobApplication} handleClose={handleClose} open={open} setOpen={setOpen}/> */}
       <JobApplicationDialog jobApplication={jobApplication} handleClose={handleClose} open={open} setOpen={setOpen} isNew={true}/>
       <AppBar position="static">
         <Toolbar>
@@ -207,7 +205,6 @@ export default function PrimarySearchAppBar() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            {/* <IconButton size="large" aria-label="New" color="inherit" component={Link} to="/new" > */}
             <IconButton size="large" aria-label="New" color="inherit" onClick={() => handleOpen()} >
                 <AddCircleIcon />
             </IconButton>
