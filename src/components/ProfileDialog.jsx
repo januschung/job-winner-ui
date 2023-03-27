@@ -44,17 +44,6 @@ export default function ProfileDialog({profile, handleClose, open, setOpen}){
         setLinkedin(profile.linkedin)
         setGithub(profile.github)
         setPersonalWebsite(profile.personalWebsite)
-        // if( firstName !== profile.firstName) setFirstName(profile.firstName)
-        // if( lastName !== profile.lastName ) setLastName(profile.lastName)
-        // if( addressStreet1 !== profile.setAddressStreet1 ) setAddressStreet1(profile.addressStreet1)
-        // if( addressStreet2 !== profile.setAddressStreet2 ) setAddressStreet2(profile.addressStreet2)
-        // if( addressCity !== profile.addressCity ) setAddressCity(profile.addressCity)
-        // if( addressState !== profile.addressState ) setAddressState(profile.addressState)
-        // if( addressZip !== profile.addressZip ) setAddressZip(profile.addressZip)
-        // if( linkedin !== profile.linkedin ) setLinkedin(profile.linkedin)
-        // if( github !== profile.github ) setGithub(profile.github)
-        // if( personalWebsite !== profile.personalWebsite ) setPersonalWebsite(profile.personalWebsite)
-        
     }, [open])
 
     const [updateProfile] = useMutation(UPDATE_PROFILE, {
