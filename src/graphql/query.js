@@ -8,3 +8,11 @@ export const GET_JOB_APPLICATIONS = gql`
       }
   }
 `
+
+export const GET_PROFILES = gql`
+  query {
+      allProfile {
+          id, firstName, lastName, addressStreet1, addressStreet2, addressCity, addressState, addressZip, linkedin, github, personalWebsite
+      }
+  }
+`

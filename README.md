@@ -13,12 +13,13 @@ To keep track of job applications:
 
 None of the about is fun or totally fit my use case.
 
-That's the reason for me to build something for myself, and potentially you, to get the job one (and to get a new job successfully!)
+That's the reason for me to build something for myself, and potentially you, to get the job done (and to get a new job successfully!)
 
 ## Benefit of Job Winner
 
 With Job Winner, you can keep track of how many job applications you want, for free, without paying for a fee and have your personal data being sold.
 
+Another feature of Job Winner is the profile page. With that one can store useful information a job application usually asks for (eg. LinkedIn url) in a single section. Besides that, the profile page provides a handy feature to automatically copy the field that you click on to your clipboard.
 
 ## Features
 
@@ -30,6 +31,8 @@ Current function:
 1. Delete a job application
 1. Edit an existing job application
 ![edit](readme-img/edit.png)
+1. A profile page to store personal information
+![profile](readme-img/profile.png)
 
 Each job application has the following fields:
 1. Company Name
@@ -39,6 +42,18 @@ Each job application has the following fields:
 1. Description
 1. Job Link
 1. Status
+
+The personal page has the following fields:
+1. First Name
+1. Last Name
+1. Address Street 1
+1. Address Street 2
+1. Address City
+1. Address State
+1. Address Zip
+1. Linkedin url
+1. Github url
+1. Personal Website url
 
 ## Components
 
@@ -66,15 +81,6 @@ or use docker
 docker build -t job-winner-ui .
 docker run -p 3000:3000 -d job-winner-ui
 ```
-
-## Future features
-
-1. Add interview
-1. Add job offer
-1. A list of interview page
-1. A list of offer page
-1. Unit test
-
 
 ## Contributing 
 

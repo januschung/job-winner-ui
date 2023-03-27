@@ -108,7 +108,7 @@ export default function JobApplicationDialog({jobApplication, handleClose, open,
                     aria-describedby="modal-modal-description"
                 >
                     <DialogTitle>{dialogTitle}</DialogTitle>
-                    <DialogContent>
+                    <DialogContent dividers>
                         <TextField
                             required
                             id="companyName"
@@ -218,7 +218,7 @@ export default function JobApplicationDialog({jobApplication, handleClose, open,
 
                             <DialogActions>
                                 <Button color="info" variant="outlined" startIcon={<CancelIcon />} onClick={handleClose}>Cancel</Button>
-                                <Button color="success" variant="outlined" startIcon={<SaveIcon />} onClick={() => isNew?handleAddJobApplication():handleUpdateJobApplication(jobApplication.id)} >Save</Button>
+                                <Button color="info" variant="contained" startIcon={<SaveIcon />} onClick={() => isNew?handleAddJobApplication():handleUpdateJobApplication(jobApplication.id)} >Save</Button>
                             </DialogActions>
                     </DialogContent>
                 </Dialog>

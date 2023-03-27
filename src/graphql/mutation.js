@@ -64,3 +64,37 @@ export const DELETE_JOB_APPLICATION = gql`
   }
 
 `
+
+export const UPDATE_PROFILE = gql`
+  mutation UpdateProfile(
+      $id: ID!,
+      $firstName: String!,
+      $lastName: String!,
+      $addressStreet1: String!,
+      $addressStreet2: String!,
+      $addressCity: String!,
+      $addressState: String!,
+      $addressZip: String!,
+      $linkedin: String!,
+      $github: String!,
+      $personalWebsite: String!
+  ){
+      updateProfile(profile: {
+      id: $id,
+      firstName: $firstName,
+      lastName: $lastName,
+      addressStreet1: $addressStreet1,
+      addressStreet2: $addressStreet2,
+      addressCity: $addressCity,
+      addressState: $addressState,
+      addressZip: $addressZip
+      linkedin: $linkedin
+      github: $github
+      personalWebsite: $personalWebsite
+
+      }) {
+      id, firstName, lastName, addressStreet1, addressStreet2, addressCity, addressState, addressZip, linkedin, github, personalWebsite
+  }
+  }
+
+`

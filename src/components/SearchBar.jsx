@@ -16,7 +16,10 @@ import { alpha, styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
-import JobApplicationDialog from '../components/JobApplicationDialog';
+import JobApplicationDialog from './JobApplicationDialog';
+import ProfileDialog from './ProfileDialog';
+import { useQuery } from '@apollo/client';
+import { GET_PROFILES } from '../graphql/query';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -60,24 +63,29 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const [open, setOpen] = useState(false);
+  const [jobApplicationOpen, setJobApplicationOpen] = useState(false);
   const [jobApplication] = useState({status:'open'})
-
-  const isMenuOpen = Boolean(anchorEl);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [profile, setProfile] = useState('')
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  const { error, data, loading } = useQuery(GET_PROFILES, {
+    fetchPolicy: 'network-only'
+  });
+
   const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+    setProfileOpen(true)
+    setProfile(data.allProfile[0])
   };
+
+  const handleProfileClose = () => setProfileOpen(false);
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
     handleMobileMenuClose();
   };
 
@@ -85,17 +93,16 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  function handleOpen() {
-    setOpen(true);
+  function handleJobApplicationOpen() {
+    setJobApplicationOpen(true);
   }
 
-  const handleClose = () => setOpen(false);
+  const handleJobApplicationClose = () => setJobApplicationOpen(false);
 
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
-      anchorEl={anchorEl}
       anchorOrigin={{
         vertical: 'top',
         horizontal: 'right',
@@ -106,10 +113,8 @@ export default function PrimarySearchAppBar() {
         vertical: 'top',
         horizontal: 'right',
       }}
-      open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
     </Menu>
   );
 
@@ -130,7 +135,7 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={() => handleOpen()}>
+      <MenuItem onClick={() => handleJobApplicationOpen()}>
         <IconButton size="large" aria-label="New" color="inherit">
             <AddCircleIcon />
         </IconButton>
@@ -173,7 +178,8 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <JobApplicationDialog jobApplication={jobApplication} handleClose={handleClose} open={open} setOpen={setOpen} isNew={true}/>
+      <JobApplicationDialog jobApplication={jobApplication} handleClose={handleJobApplicationClose} open={jobApplicationOpen} setOpen={setJobApplicationOpen} isNew={true}/>
+      <ProfileDialog profile={profile} handleClose={handleProfileClose} open={profileOpen} setOpen={setProfileOpen} />
       <AppBar position="static">
         <Toolbar>
           <EmojiEventsIcon sx={{ mr: 2 }} />
@@ -205,7 +211,7 @@ export default function PrimarySearchAppBar() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="New" color="inherit" onClick={() => handleOpen()} >
+            <IconButton size="large" aria-label="New" color="inherit" onClick={() => handleJobApplicationOpen()} >
                 <AddCircleIcon />
             </IconButton>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
