@@ -113,7 +113,7 @@ export default function JobApplicationDialog({jobApplication, handleClose, open,
                             required
                             id="companyName"
                             name="companyName"
-                            label="Company name"
+                            label="Company Name"
                             fullWidth
                             autoComplete="given-name"
                             variant="standard"
@@ -121,7 +121,6 @@ export default function JobApplicationDialog({jobApplication, handleClose, open,
                                 setCompanyName(e.target.value);
                             }}
                             defaultValue={jobApplication.companyName}
-                            // defaultValue={companyName}
                         />
 
                         <TextField
