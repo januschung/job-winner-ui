@@ -31,7 +31,7 @@ export default function JobApplicationDialog({jobApplication, handleClose, open,
     const [description, setDescription] = useState('');
     const [jobUrl, setJobUrl] = useState('');
     const [status, setStatus] = useState('open');
-    const [appliedDate, setAppliedDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
+    const [appliedDate, setAppliedDate] = useState(dayjs(new Date()).format('MM/DD/YYYY'));
     const [dialogTitle, setDialogTitle] = useState('Edit Job Application')
     const [newJobApplication] = useMutation(ADD_JOB_APPLICATION, {
         refetchQueries: [
@@ -41,7 +41,7 @@ export default function JobApplicationDialog({jobApplication, handleClose, open,
     
     useEffect(()=> {
         if(isNew){
-            setStatus('open')
+            // setStatus('open')
             setAppliedDate(dayjs(new Date()).format('YYYY-MM-DD'))
             setDialogTitle('Add Job Application')
         }
@@ -154,6 +154,7 @@ export default function JobApplicationDialog({jobApplication, handleClose, open,
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DesktopDatePicker
+                            id="appliedDate"
                             label="Applied Date"
                             inputFormat="MM/DD/YYYY"
                             variant="standard"

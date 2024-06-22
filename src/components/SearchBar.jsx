@@ -19,7 +19,7 @@ import React, { useState } from 'react';
 import JobApplicationDialog from './JobApplicationDialog';
 import ProfileDialog from './ProfileDialog';
 import { useQuery } from '@apollo/client';
-import { GET_PROFILES } from '../graphql/query';
+import { GET_PROFILE } from '../graphql/query';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -70,13 +70,16 @@ export default function PrimarySearchAppBar() {
   const [profile, setProfile] = useState('')
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const { error, data, loading } = useQuery(GET_PROFILES, {
-    fetchPolicy: 'network-only'
+  const id = 1;
+
+  const { error, data, loading } = useQuery(GET_PROFILE, {
+      variables: { id },
+      // fetchPolicy: 'network-only'
   });
 
   const handleProfileMenuOpen = (event) => {
     setProfileOpen(true)
-    setProfile(data.allProfile[0])
+    setProfile(data.profileById)
   };
 
   const handleProfileClose = () => setProfileOpen(false);
