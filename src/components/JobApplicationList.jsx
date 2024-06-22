@@ -70,7 +70,7 @@ export default function JobApplicationList() {
         <div>
             <main>
                 <JobApplicationDialog jobApplication={jobApplication} handleClose={handleClose} open={open} setOpen={setOpen}/>                
-                <Container sx={{ py: 8 }} maxWidth="md">
+                <Container sx={{ py: 8 }} maxWidth="lg">
                     <Grid container spacing={4}>
 
                 {data.allJobApplication.map(jobApplication => {
