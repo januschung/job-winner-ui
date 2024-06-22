@@ -5,7 +5,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
 import Button from '@mui/material/Button';
 import { UPDATE_PROFILE } from '../graphql/mutation';
-import { GET_PROFILES } from '../graphql/query';
+import { GET_PROFILE } from '../graphql/query';
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -29,9 +29,13 @@ export default function ProfileDialog({profile, handleClose, open, setOpen}){
     const [github, setGithub] = useState('');
     const [personalWebsite, setPersonalWebsite] = useState('');
 
-    const { error, data, loading } = useQuery(GET_PROFILES, {
+
+    const id = 1;
+
+    const { error, data, loading } = useQuery(GET_PROFILE, {
+        variables: { id },
         fetchPolicy: 'network-only'
-    });
+      });
 
     useEffect(()=> {
         setFirstName(profile.firstName)
@@ -48,7 +52,7 @@ export default function ProfileDialog({profile, handleClose, open, setOpen}){
 
     const [updateProfile] = useMutation(UPDATE_PROFILE, {
         refetchQueries: [
-            {query: GET_PROFILES}
+            {query: GET_PROFILE, variables: { id }}
         ]
     });
 

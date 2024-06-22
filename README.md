@@ -9,7 +9,7 @@ To keep track of job applications:
 
 1. Use Google Spreadsheet (I am using it before this project). It is ugly, hard to maintain and easy to mess up the layout.
 1. Use online tool like huntr.co. But it can only track 40 jobs and I don't want to spend a dime for the premium service.
-1. Use pen and paper. It works but I can't copy and paste information such as link job link and utilize it later.
+1. Use pen and paper. It works but I can't copy and paste information such as the job url link and utilize it later.
 
 None of the about is fun or totally fit my use case.
 
@@ -19,7 +19,7 @@ That's the reason for me to build something for myself, and potentially you, to 
 
 With Job Winner, you can keep track of how many job applications you want, for free, without paying for a fee and have your personal data being sold.
 
-Another feature of Job Winner is the profile page. With that one can store useful information a job application usually asks for (eg. LinkedIn url) in a single section. Besides that, the profile page provides a handy feature to automatically copy the field that you click on to your clipboard.
+Another feature of Job Winner is the `Profile Page`. With that one can store useful information a job application usually asks for (eg. LinkedIn url) in a single section. Besides that, the `Profile Page` provides a handy feature to automatically copy the field that you click on to your clipboard.
 
 ## Features
 
