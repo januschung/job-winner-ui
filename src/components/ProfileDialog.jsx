@@ -8,23 +8,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import { Typography, Grid } from '@mui/material';
 import { UPDATE_PROFILE } from '../graphql/mutation';
 import { GET_PROFILE } from '../graphql/query';
+import CopyButton from './CopyButton';
 
-const CopyButton = ({ text }) => {
-  const handleCopy = () => {
-    navigator.clipboard.writeText(text);
-  };
-
-  return (
-    <IconButton onClick={handleCopy} size="small" edge="end">
-      <ContentCopyOutlinedIcon fontSize="small" />
-    </IconButton>
-  );
-};
 
 export default function ProfileDialog({ profile, handleClose, open, setOpen }) {
   const [firstName, setFirstName] = useState('');
