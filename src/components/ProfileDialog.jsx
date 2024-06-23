@@ -13,7 +13,6 @@ import { UPDATE_PROFILE } from '../graphql/mutation';
 import { GET_PROFILE } from '../graphql/query';
 import CopyButton from './CopyButton';
 
-
 export default function ProfileDialog({ profile, handleClose, open, setOpen }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -34,17 +33,19 @@ export default function ProfileDialog({ profile, handleClose, open, setOpen }) {
   });
 
   useEffect(() => {
-    setFirstName(profile.firstName);
-    setLastName(profile.lastName);
-    setAddressStreet1(profile.addressStreet1);
-    setAddressStreet2(profile.addressStreet2);
-    setAddressCity(profile.addressCity);
-    setAddressState(profile.addressState);
-    setAddressZip(profile.addressZip);
-    setLinkedin(profile.linkedin);
-    setGithub(profile.github);
-    setPersonalWebsite(profile.personalWebsite);
-  }, [open]);
+    if (profile) {
+      setFirstName(profile.firstName || '');
+      setLastName(profile.lastName || '');
+      setAddressStreet1(profile.addressStreet1 || '');
+      setAddressStreet2(profile.addressStreet2 || '');
+      setAddressCity(profile.addressCity || '');
+      setAddressState(profile.addressState || '');
+      setAddressZip(profile.addressZip || '');
+      setLinkedin(profile.linkedin || '');
+      setGithub(profile.github || '');
+      setPersonalWebsite(profile.personalWebsite || '');
+    }
+  }, [profile, open]);
 
   const [updateProfile] = useMutation(UPDATE_PROFILE, {
     refetchQueries: [{ query: GET_PROFILE, variables: { id } }],

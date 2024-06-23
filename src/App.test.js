@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import App from './App';
-import PrimarySearchAppBar from './components/SearchBar';
+import PrimarySearchAppBar from './components/PrimarySearchAppBar';
 import JobApplicationList from './components/JobApplicationList';
 
 
-jest.mock('./components/SearchBar')
+jest.mock('./components/PrimarySearchAppBar')
 jest.mock('./components/JobApplicationList')
 
 it('Should render Job Application list on default route', async () => {
