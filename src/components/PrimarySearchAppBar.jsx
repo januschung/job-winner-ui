@@ -16,12 +16,14 @@ import { GET_PROFILE } from '../graphql/query';
 import SearchBar from './SearchBar';
 import JobApplicationDialog from './JobApplicationDialog';
 import ProfileDialog from './ProfileDialog';
+import JobApplicationList from './JobApplicationList';
 
 export default function PrimarySearchAppBar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [jobApplicationOpen, setJobApplicationOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [profile, setProfile] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const id = 1;
@@ -39,6 +41,10 @@ export default function PrimarySearchAppBar() {
   const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
   const handleJobApplicationOpen = () => setJobApplicationOpen(true);
   const handleJobApplicationClose = () => setJobApplicationOpen(false);
+
+  const handleSearch = (text) => {
+    setSearchTerm(text);
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -75,7 +81,7 @@ export default function PrimarySearchAppBar() {
           >
             JOB WINNER
           </Typography>
-          <SearchBar />
+          <SearchBar onSearch={handleSearch} />
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="New" color="inherit" onClick={handleJobApplicationOpen}>
@@ -117,6 +123,7 @@ export default function PrimarySearchAppBar() {
           </Box>
         </Toolbar>
       </AppBar>
+      <JobApplicationList searchTerm={searchTerm} />
     </Box>
   );
 }

@@ -50,18 +50,3 @@ export const GET_PROFILE = gql`
     }
   }
 `;
-
-const SEARCH_JOB_APPLICATIONS = gql`
-  query SearchJobApplications($companyName: String, $jobTitle: String) {
-    searchJobApplications(companyName: $companyName, jobTitle: $jobTitle) {
-      id
-      companyName
-      jobTitle
-      salaryRange
-      description
-      jobUrl
-      status
-      appliedDate
-    }
-  }
-`;
