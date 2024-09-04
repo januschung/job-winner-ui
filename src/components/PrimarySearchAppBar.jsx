@@ -1,125 +1,129 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
-import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
-import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
-import DeleteIcon from '@mui/icons-material/Delete';
-import LinkRoundedIcon from '@mui/icons-material/LinkRounded';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import ReadMoreIcon from '@mui/icons-material/ReadMore';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
+import React, { useState } from 'react';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import JobApplicationDialog from '../components/JobApplicationDialog';
-import Loading from '../components/Loading';
-import { DELETE_JOB_APPLICATION } from '../graphql/mutation';
-import { GET_JOB_APPLICATIONS } from '../graphql/query';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Badge from '@mui/material/Badge';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import MailIcon from '@mui/icons-material/Mail';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import { useQuery } from '@apollo/client';
+import { GET_PROFILE } from '../graphql/query';
+import SearchBar from './SearchBar';
+import JobApplicationDialog from './JobApplicationDialog';
+import ProfileDialog from './ProfileDialog';
+import JobApplicationList from './JobApplicationList';
 
-export default function JobApplicationList({ searchTerm }) {
-    const [open, setOpen] = useState(false);
-    const [jobApplication, setJobApplication] = useState("");
-    const [localData, setLocalData] = useState([]);
+export default function PrimarySearchAppBar() {
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [jobApplicationOpen, setJobApplicationOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [profile, setProfile] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-    const { error, data, loading } = useQuery(GET_JOB_APPLICATIONS, {
-        fetchPolicy: 'network-only'
-    });
+  const id = 1;
 
-    const [deleteJobApplication] = useMutation(DELETE_JOB_APPLICATION, {
-        refetchQueries: [{ query: GET_JOB_APPLICATIONS }]
-    });
+  const { error, data, loading } = useQuery(GET_PROFILE, {
+    variables: { id },
+  });
 
-    useEffect(() => {
-        if (data) {
-            setLocalData(data.allJobApplication);
-        }
-    }, [data]);
+  const handleProfileMenuOpen = () => {
+    setProfileOpen(true);
+    setProfile(data.profileById);
+  };
 
-    const handleOpen = (jobApplication) => {
-        setJobApplication(jobApplication);
-        setOpen(true);
-    }
+  const handleProfileClose = () => setProfileOpen(false);
+  const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
+  const handleJobApplicationOpen = () => setJobApplicationOpen(true);
+  const handleJobApplicationClose = () => setJobApplicationOpen(false);
 
-    const handleClose = () => setOpen(false);
+  const handleSearch = (text) => {
+    setSearchTerm(text);
+  };
 
-    const handleDeleteJobApplication = (id) => {
-        if (window.confirm('Are you sure you want to delete?')) {
-            deleteJobApplication({
-                variables: { id }
-            }).then(() => {
-                setLocalData(localData.filter(jobApp => jobApp.id !== id));
-            });
-        }
-    }
-
-    function containsIgnoreCase(str, searchTerm) {
-        if (searchTerm) {
-            return str.toLowerCase().includes(searchTerm.toLowerCase());
-        } else {
-            return str.toLowerCase().includes(searchTerm);
-        }
-    }
-    
-    const filteredData = localData.filter(jobApp =>
-        containsIgnoreCase(jobApp.companyName, searchTerm) ||
-        containsIgnoreCase(jobApp.description, searchTerm) ||
-        containsIgnoreCase(jobApp.jobTitle, searchTerm)
-    );
-    
-    
-
-    if (loading) return <Loading />;
-    if (error) return <div>Something went wrong</div>;
-
-    return (
-        <div>
-            <main>
-                <JobApplicationDialog jobApplication={jobApplication} handleClose={handleClose} open={open} setOpen={setOpen}/>                
-                <Container sx={{ py: 8 }} maxWidth="lg">
-                    <Grid container spacing={4}>
-                        {filteredData.map(jobApplication => (
-                            <Grid item key={jobApplication.id} xs={12} sm={6} md={4}>
-                                <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                                    <CardContent>
-                                        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                                            <CalendarMonthRoundedIcon fontSize="inherit"/> {jobApplication.appliedDate}
-                                        </Typography>
-                                        <Typography variant="h5" component="div">
-                                            {jobApplication.companyName}
-                                        </Typography>
-                                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                            {jobApplication.jobTitle}
-                                        </Typography>
-                                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                            <MonetizationOnIcon fontSize="inherit"/>{jobApplication.salaryRange}
-                                        </Typography>
-                                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                            Status: {jobApplication.status}
-                                        </Typography>
-                                    </CardContent>
-                                    <CardContent sx={{ flexGrow: 1 }}>
-                                        <Typography color="text.secondary">
-                                            <CommentRoundedIcon fontSize="inherit"/>
-                                            <br/>
-                                            {jobApplication.description}
-                                        </Typography>
-                                        <Typography color="text.secondary">
-                                            <LinkRoundedIcon fontSize="inherit"/> <Link href={jobApplication.jobUrl} underline="hover" color="inherit">job link</Link>
-                                        </Typography>
-                                        <CardActions>
-                                            <Button size="small" color="info" variant="outlined" startIcon={<ReadMoreIcon />} onClick={() => handleOpen(jobApplication)}>Edit</Button>
-                                            <Button size="small" color="warning" variant="outlined" startIcon={<DeleteIcon />} onClick={() => handleDeleteJobApplication(jobApplication.id)}>Delete</Button>
-                                        </CardActions>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Container>
-            </main>
-        </div>
-    );
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <JobApplicationDialog
+        jobApplication={{ status: 'open' }}
+        open={jobApplicationOpen}
+        handleClose={handleJobApplicationClose}
+        setOpen={setJobApplicationOpen}
+        isNew
+      />
+      <ProfileDialog
+        profile={profile}
+        open={profileOpen}
+        handleClose={handleProfileClose}
+        setOpen={setProfileOpen}
+      />
+      <AppBar position="static">
+        <Toolbar>
+          <EmojiEventsIcon sx={{ mr: 2 }} />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            JOB WINNER
+          </Typography>
+          <SearchBar onSearch={handleSearch} />
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <IconButton size="large" aria-label="New" color="inherit" onClick={handleJobApplicationOpen}>
+              <AddCircleIcon />
+            </IconButton>
+            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+              <Badge badgeContent={4} color="error">
+                <MailIcon />
+              </Badge>
+            </IconButton>
+            <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+              <Badge badgeContent={17} color="error">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls="primary-search-account-menu"
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+          </Box>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="show more"
+              aria-controls="primary-search-account-menu-mobile"
+              aria-haspopup="true"
+              onClick={(event) => setMobileMoreAnchorEl(event.currentTarget)}
+              color="inherit"
+            >
+              <MoreIcon />
+            </IconButton>
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <JobApplicationList searchTerm={searchTerm} />
+    </Box>
+  );
 }
