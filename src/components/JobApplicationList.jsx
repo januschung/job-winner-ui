@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
 import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ErrorIcon from '@mui/icons-material/Error';
 import LinkRoundedIcon from '@mui/icons-material/LinkRounded';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
@@ -18,6 +19,8 @@ import JobApplicationDialog from '../components/JobApplicationDialog';
 import Loading from '../components/Loading';
 import { DELETE_JOB_APPLICATION } from '../graphql/mutation';
 import { GET_JOB_APPLICATIONS } from '../graphql/query';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 export default function JobApplicationList({ searchTerm }) {
     const [open, setOpen] = useState(false);
@@ -70,15 +73,19 @@ export default function JobApplicationList({ searchTerm }) {
     );
     
     
-
-    if (loading) return <Loading />;
-    if (error) return <div>Something went wrong</div>;
-
     return (
         <div>
             <main>
                 <JobApplicationDialog jobApplication={jobApplication} handleClose={handleClose} open={open} setOpen={setOpen}/>                
                 <Container sx={{ py: 8 }} maxWidth="lg">
+                    {loading && <Loading />}
+                    {error && (
+                        <Alert severity="error" icon={<ErrorIcon fontSize="inherit" />} sx={{ mt: 2 }}>
+                            <AlertTitle>Error</AlertTitle>
+                            <strong>Failed to fetch data. Please check your network connection and try again.</strong>
+                        </Alert>
+                    )}
+                    {!loading && !error && (
                     <Grid container spacing={4}>
                         {filteredData.map(jobApplication => (
                             <Grid item key={jobApplication.id} xs={12} sm={6} md={4}>
@@ -118,6 +125,7 @@ export default function JobApplicationList({ searchTerm }) {
                             </Grid>
                         ))}
                     </Grid>
+                    )}
                 </Container>
             </main>
         </div>

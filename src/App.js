@@ -13,9 +13,6 @@ function App() {
       <CssBaseline />
       <PrimarySearchAppBar/>
       <div className="App">
-      <Routes>
-        <Route path="/" element={<JobApplicationList/ >} />
-      </Routes>
       </div>
     </ThemeProvider>
   );
