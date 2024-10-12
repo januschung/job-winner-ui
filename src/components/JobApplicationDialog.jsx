@@ -199,6 +199,7 @@ export default function JobApplicationDialog({jobApplication, handleClose, open,
                             <FormControl sx={{ minWidth: 120 }} variant="standard" size="small">
                                 <InputLabel id="status-label">Status</InputLabel>
                                 <Select
+                                    disabled={isNew}
                                     labelId="status-label"
                                     id="status"
                                     name="status"
