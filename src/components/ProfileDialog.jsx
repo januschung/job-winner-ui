@@ -41,28 +41,10 @@ export default function ProfileDialog({ profile, handleClose, open, setOpen }) {
     fetchPolicy: 'network-only',
   });
 
-  // useEffect(() => {
-  //   if (profile) {
-  //     setFormData({
-  //       firstName: profile.firstName || '',
-  //       lastName: profile.lastName || '',
-  //       addressStreet1: profile.addressStreet1 || '',
-  //       addressStreet2: profile.addressStreet2 || '',
-  //       addressCity: profile.addressCity || '',
-  //       addressState: profile.addressState || '',
-  //       addressZip: profile.addressZip || '',
-  //       linkedin: profile.linkedin || '',
-  //       github: profile.github || '',
-  //       personalWebsite: profile.personalWebsite || '',
-  //     });
-  //   }
-  // }, [profile, open]);
-
   useEffect(() => {
     if (profile) {
       setFormData({
-        // ...initialFormData(),
-        ...profile, // Spread existing profile values
+        ...profile
       });
     }
   }, [profile, open]);
