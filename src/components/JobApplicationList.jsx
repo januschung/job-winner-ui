@@ -90,7 +90,7 @@ export default function JobApplicationList({ searchTerm }) {
                         {filteredData.map(jobApplication => (
                             <Grid item key={jobApplication.id} xs={12} sm={6} md={4}>
                                 <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                                    <CardContent>
+                                    <CardContent sx={{ flexGrow: 1 }}>
                                         <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
                                             <CalendarMonthRoundedIcon fontSize="inherit"/> {jobApplication.appliedDate}
                                         </Typography>
@@ -108,7 +108,14 @@ export default function JobApplicationList({ searchTerm }) {
                                         </Typography>
                                     </CardContent>
                                     <CardContent sx={{ flexGrow: 1 }}>
-                                        <Typography color="text.secondary">
+                                        <Typography color="text.secondary"
+                                            sx={{
+                                                display: '-webkit-box',
+                                                WebkitBoxOrient: 'vertical',
+                                                overflow: 'hidden',
+                                                WebkitLineClamp: 3
+                                            }}
+                                        >
                                             <CommentRoundedIcon fontSize="inherit"/>
                                             <br/>
                                             {jobApplication.description}
@@ -116,11 +123,11 @@ export default function JobApplicationList({ searchTerm }) {
                                         <Typography color="text.secondary">
                                             <LinkRoundedIcon fontSize="inherit"/> <Link href={jobApplication.jobUrl} underline="hover" color="inherit">job link</Link>
                                         </Typography>
-                                        <CardActions>
-                                            <Button size="small" color="info" variant="outlined" startIcon={<ReadMoreIcon />} onClick={() => handleOpen(jobApplication)}>Edit</Button>
-                                            <Button size="small" color="warning" variant="outlined" startIcon={<DeleteIcon />} onClick={() => handleDeleteJobApplication(jobApplication.id)}>Delete</Button>
-                                        </CardActions>
                                     </CardContent>
+                                    <CardActions sx={{ justifyContent: 'flex-end' }}>
+                                        <Button size="small" color="info" variant="outlined" startIcon={<ReadMoreIcon />} onClick={() => handleOpen(jobApplication)}>Edit</Button>
+                                        <Button size="small" color="warning" variant="outlined" startIcon={<DeleteIcon />} onClick={() => handleDeleteJobApplication(jobApplication.id)}>Delete</Button>
+                                    </CardActions>
                                 </Card>
                             </Grid>
                         ))}
