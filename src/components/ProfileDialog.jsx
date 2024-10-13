@@ -7,25 +7,34 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
 import { Typography, Grid } from '@mui/material';
 import { UPDATE_PROFILE } from '../graphql/mutation';
 import { GET_PROFILE } from '../graphql/query';
-import CopyButton from './CopyButton';
+import ProfileTextField from './ProfileTextField';
 
 export default function ProfileDialog({ profile, handleClose, open, setOpen }) {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [addressStreet1, setAddressStreet1] = useState('');
-  const [addressStreet2, setAddressStreet2] = useState('');
-  const [addressCity, setAddressCity] = useState('');
-  const [addressState, setAddressState] = useState('');
-  const [addressZip, setAddressZip] = useState('');
-  const [linkedin, setLinkedin] = useState('');
-  const [github, setGithub] = useState('');
-  const [personalWebsite, setPersonalWebsite] = useState('');
-
   const id = 1;
+
+  const fields = [
+    { id: 'firstName', label: 'First Name' },
+    { id: 'lastName', label: 'Last Name' },
+    { id: 'addressStreet1', label: 'Address Line 1' },
+    { id: 'addressStreet2', label: 'Address Line 2' },
+    { id: 'addressCity', label: 'City' },
+    { id: 'addressState', label: 'State' },
+    { id: 'addressZip', label: 'ZIP Code' },
+    { id: 'linkedin', label: 'LinkedIn' },
+    { id: 'github', label: 'GitHub' },
+    { id: 'personalWebsite', label: 'Personal Website' },
+  ];
+
+  const initialFormData = () => 
+    fields.reduce((acc, field) => {
+      acc[field.id] = '';
+      return acc;
+    }, {});
+
+  const [formData, setFormData] = useState(initialFormData);
 
   const { error, data, loading } = useQuery(GET_PROFILE, {
     variables: { id },
@@ -34,16 +43,9 @@ export default function ProfileDialog({ profile, handleClose, open, setOpen }) {
 
   useEffect(() => {
     if (profile) {
-      setFirstName(profile.firstName || '');
-      setLastName(profile.lastName || '');
-      setAddressStreet1(profile.addressStreet1 || '');
-      setAddressStreet2(profile.addressStreet2 || '');
-      setAddressCity(profile.addressCity || '');
-      setAddressState(profile.addressState || '');
-      setAddressZip(profile.addressZip || '');
-      setLinkedin(profile.linkedin || '');
-      setGithub(profile.github || '');
-      setPersonalWebsite(profile.personalWebsite || '');
+      setFormData({
+        ...profile
+      });
     }
   }, [profile, open]);
 
@@ -51,181 +53,41 @@ export default function ProfileDialog({ profile, handleClose, open, setOpen }) {
     refetchQueries: [{ query: GET_PROFILE, variables: { id } }],
   });
 
-  function handleUpdateProfile(id) {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleUpdateProfile = (event) => {
+    event.preventDefault();
     updateProfile({
       variables: {
         id: 1,
-        firstName,
-        lastName,
-        addressStreet1,
-        addressStreet2,
-        addressCity,
-        addressState,
-        addressZip,
-        linkedin,
-        github,
-        personalWebsite,
+        ...formData,
       },
     });
-
     setOpen(false);
-  }
+  };
 
   return (
-    <Dialog open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={handleClose} aria-labelledby="modal-title" aria-describedby="modal-description" fullWidth maxWidth="sm">
       <DialogTitle>Profile</DialogTitle>
-      <form onSubmit={() => handleUpdateProfile(profile.id)}>
+      <form onSubmit={handleUpdateProfile}>
         <DialogContent dividers>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={11}>
-              <TextField
-                id="firstName"
-                name="firstName"
-                label="First Name"
-                fullWidth
-                variant="standard"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
+            {fields.map((field) => (
+              <ProfileTextField
+                key={field.id}
+                id={field.id}
+                label={field.label}
+                value={formData[field.id]}
+                onChange={handleChange}
+                name={field.id}
               />
-            </Grid>
-            <Grid item xs={1}>
-              <CopyButton text={firstName} />
-            </Grid>
-
-            <Grid item xs={11}>
-              <TextField
-                id="lastName"
-                name="lastName"
-                label="Last Name"
-                fullWidth
-                variant="standard"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={1}>
-              <CopyButton text={lastName} />
-            </Grid>
-
-            <Grid item xs={11}>
-              <TextField
-                id="addressStreet1"
-                name="addressStreet1"
-                label="Address Street 1"
-                fullWidth
-                variant="standard"
-                value={addressStreet1}
-                onChange={(e) => setAddressStreet1(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={1}>
-              <CopyButton text={addressStreet1} />
-            </Grid>
-
-            <Grid item xs={11}>
-              <TextField
-                id="addressStreet2"
-                name="addressStreet2"
-                label="Address Street 2"
-                fullWidth
-                variant="standard"
-                value={addressStreet2}
-                onChange={(e) => setAddressStreet2(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={1}>
-              <CopyButton text={addressStreet2} />
-            </Grid>
-
-            <Grid item xs={11}>
-              <TextField
-                id="addressCity"
-                name="addressCity"
-                label="City"
-                fullWidth
-                variant="standard"
-                value={addressCity}
-                onChange={(e) => setAddressCity(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={1}>
-              <CopyButton text={addressCity} />
-            </Grid>
-
-            <Grid item xs={11}>
-              <TextField
-                id="addressState"
-                name="addressState"
-                label="State"
-                fullWidth
-                variant="standard"
-                value={addressState}
-                onChange={(e) => setAddressState(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={1}>
-              <CopyButton text={addressState} />
-            </Grid>
-
-            <Grid item xs={11}>
-              <TextField
-                id="addressZip"
-                name="addressZip"
-                label="Zip Code"
-                fullWidth
-                variant="standard"
-                value={addressZip}
-                onChange={(e) => setAddressZip(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={1}>
-              <CopyButton text={addressZip} />
-            </Grid>
-
-            <Grid item xs={11}>
-              <TextField
-                id="linkedin"
-                name="linkedin"
-                label="LinkedIn"
-                fullWidth
-                variant="standard"
-                value={linkedin}
-                onChange={(e) => setLinkedin(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={1}>
-              <CopyButton text={linkedin} />
-            </Grid>
-
-            <Grid item xs={11}>
-              <TextField
-                id="github"
-                name="github"
-                label="Github"
-                fullWidth
-                variant="standard"
-                value={github}
-                onChange={(e) => setGithub(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={1}>
-              <CopyButton text={github} />
-            </Grid>
-
-            <Grid item xs={11}>
-              <TextField
-                id="personalWebsite"
-                name="personalWebsite"
-                label="Personal Website"
-                fullWidth
-                variant="standard"
-                value={personalWebsite}
-                onChange={(e) => setPersonalWebsite(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={1}>
-              <CopyButton text={personalWebsite} />
-            </Grid>
+            ))}
           </Grid>
           <Typography variant="overline" align="right" paragraph>
             * Click the copy icon to copy to clipboard
