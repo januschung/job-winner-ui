@@ -1,23 +1,24 @@
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import CircularProgress from '@mui/material/CircularProgress';
+import CardActions from '@mui/material/CardActions';
+import Skeleton from '@mui/material/Skeleton';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-const LoadingCard = ({ maxHeight = '33vh' }) => (
+const LoadingCard = () => (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }} data-testid="loading-card" >
-        <CardContent
-            sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: maxHeight
-            }}
-        >
-            <CircularProgress />
+        <CardContent>
+            <Skeleton variant="text" width="35%" />
+            <Skeleton variant="text" width="30%" />
+            <Skeleton variant="text" width="50%" />
+            <Skeleton variant="rectangular" height={118} sx={{ my: 2 }} />
+            <Skeleton variant="text" width="80%" />
         </CardContent>
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
+            <Skeleton variant="rectangular" width={80} height={30} sx={{ mr: 1 }} />
+            <Skeleton variant="rectangular" width={80} height={30} />
+        </CardActions>
     </Card>
 );
 
@@ -46,14 +47,8 @@ export default function Loading() {
     }
 
     return (
-        <div>
-            <main>
-                <Container sx={{ py: 8 }} maxWidth="md">
-                    <Grid container spacing={4}>
-                        {cards}
-                    </Grid>
-                </Container>
-            </main>
-        </div>
+        <Grid container spacing={4}>
+            {cards}
+        </Grid>
     );
 }
