@@ -108,48 +108,48 @@ export default function JobApplicationDialog({jobApplication, handleClose, open,
                     aria-describedby="modal-modal-description"
                 >
                     <DialogTitle>{dialogTitle}</DialogTitle>
-                    <DialogContent dividers>
-                        <TextField
-                            required
-                            id="companyName"
-                            name="companyName"
-                            label="Company Name"
-                            fullWidth
-                            autoComplete="given-name"
-                            variant="standard"
-                            onChange={(e) => {
-                                setCompanyName(e.target.value);
-                            }}
-                            defaultValue={jobApplication.companyName}
-                        />
+                    <form onSubmit={() => isNew?handleAddJobApplication():handleUpdateJobApplication(jobApplication.id)}>
+                        <DialogContent dividers>
+                            <TextField
+                                required
+                                id="companyName"
+                                name="companyName"
+                                label="Company Name"
+                                fullWidth
+                                autoComplete="given-name"
+                                variant="standard"
+                                onChange={(e) => {
+                                    setCompanyName(e.target.value);
+                                }}
+                                defaultValue={jobApplication.companyName}
+                            />
 
-                        <TextField
-                            required
-                            id="jobTitle"
-                            name="jobTitle"
-                            label="Job Title"
-                            fullWidth
-                            autoComplete="family-name"
-                            variant="standard"
-                            onChange={(e) => {
-                                setJobTitle(e.target.value);
-                            }}
-                            defaultValue={jobApplication.jobTitle}
-                        />
+                            <TextField
+                                required
+                                id="jobTitle"
+                                name="jobTitle"
+                                label="Job Title"
+                                fullWidth
+                                autoComplete="family-name"
+                                variant="standard"
+                                onChange={(e) => {
+                                    setJobTitle(e.target.value);
+                                }}
+                                defaultValue={jobApplication.jobTitle}
+                            />
 
-                        <TextField
-                            required
-                            id="salaryRange"
-                            name="salaryRange"
-                            label="Salary Range"
-                            fullWidth
-                            autoComplete="shipping address-level2"
-                            variant="standard"
-                            onChange={(e) => {
-                                setSalaryRange(e.target.value);
-                            }}
-                            defaultValue={jobApplication.salaryRange}
-                        />
+                            <TextField
+                                id="salaryRange"
+                                name="salaryRange"
+                                label="Salary Range"
+                                fullWidth
+                                autoComplete="shipping address-level2"
+                                variant="standard"
+                                onChange={(e) => {
+                                    setSalaryRange(e.target.value);
+                                }}
+                                defaultValue={jobApplication.salaryRange}
+                            />
                         <DialogContent />
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -161,13 +161,12 @@ export default function JobApplicationDialog({jobApplication, handleClose, open,
                             value={appliedDate}
                             onChange={(e) => {
                                 setAppliedDate(dayjs(e).format('YYYY-MM-DD'))
-                            } } 
+                            } }
                             renderInput={(params) => <TextField {...params} />}
-                            />
+                        />
                         </LocalizationProvider>
 
                         <TextField
-                            required
                             id="description"
                             name="description"
                             label="Description"
@@ -194,13 +193,13 @@ export default function JobApplicationDialog({jobApplication, handleClose, open,
                                 setJobUrl(e.target.value);
                             }}
                             defaultValue={jobApplication.jobUrl}
-
                         />
 
                         <DialogContent />
                             <FormControl sx={{ minWidth: 120 }} variant="standard" size="small">
                                 <InputLabel id="status-label">Status</InputLabel>
                                 <Select
+                                    disabled={isNew}
                                     labelId="status-label"
                                     id="status"
                                     name="status"
@@ -216,11 +215,12 @@ export default function JobApplicationDialog({jobApplication, handleClose, open,
                                 </Select>
                             </FormControl>
 
-                            <DialogActions>
-                                <Button color="info" variant="outlined" startIcon={<CancelIcon />} onClick={handleClose}>Cancel</Button>
-                                <Button color="info" variant="contained" startIcon={<SaveIcon />} onClick={() => isNew?handleAddJobApplication():handleUpdateJobApplication(jobApplication.id)} >Save</Button>
-                            </DialogActions>
-                    </DialogContent>
+                                <DialogActions>
+                                    <Button color="info" variant="outlined" startIcon={<CancelIcon />} onClick={handleClose}>Cancel</Button>
+                                    <Button color="info" variant="contained" startIcon={<SaveIcon />} type="submit" >Save</Button>
+                                </DialogActions>
+                        </DialogContent>
+                    </form>
                 </Dialog>
             </>
     );
