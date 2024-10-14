@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
+import DialogTitleBar from './DialogTitleBar'
 import { Typography, Grid } from '@mui/material';
 import { UPDATE_PROFILE } from '../graphql/mutation';
 import { GET_PROFILE } from '../graphql/query';
@@ -73,8 +73,21 @@ export default function ProfileDialog({ profile, handleClose, open, setOpen }) {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} aria-labelledby="modal-title" aria-describedby="modal-description" fullWidth maxWidth="sm">
-      <DialogTitle>Profile</DialogTitle>
+    <Dialog 
+      open={open} 
+      onClose={handleClose} 
+      aria-labelledby="modal-title" 
+      aria-describedby="modal-description" 
+      fullWidth maxWidth="sm"
+      slotProps={{
+        backdrop: {
+            sx: {
+                backdropFilter: 'blur(8px)'
+            },
+        },
+    }}
+    >
+      <DialogTitleBar title="Profile" />
       <form onSubmit={handleUpdateProfile}>
         <DialogContent dividers>
           <Grid container spacing={2} alignItems="center">
