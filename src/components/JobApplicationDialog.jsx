@@ -157,6 +157,7 @@ export default function JobApplicationDialog({ jobApplication, handleClose, open
                     />
                     <TextField
                         required
+                        id="jobUrl"
                         name="jobUrl"
                         label="Job Link"
                         multiline
