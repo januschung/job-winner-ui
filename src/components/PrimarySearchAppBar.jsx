@@ -17,6 +17,7 @@ import SearchBar from './SearchBar';
 import JobApplicationDialog from './JobApplicationDialog';
 import ProfileDialog from './ProfileDialog';
 import JobApplicationList from './JobApplicationList';
+import MobileMenu from './MobileMenu';
 
 export default function PrimarySearchAppBar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -63,7 +64,7 @@ export default function PrimarySearchAppBar() {
       />
       <AppBar position="static">
         <Toolbar>
-          <EmojiEventsIcon sx={{ mr: 2 }} />
+        <EmojiEventsIcon sx={{ color: '#FFD700', mr: 2 }} />
           <Typography
             variant="h6"
             noWrap
@@ -122,6 +123,13 @@ export default function PrimarySearchAppBar() {
             </IconButton>
           </Box>
         </Toolbar>
+        <MobileMenu
+          mobileMoreAnchorEl={mobileMoreAnchorEl}
+          isMobileMenuOpen={isMobileMenuOpen}
+          handleMobileMenuClose={handleMobileMenuClose}
+          handleProfileMenuOpen={handleProfileMenuOpen} 
+          handleJobApplicationOpen={handleJobApplicationOpen}
+        />
       </AppBar>
       <JobApplicationList searchTerm={searchTerm} />
     </Box>
