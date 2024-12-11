@@ -98,3 +98,56 @@ export const UPDATE_PROFILE = gql`
   }
 
 `
+
+export const ADD_OFFER = gql`
+  mutation AddOffer(
+      $jobApplicationId: Int!
+      $offerDate: String!
+      $salaryOffered: String!
+      $description: String!
+  ){
+      addOffer(offerInput: {
+      jobApplicationId: $jobApplicationId,
+      offerDate: $offerDate,
+      salaryOffered: $salaryOffered,
+      description: $description,
+      }) {
+      id, jobApplicationId, offerDate, salaryOffered, description
+  }
+  }
+
+`
+
+export const UPDATE_OFFER = gql`
+  mutation UpdateOffer(
+      $id: ID!
+      $jobApplicationId: Int!
+      $offerDate: String!
+      $salaryOffered: String!
+      $description: String!
+  ){
+      updateOffer(offer: {
+      id: $id,
+      jobApplicationId: $jobApplicationId,
+      offerDate: $offerDate,
+      salaryOffered: $salaryOffered,
+      description: $description,
+      }) {
+      id, jobApplicationId, offerDate, salaryOffered, description
+  }
+  }
+
+`
+
+export const DELETE_OFFER = gql`
+  mutation DeleteOffer(
+      $id: ID!
+  ){
+      deleteOffer(
+        id: $id
+      ) {
+        id, jobApplicationId, offerDate, salaryOffered, description
+  }
+  }
+
+`
