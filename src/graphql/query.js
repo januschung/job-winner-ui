@@ -33,6 +33,7 @@ export const GET_PROFILES = gql`
     }
   }
 `
+
 export const GET_PROFILE = gql`
   query GetProfile($id: ID!) {
     profileById(id: $id) {
@@ -49,4 +50,17 @@ export const GET_PROFILE = gql`
       personalWebsite
     }
   }
-`;
+`
+
+export const GET_OFFER = gql`
+  query GetOffer($jobApplicationId: Int!) {
+    offerByJobApplicationId(jobApplicationId: $jobApplicationId) {
+      id
+      jobApplicationId
+      offerDate
+      salaryOffered
+      description
+    }
+  }
+`
+;
