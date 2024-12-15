@@ -151,3 +151,29 @@ export const DELETE_OFFER = gql`
   }
 
 `
+
+export const ADD_INTERVIEW = gql`
+  mutation AddInterview($interviewInput: AddInterviewInput!) {
+    addInterview(interviewInput: $interviewInput) {
+      id
+      jobApplicationId
+      interviewDate
+      interviewer
+      description
+      status
+    }
+  }
+`;
+
+export const UPDATE_INTERVIEW = gql`
+  mutation UpdateInterview($id: ID!, $interview: UpdateInterviewInput!) {
+    updateInterview(id: $id, interview: $interview) {
+      id
+      jobApplicationId
+      interviewDate
+      interviewer
+      description
+      status
+    }
+  }
+`;
