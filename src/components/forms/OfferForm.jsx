@@ -167,6 +167,7 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                                         }
                                         renderInput={(params) => (
                                             <TextField
+                                                sx={{ maxWidth: 150 }}
                                                 {...params}
                                                 error={!!errors.offerDate}
                                                 helperText={errors.offerDate}

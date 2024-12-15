@@ -64,3 +64,42 @@ export const GET_OFFER = gql`
   }
 `
 ;
+
+export const GET_ALL_INTERVIEWS = gql`
+  query GetAllInterviews {
+    allInterview {
+      id
+      jobApplicationId
+      interviewDate
+      interviewer
+      description
+      status
+    }
+  }
+`;
+
+export const GET_INTERVIEWS_BY_JOB_APPLICATION_ID = gql`
+  query GetInterviewsByJobApplicationId($jobApplicationId: Int!) {
+    allInterviewByJobApplicationId(jobApplicationId: $jobApplicationId) {
+      id
+      jobApplicationId
+      interviewDate
+      interviewer
+      description
+      status
+    }
+  }
+`;
+
+export const GET_INTERVIEW_BY_ID = gql`
+  query GetInterviewById($id: ID!) {
+    interviewById(id: $id) {
+      id
+      jobApplicationId
+      interviewDate
+      interviewer
+      description
+      status
+    }
+  }
+`;
