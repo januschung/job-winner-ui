@@ -4,27 +4,25 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useQuery, useMutation } from '@apollo/client';
-import { ADD_INTERVIEW, UPDATE_INTERVIEW } from '../../graphql/mutation';
+import ConfirmDialog from '../common/ConfirmDialog';
+import SnackbarComponent from '../common/SnackbarComponent';
+import useSnackbar from '../hooks/useSnackbar';
+import { ADD_INTERVIEW, UPDATE_INTERVIEW, DELETE_INTERVIEW } from '../../graphql/mutation';
 import { GET_INTERVIEWS_BY_JOB_APPLICATION_ID } from '../../graphql/query';
 import dayjs from 'dayjs';
-import { Grid, Snackbar, Alert } from '@mui/material';
+import { Grid } from '@mui/material';
 
 export default function InterviewsForm({ jobApplicationId }) {
     const [interviews, setInterviews] = useState([]);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [interviewToDelete, setInterviewToDelete] = useState(null);
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState('');
-    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+    const { snackbarOpen, snackbarMessage, snackbarSeverity, showSnackbar, handleSnackbarClose } = useSnackbar();
 
     const { loading, error } = useQuery(GET_INTERVIEWS_BY_JOB_APPLICATION_ID, {
         variables: { jobApplicationId },
@@ -39,6 +37,14 @@ export default function InterviewsForm({ jobApplicationId }) {
         refetchQueries: [{ query: GET_INTERVIEWS_BY_JOB_APPLICATION_ID, variables: { jobApplicationId } }],
     });
 
+    const [deleteInterview] = useMutation(DELETE_INTERVIEW, {
+        refetchQueries: [{ query: GET_INTERVIEWS_BY_JOB_APPLICATION_ID, variables: { jobApplicationId } }],
+        onError: (err) => {
+            console.error('Error deleting interview:', err.message);
+            showSnackbar('Error deleting interview', 'error');
+        }
+    });
+    
     const handleAddInterview = async () => {
         try {
             const { data } = await addInterview({
@@ -54,14 +60,13 @@ export default function InterviewsForm({ jobApplicationId }) {
             });
             if (data?.addInterview?.id) {
                 setInterviews([...interviews, data.addInterview]);
+                showSnackbar('Interview added successfully', 'success');
             } else {
                 console.warn('Failed to retrieve ID for the new interview');
             }
         } catch (err) {
             console.error('Error adding interview:', err.message);
-            setSnackbarSeverity('error');
-            setSnackbarMessage('Error adding interview');
-            setSnackbarOpen(true);
+            showSnackbar('Error adding interview', 'error');
         }
     };
 
@@ -77,7 +82,7 @@ export default function InterviewsForm({ jobApplicationId }) {
         try {
             const interview = interviews.find((item) => item.id === id);
             if (!interview) return;
-
+    
             await updateInterview({
                 variables: {
                     id,
@@ -91,36 +96,31 @@ export default function InterviewsForm({ jobApplicationId }) {
                     }
                 },
             });
-
-            setSnackbarSeverity('success');
-            setSnackbarMessage('Interview saved successfully');
-            setSnackbarOpen(true);
+    
+            showSnackbar('Interview saved successfully', 'success');
         } catch (err) {
             console.error('Error saving interview:', err.message);
-            setSnackbarSeverity('error');
-            setSnackbarMessage('Error saving interview');
-            setSnackbarOpen(true);
+            showSnackbar('Error saving interview', 'error');
         }
     };
-
-    const handleDelete = (id) => {
-        setInterviewToDelete(id);
-        setConfirmDeleteOpen(true);
+    
+    const confirmDeleteInterview = async () => {
+        try {
+            await deleteInterview({ variables: { id: interviewToDelete } });
+            setInterviews((prev) => prev.filter((interview) => interview.id !== interviewToDelete));
+            showSnackbar('Interview deleted successfully', 'success');
+        } catch (err) {
+            console.error('Error deleting interview:', err.message);
+            showSnackbar('Error deleting interview', 'error');
+        } finally {
+            setInterviewToDelete(null);
+        }
     };
-
-    const confirmDeleteInterview = () => {
-        setInterviews((prev) => prev.filter((interview) => interview.id !== interviewToDelete));
-        setConfirmDeleteOpen(false);
-        setInterviewToDelete(null);
-    };
+        
 
     const cancelDeleteInterview = () => {
         setConfirmDeleteOpen(false);
         setInterviewToDelete(null);
-    };
-
-    const handleSnackbarClose = () => {
-        setSnackbarOpen(false);
     };
 
     if (loading) return <p>Loading...</p>;
@@ -196,37 +196,25 @@ export default function InterviewsForm({ jobApplicationId }) {
                 </Grid>
 
                 <Grid container justifyContent="center" sx={{ marginTop: 3 }}>
-                    <Button variant="contained" onClick={handleAddInterview}>
+                    <Button variant="contained" onClick={handleAddInterview} disabled={loading}>
                         Add Interview
                     </Button>
                 </Grid>
             </DialogContent>
 
-            <Dialog open={confirmDeleteOpen} onClose={cancelDeleteInterview}>
-                <DialogTitle>Confirm Deletion</DialogTitle>
-                <DialogContent>
-                    Are you sure you want to delete this interview? This action cannot be undone.
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={cancelDeleteInterview} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={confirmDeleteInterview} color="error">
-                        Delete
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
-            <Snackbar
-                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            <ConfirmDialog
+                open={confirmDeleteOpen}
+                onCancel={cancelDeleteInterview}
+                onConfirm={confirmDeleteInterview}
+                title="Confirm Deletion"
+                content="Are you sure you want to delete this interview? This action cannot be undone."
+            />
+            <SnackbarComponent
                 open={snackbarOpen}
-                autoHideDuration={3000}
+                message={snackbarMessage}
+                severity={snackbarSeverity}
                 onClose={handleSnackbarClose}
-            >
-                <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
-                    {snackbarMessage}
-                </Alert>
-            </Snackbar>
+            />
         </>
     );
 }
