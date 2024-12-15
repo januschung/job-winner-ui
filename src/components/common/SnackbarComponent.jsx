@@ -10,7 +10,7 @@ export default function SnackbarComponent({ open, message, severity = 'success',
             onClose={onClose}
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
-            <Alert severity={severity} onClose={onClose}>
+            <Alert severity={severity} onClose={onClose} variant="filled">
                 {message}
             </Alert>
         </Snackbar>

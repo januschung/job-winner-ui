@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
 import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -35,7 +35,7 @@ export default function JobApplicationList({ searchTerm }) {
 
     const { data, loading, error } = useJobApplications();
     const { snackbarOpen, snackbarMessage, showSnackbar, handleSnackbarClose } = useSnackbar();
-    const { confirmOpen, openConfirmDialog, confirm, cancel } = useConfirmDialog();
+    const { confirmOpen, openConfirmDialog, cancel } = useConfirmDialog();
 
 
     const [deleteJobApplication] = useMutation(DELETE_JOB_APPLICATION, {
