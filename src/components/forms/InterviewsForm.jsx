@@ -103,6 +103,11 @@ export default function InterviewsForm({ jobApplicationId }) {
             showSnackbar('Error saving interview', 'error');
         }
     };
+
+    const handleDelete = (id) => {
+        setInterviewToDelete(id);
+        setConfirmDeleteOpen(true);
+    }
     
     const confirmDeleteInterview = async () => {
         try {
@@ -114,6 +119,7 @@ export default function InterviewsForm({ jobApplicationId }) {
             showSnackbar('Error deleting interview', 'error');
         } finally {
             setInterviewToDelete(null);
+            setConfirmDeleteOpen(false);
         }
     };
         
