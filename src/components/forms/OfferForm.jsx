@@ -13,7 +13,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { ADD_OFFER, UPDATE_OFFER, DELETE_OFFER } from '../../graphql/mutation';
-import { GET_OFFER } from '../../graphql/query';
+import { GET_OFFER, GET_ALL_OFFERS } from '../../graphql/query';
 import dayjs from 'dayjs';
 import { Grid } from '@mui/material';
 
@@ -43,7 +43,10 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
     });
 
     const [deleteOffer, { loading: deleteOfferLoading }] = useMutation(DELETE_OFFER, {
-        refetchQueries: [{ query: GET_OFFER, variables: { jobApplicationId } }],
+        refetchQueries: [
+            { query: GET_OFFER, variables: { jobApplicationId } }, 
+            { query: GET_ALL_OFFERS },
+        ],
     });
 
     useEffect(() => {
@@ -100,6 +103,7 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                         description: offerData.description,
                         offerDate: offerData.offerDate,
                     },
+                    refetchQueries: [{ query: GET_ALL_OFFERS }],
                 });
                 showSnackbar('Offer added successfully!', 'success');
             }

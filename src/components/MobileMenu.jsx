@@ -4,11 +4,11 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Badge from '@mui/material/Badge';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import MailIcon from '@mui/icons-material/Mail';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
-export default function MobileMenu({ mobileMoreAnchorEl, isMobileMenuOpen, handleMobileMenuClose, handleProfileMenuOpen, handleJobApplicationOpen }) {
+export default function MobileMenu({ mobileMoreAnchorEl, isMobileMenuOpen, handleMobileMenuClose, handleProfileMenuOpen, handleJobApplicationOpen, interviewCount, offerCount }) {
   const mobileMenuId = 'primary-search-account-menu-mobile';
   return (
     <Menu
@@ -33,20 +33,20 @@ export default function MobileMenu({ mobileMoreAnchorEl, isMobileMenuOpen, handl
         <p>New</p>
       </MenuItem>
       <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Offers</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
+        <IconButton size="large" color="inherit">
+          <Badge badgeContent={interviewCount} color="error">
+            <EventAvailableIcon />
           </Badge>
         </IconButton>
         <p>Interviews</p>
+      </MenuItem>
+      <MenuItem>
+        <IconButton size="large" color="inherit">
+          <Badge badgeContent={offerCount} color="error">
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
+        <p>Offers</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton size="large" aria-label="account of current user" aria-controls="primary-search-account-menu" aria-haspopup="true" color="inherit">

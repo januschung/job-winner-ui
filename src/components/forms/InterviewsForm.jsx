@@ -14,7 +14,7 @@ import ConfirmDialog from '../common/ConfirmDialog';
 import SnackbarComponent from '../common/SnackbarComponent';
 import useSnackbar from '../hooks/useSnackbar';
 import { ADD_INTERVIEW, UPDATE_INTERVIEW, DELETE_INTERVIEW } from '../../graphql/mutation';
-import { GET_INTERVIEWS_BY_JOB_APPLICATION_ID } from '../../graphql/query';
+import { GET_INTERVIEWS_BY_JOB_APPLICATION_ID, GET_ALL_INTERVIEWS } from '../../graphql/query';
 import dayjs from 'dayjs';
 import { Grid } from '@mui/material';
 
@@ -30,15 +30,24 @@ export default function InterviewsForm({ jobApplicationId }) {
     });
 
     const [addInterview] = useMutation(ADD_INTERVIEW, {
-        refetchQueries: [{ query: GET_INTERVIEWS_BY_JOB_APPLICATION_ID, variables: { jobApplicationId } }],
+        refetchQueries: [
+            { query: GET_INTERVIEWS_BY_JOB_APPLICATION_ID, variables: { jobApplicationId } },
+            { query: GET_ALL_INTERVIEWS }
+        ],
     });
 
     const [updateInterview] = useMutation(UPDATE_INTERVIEW, {
-        refetchQueries: [{ query: GET_INTERVIEWS_BY_JOB_APPLICATION_ID, variables: { jobApplicationId } }],
+        refetchQueries: [
+            { query: GET_INTERVIEWS_BY_JOB_APPLICATION_ID, variables: { jobApplicationId } },
+            { query: GET_ALL_INTERVIEWS }
+        ],
     });
 
     const [deleteInterview] = useMutation(DELETE_INTERVIEW, {
-        refetchQueries: [{ query: GET_INTERVIEWS_BY_JOB_APPLICATION_ID, variables: { jobApplicationId } }],
+        refetchQueries: [
+            { query: GET_INTERVIEWS_BY_JOB_APPLICATION_ID, variables: { jobApplicationId } },
+            { query: GET_ALL_INTERVIEWS }
+        ],
         onError: (err) => {
             console.error('Error deleting interview:', err.message);
             showSnackbar('Error deleting interview', 'error');
