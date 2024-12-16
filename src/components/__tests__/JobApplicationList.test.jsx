@@ -55,6 +55,7 @@ const errorMocks = [
   },
 ];
 
+// Mock delete mutation response
 const deleteMocks = [
   ...mocks,
   {
@@ -79,6 +80,32 @@ const deleteMocks = [
   },
 ];
 
+// Mock `useSnackbar` to simulate snackbar state
+jest.mock('../hooks/useSnackbar', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
+
+jest.mock('../hooks/useConfirmDialog', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
+
+beforeEach(() => {
+  require('../hooks/useSnackbar').default.mockReturnValue({
+    snackbarOpen: true,
+    snackbarMessage: 'Job application deleted successfully!',
+    snackbarSeverity: 'success',
+    showSnackbar: jest.fn(),
+    handleSnackbarClose: jest.fn(),
+  });
+  require('../hooks/useConfirmDialog').default.mockReturnValue({
+    confirmOpen: true,
+    openConfirmDialog: jest.fn(),
+    cancel: jest.fn(),
+  });
+});
+
 describe('JobApplicationList', () => {
   test('renders error message on error', async () => {
     render(
@@ -101,7 +128,6 @@ describe('JobApplicationList', () => {
 
     // Wait for the data to be fetched
     await waitFor(() => {
-      // Check that job application data is rendered correctly
       expect(screen.getByText('Company A')).toBeInTheDocument();
       expect(screen.getByText('Frontend Developer')).toBeInTheDocument();
       expect(screen.getByText('Company B')).toBeInTheDocument();
@@ -116,7 +142,7 @@ describe('JobApplicationList', () => {
       </MockedProvider>
     );
 
-    // Wait for the data to be fetched
+    // Wait for the job applications to be rendered
     await waitFor(() => {
       expect(screen.getByText('Company A')).toBeInTheDocument();
     });
@@ -125,12 +151,21 @@ describe('JobApplicationList', () => {
     const deleteButton = screen.getAllByText('Delete')[0];
     userEvent.click(deleteButton);
 
-    // Confirm the deletion action
-    window.confirm = jest.fn(() => true);
+    console.log("first check: {}", screen.getAllByText('Delete'))
 
-    // Wait for the deletion
+    // Simulate confirming the deletion in the dialog, index is 2 as there are two job applilcations and hence two existing delete buttons
+    const confirmButton = screen.getAllByText('Delete')[2];
+    console.log("second check: {}", screen.getAllByText('Delete'))
+    userEvent.click(confirmButton);
+
+    // Wait for the job application to be removed from the DOM
     await waitFor(() => {
       expect(screen.queryByText('Company A')).not.toBeInTheDocument();
+    });
+
+    // Check that the success message appears
+    await waitFor(() => {
+      expect(screen.getByText('Job application deleted successfully!')).toBeInTheDocument();
     });
   });
 });
