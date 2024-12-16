@@ -74,7 +74,7 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
     const handleOfferChange = (e) => {
         const { name, value } = e.target;
         setOfferData({ ...offerData, [name]: value });
-        setErrors({ ...errors, [name]: '' });
+        setErrors({ ...errors, [name]: '' }); // Clear error when user types
     };
 
     const handleSave = async () => {
@@ -101,7 +101,6 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                         offerDate: offerData.offerDate,
                     },
                 });
-                console.log('Show snackbar: Offer added successfully!');
                 showSnackbar('Offer added successfully!', 'success');
             }
             setTimeout(() => handleClose(), 500); 
