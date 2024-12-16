@@ -65,6 +65,19 @@ export const GET_OFFER = gql`
 `
 ;
 
+export const GET_ALL_OFFERS = gql`
+  query GetOffers {
+    allOffer {
+      id
+      jobApplicationId
+      offerDate
+      salaryOffered
+      description
+    }
+  }
+`
+;
+
 export const GET_ALL_INTERVIEWS = gql`
   query GetAllInterviews {
     allInterview {

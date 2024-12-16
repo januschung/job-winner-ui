@@ -7,19 +7,20 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useQuery } from '@apollo/client';
-import { GET_PROFILE } from '../graphql/query';
+import { GET_PROFILE, GET_ALL_OFFERS, GET_ALL_INTERVIEWS } from '../graphql/query';
 import SearchBar from './SearchBar';
 import JobApplicationDialog from './JobApplicationDialog';
 import ProfileDialog from './ProfileDialog';
 import JobApplicationList from './JobApplicationList';
 import MobileMenu from './MobileMenu';
+import dayjs from 'dayjs';
 
-export default function PrimarySearchAppBar() {
+export default function AppHeader() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [jobApplicationOpen, setJobApplicationOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -32,6 +33,31 @@ export default function PrimarySearchAppBar() {
   const { error, data, loading } = useQuery(GET_PROFILE, {
     variables: { id },
   });
+
+  const { data: offersData, loading: offersLoading, error: offersError } = useQuery(GET_ALL_OFFERS, {
+    fetchPolicy: 'network-only',
+  });
+
+  const { data: interviewsData, loading: interviewsLoading, error: interviewsError } = useQuery(GET_ALL_INTERVIEWS, {
+    fetchPolicy: 'network-only',
+  });
+
+  const offerCount = offersData?.allOffer?.length || 0;
+
+  const filteredInterviews = interviewsData?.allInterview?.filter((interview) => {
+    const interviewDate = dayjs(interview.interviewDate);
+    if (!interviewDate.isValid()) {
+      console.warn('Invalid dayjs object for interviewDate:', interview.interviewDate);
+      return false;
+    }
+  
+    return (
+      (interviewDate.isSame(dayjs(), 'day') || interviewDate.isAfter(dayjs(), 'day')) &&
+      ['open', 'pending'].includes(interview.status)
+    );
+  }) || [];
+  
+  const interviewCount = filteredInterviews?.length || 0;
 
   const handleProfileMenuOpen = () => {
     setProfileOpen(true);
@@ -88,13 +114,13 @@ export default function PrimarySearchAppBar() {
             <IconButton size="large" aria-label="New" color="inherit" onClick={handleJobApplicationOpen}>
               <AddCircleIcon />
             </IconButton>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
+            <IconButton size="large" color="inherit">
+              <Badge badgeContent={interviewsLoading ? '...' : interviewCount} color="error">
+                <EventAvailableIcon />
               </Badge>
             </IconButton>
-            <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="error">
+            <IconButton size="large" color="inherit">
+              <Badge badgeContent={offersLoading ? '...' : offerCount} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -129,6 +155,8 @@ export default function PrimarySearchAppBar() {
           handleMobileMenuClose={handleMobileMenuClose}
           handleProfileMenuOpen={handleProfileMenuOpen} 
           handleJobApplicationOpen={handleJobApplicationOpen}
+          interviewCount={interviewCount}
+          offerCount={offerCount}
         />
       </AppBar>
       <JobApplicationList searchTerm={searchTerm} />
