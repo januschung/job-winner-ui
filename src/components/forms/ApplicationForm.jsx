@@ -17,7 +17,7 @@ import { ADD_JOB_APPLICATION, UPDATE_JOB_APPLICATION } from '../../graphql/mutat
 import { GET_JOB_APPLICATIONS } from '../../graphql/query';
 import dayjs from 'dayjs';
 
-export default function ApplicationForm({ jobApplication, isNew, setOpen, handleClose }) {
+export default function ApplicationForm({ jobApplication, isNew, handleClose }) {
     const [formData, setFormData] = useState({
         companyName: '',
         jobTitle: '',
@@ -70,7 +70,7 @@ export default function ApplicationForm({ jobApplication, isNew, setOpen, handle
             ...(jobApplication && { id: jobApplication.id }),
         };
         mutationFn({ variables });
-        setOpen(false);
+        handleClose()
     };
 
     return (

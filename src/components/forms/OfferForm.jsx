@@ -35,11 +35,17 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
     });
 
     const [addOffer, { loading: addOfferLoading }] = useMutation(ADD_OFFER, {
-        refetchQueries: [{ query: GET_OFFER, variables: { jobApplicationId } }],
+        refetchQueries: [
+            { query: GET_OFFER, variables: { jobApplicationId } },
+            { query: GET_ALL_OFFERS },
+        ],
     });
 
     const [updateOffer, { loading: updateOfferLoading }] = useMutation(UPDATE_OFFER, {
-        refetchQueries: [{ query: GET_OFFER, variables: { jobApplicationId } }],
+        refetchQueries: [
+            { query: GET_OFFER, variables: { jobApplicationId } },
+            { query: GET_ALL_OFFERS },
+        ],
     });
 
     const [deleteOffer, { loading: deleteOfferLoading }] = useMutation(DELETE_OFFER, {
