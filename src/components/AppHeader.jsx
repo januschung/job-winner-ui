@@ -15,6 +15,9 @@ import { useQuery } from '@apollo/client';
 import { GET_PROFILE, GET_ALL_OFFERS, GET_ALL_INTERVIEWS } from '../graphql/query';
 import SearchBar from './SearchBar';
 import JobApplicationDialog from './JobApplicationDialog';
+import OfferListDialog from './OfferListDialog';
+import useJobApplicationDialog from './hooks/useJobApplicationDialog';
+import useOfferListDialog from './hooks/useOfferList';
 import ProfileDialog from './ProfileDialog';
 import JobApplicationList from './JobApplicationList';
 import MobileMenu from './MobileMenu';
@@ -22,20 +25,27 @@ import dayjs from 'dayjs';
 
 export default function AppHeader() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-  const [jobApplicationOpen, setJobApplicationOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [profile, setProfile] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const { data: offersData, loading: offersLoading, error: offersError, refetch } = useQuery(GET_ALL_OFFERS, {
+    fetchPolicy: 'network-only',
+  });
+  const { open, handleOpen, handleClose } = useJobApplicationDialog(refetch);
+
+  const { 
+    offerListingDialogOpen,
+    handleOfferListDialogOpen,
+    handleOfferListDialogClose,
+  } = useOfferListDialog(refetch);
+
+
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const id = 1;
 
   const { error, data, loading } = useQuery(GET_PROFILE, {
     variables: { id },
-  });
-
-  const { data: offersData, loading: offersLoading, error: offersError } = useQuery(GET_ALL_OFFERS, {
-    fetchPolicy: 'network-only',
   });
 
   const { data: interviewsData, loading: interviewsLoading, error: interviewsError } = useQuery(GET_ALL_INTERVIEWS, {
@@ -66,8 +76,6 @@ export default function AppHeader() {
 
   const handleProfileClose = () => setProfileOpen(false);
   const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
-  const handleJobApplicationOpen = () => setJobApplicationOpen(true);
-  const handleJobApplicationClose = () => setJobApplicationOpen(false);
 
   const handleSearch = (text) => {
     setSearchTerm(text);
@@ -77,9 +85,9 @@ export default function AppHeader() {
     <Box sx={{ flexGrow: 1 }}>
       <JobApplicationDialog
         jobApplication={{ status: 'open' }}
-        open={jobApplicationOpen}
-        handleClose={handleJobApplicationClose}
-        setOpen={setJobApplicationOpen}
+        open={open}
+        handleClose={handleClose}
+        setOpen={handleOpen}
         isNew
       />
       <ProfileDialog
@@ -87,6 +95,11 @@ export default function AppHeader() {
         open={profileOpen}
         handleClose={handleProfileClose}
         setOpen={setProfileOpen}
+      />
+      <OfferListDialog
+        open={offerListingDialogOpen}
+        handleClose={handleOfferListDialogClose}
+        setOpen={handleOfferListDialogOpen}
       />
       <AppBar position="static">
         <Toolbar>
@@ -111,15 +124,15 @@ export default function AppHeader() {
           <SearchBar onSearch={handleSearch} />
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="New" color="inherit" onClick={handleJobApplicationOpen}>
+            <IconButton size="large" aria-label="New" color="inherit" onClick={handleOpen}>
               <AddCircleIcon />
             </IconButton>
-            <IconButton size="large" color="inherit">
+            <IconButton size="large" color="inherit" onClick={() => refetch()}>
               <Badge badgeContent={interviewsLoading ? '...' : interviewCount} color="error">
                 <EventAvailableIcon />
               </Badge>
             </IconButton>
-            <IconButton size="large" color="inherit">
+            <IconButton size="large" color="inherit" onClick={handleOfferListDialogOpen}>
               <Badge badgeContent={offersLoading ? '...' : offerCount} color="error">
                 <NotificationsIcon />
               </Badge>
@@ -154,7 +167,7 @@ export default function AppHeader() {
           isMobileMenuOpen={isMobileMenuOpen}
           handleMobileMenuClose={handleMobileMenuClose}
           handleProfileMenuOpen={handleProfileMenuOpen} 
-          handleJobApplicationOpen={handleJobApplicationOpen}
+          handleJobApplicationOpen={handleOpen}
           interviewCount={interviewCount}
           offerCount={offerCount}
         />

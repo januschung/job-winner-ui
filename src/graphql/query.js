@@ -73,6 +73,16 @@ export const GET_ALL_OFFERS = gql`
       offerDate
       salaryOffered
       description
+      jobApplication {
+        id
+        companyName
+        description
+        jobTitle
+        jobUrl
+        appliedDate
+        salaryRange
+        status
+      }
     }
   }
 `

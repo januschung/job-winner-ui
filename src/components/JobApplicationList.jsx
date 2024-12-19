@@ -24,19 +24,20 @@ import SnackbarComponent from './common/SnackbarComponent';
 import useJobApplications from './hooks/useJobApplications';
 import useSnackbar from './hooks/useSnackbar';
 import useConfirmDialog from './hooks/useConfirmDialog';
+import useJobApplicationDialog from './hooks/useJobApplicationDialog';
 import { DELETE_JOB_APPLICATION } from '../graphql/mutation';
 import { GET_JOB_APPLICATIONS } from '../graphql/query';
 
 export default function JobApplicationList({ searchTerm }) {
-    const [open, setOpen] = useState(false);
-    const [jobApplication, setJobApplication] = useState(null);
+    // const [open, setOpen] = useState(false);
+    // const [jobApplication, setJobApplication] = useState(null);
     const [jobApplicationToDelete, setJobApplicationToDelete] = useState(null);
     const [localData, setLocalData] = useState([]);
 
     const { data, loading, error } = useJobApplications();
     const { snackbarOpen, snackbarMessage, showSnackbar, handleSnackbarClose } = useSnackbar();
     const { confirmOpen, openConfirmDialog, cancel } = useConfirmDialog();
-
+    const { open, jobApplication, handleOpen, handleClose } = useJobApplicationDialog();
 
     const [deleteJobApplication] = useMutation(DELETE_JOB_APPLICATION, {
         refetchQueries: [{ query: GET_JOB_APPLICATIONS }],
@@ -48,12 +49,12 @@ export default function JobApplicationList({ searchTerm }) {
         }
     }, [data]);
 
-    const handleOpen = (jobApplication) => {
-        setJobApplication(jobApplication);
-        setOpen(true);
-    };
+    // const handleOpen = (jobApplication) => {
+    //     setJobApplication(jobApplication);
+    //     setOpen(true);
+    // };
 
-    const handleClose = () => setOpen(false);
+    // const handleClose = () => setOpen(false);
 
     const confirmDeleteJobApplication = () => {
         if (jobApplicationToDelete) {

@@ -56,13 +56,13 @@ export default function JobApplicationDialog({ jobApplication, handleClose, open
             )}
             {activeTab === 1 && (
                 <InterviewsForm 
-                    jobApplicationId={parseInt(jobApplication.id)}
+                    jobApplicationId={parseInt(jobApplication.id || 0)}
                 />
             )}
 
             {activeTab === 2 && (
                 <OfferForm
-                    jobApplicationId={parseInt(jobApplication.id)}
+                    jobApplicationId={parseInt(jobApplication?.id || 0)}
                     handleClose={handleClose}
                 />
             )}
