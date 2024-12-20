@@ -168,6 +168,7 @@ export default function AppHeader() {
           handleMobileMenuClose={handleMobileMenuClose}
           handleProfileMenuOpen={handleProfileMenuOpen} 
           handleJobApplicationOpen={handleOpen}
+          handleOfferListDialogOpen={handleOfferListDialogOpen}
           interviewCount={interviewCount}
           offerCount={offerCount}
         />
