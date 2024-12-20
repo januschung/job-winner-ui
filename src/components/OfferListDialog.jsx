@@ -7,25 +7,22 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
 import { GET_ALL_OFFERS } from '../graphql/query';
 import useJobApplicationDialog from './hooks/useJobApplicationDialog';
 import JobApplicationDialog from './JobApplicationDialog';
 import DialogTitleBar from './DialogTitleBar';
+import useSortableTable from './hooks/useSortableTable';
+import SortableTable from './common/SortableTable';
 
 export default function OfferListDialog({ handleClose, open }) {
   const [offers, setOffers] = useState([]);
+  
   const { loading, error, data, refetch } = useQuery(GET_ALL_OFFERS, {
     fetchPolicy: 'network-only',
     onCompleted: (data) => setOffers(data.allOffer),
   });
+
   const { 
     open: jobDialogOpen, 
     jobApplication, 
@@ -34,6 +31,35 @@ export default function OfferListDialog({ handleClose, open }) {
   } = useJobApplicationDialog(() => {
     refetch().then(({ data }) => setOffers(data.allOffer));
   });
+
+  const columns = [
+    {
+      key: 'jobApplication.companyName', // Nested property example
+      label: 'Company Name',
+      sortable: true,
+      render: (value, row) => value || row.jobApplication?.companyName || 'N/A', // Fallback for nested value
+    },
+    { key: 'offerDate', label: 'Offer Date', sortable: true },
+    { key: 'salaryOffered', label: 'Salary Offered', sortable: true },
+    { key: 'description', label: 'Note' },
+    {
+      key: 'actions',
+      label: 'Job Application',
+      render: (value, row) => (
+        <Button 
+          size="small" 
+          color="info" 
+          variant="outlined" 
+          onClick={() => handleJobDialogOpen(row.jobApplication)}
+        >
+          Job Details
+        </Button>
+      ),
+      align: 'center',
+    },
+  ];
+
+  const { sortedData, handleSort, getSortIndicator } = useSortableTable(offers, columns);
 
   useEffect(() => {
     if (open) {
@@ -49,8 +75,6 @@ export default function OfferListDialog({ handleClose, open }) {
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="modal-title"
-      aria-describedby="modal-description"
       fullWidth
       maxWidth="md"
       slotProps={{
@@ -62,68 +86,24 @@ export default function OfferListDialog({ handleClose, open }) {
       }}
     >
       <DialogTitleBar title="Offer List" />
-
       <DialogContent dividers>
-        {loading && (
+        {loading ? (
           <Box display="flex" justifyContent="center" alignItems="center" height="200px">
             <CircularProgress />
           </Box>
-        )}
-
-        {error && (
+        ) : error ? (
           <Typography variant="body1" color="error" align="center">
             Something went wrong. Please try again later.
           </Typography>
-        )}
-
-        {!loading && !error && offers.length === 0 && (
-          <Box textAlign="center" p={4}>
-            <Typography variant="h6" color="textSecondary">
-              No offers available yet!
-            </Typography>
-            <Button color="primary" variant="contained" onClick={handleClose}>
-              Add an Offer
-            </Button>
-          </Box>
-        )}
-
-        {!loading && !error && offers.length > 0 && (
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="left">Company</TableCell>
-                  <TableCell align="left">Offer Date</TableCell>
-                  <TableCell align="left">Salary Offered</TableCell>
-                  <TableCell align="left">Note</TableCell>
-                  <TableCell align="center">Job Application</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {offers.map((offer, index) => (
-                  <TableRow key={index}>
-                    <TableCell align="left">{offer.jobApplication.companyName}</TableCell>
-                    <TableCell align="left">{offer.offerDate}</TableCell>
-                    <TableCell align="left">{offer.salaryOffered}</TableCell>
-                    <TableCell align="left">{offer.description}</TableCell>
-                    <TableCell align="center">
-                      <Button
-                        size="small"
-                        color="info"
-                        variant="outlined"
-                        onClick={() => handleJobDialogOpen(offer.jobApplication)}
-                      >
-                        Job Details
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+        ) : (
+          <SortableTable
+            data={sortedData}
+            columns={columns}
+            handleSort={handleSort}
+            getSortIndicator={getSortIndicator}
+          />
         )}
       </DialogContent>
-
       <DialogActions>
         <Button color="info" variant="outlined" startIcon={<CancelIcon />} onClick={handleClose}>
           Cancel

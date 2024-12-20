@@ -8,7 +8,7 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
-export default function MobileMenu({ mobileMoreAnchorEl, isMobileMenuOpen, handleMobileMenuClose, handleProfileMenuOpen, handleJobApplicationOpen, interviewCount, offerCount }) {
+export default function MobileMenu({ mobileMoreAnchorEl, isMobileMenuOpen, handleMobileMenuClose, handleProfileMenuOpen, handleJobApplicationOpen, handleOfferListDialogOpen, interviewCount, offerCount }) {
   const mobileMenuId = 'primary-search-account-menu-mobile';
   return (
     <Menu
@@ -40,7 +40,7 @@ export default function MobileMenu({ mobileMoreAnchorEl, isMobileMenuOpen, handl
         </IconButton>
         <p>Interviews</p>
       </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={handleOfferListDialogOpen}>
         <IconButton size="large" color="inherit">
           <Badge badgeContent={offerCount} color="error">
             <NotificationsIcon />
