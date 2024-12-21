@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import useDialog from './useDialog';
 
 export default function useConfirmDialog() {
-    const [confirmOpen, setConfirmOpen] = useState(false);
+    const { dialogOpen, handleOpen, handleClose } = useDialog();
 
-    const openConfirmDialog = () => setConfirmOpen(true);
-    const confirm = () => setConfirmOpen(false);
-    const cancel = () => setConfirmOpen(false);
-
-    return { confirmOpen, openConfirmDialog, confirm, cancel };
+    return { 
+        confirmDialogOpen: dialogOpen, 
+        handleConfirmDialogOpen: handleOpen,
+        handleConfirmDialogClose: handleClose,
+    };
 }

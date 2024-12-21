@@ -29,14 +29,12 @@ import { DELETE_JOB_APPLICATION } from '../graphql/mutation';
 import { GET_JOB_APPLICATIONS } from '../graphql/query';
 
 export default function JobApplicationList({ searchTerm }) {
-    // const [open, setOpen] = useState(false);
-    // const [jobApplication, setJobApplication] = useState(null);
     const [jobApplicationToDelete, setJobApplicationToDelete] = useState(null);
     const [localData, setLocalData] = useState([]);
 
     const { data, loading, error } = useJobApplications();
     const { snackbarOpen, snackbarMessage, showSnackbar, handleSnackbarClose } = useSnackbar();
-    const { confirmOpen, openConfirmDialog, cancel } = useConfirmDialog();
+    const { confirmDialogOpen, handleConfirmDialogOpen, handleConfirmDialogClose } = useConfirmDialog();
     const { open, jobApplication, handleOpen, handleClose } = useJobApplicationDialog();
 
     const [deleteJobApplication] = useMutation(DELETE_JOB_APPLICATION, {
@@ -48,13 +46,6 @@ export default function JobApplicationList({ searchTerm }) {
             setLocalData(data.allJobApplication);
         }
     }, [data]);
-
-    // const handleOpen = (jobApplication) => {
-    //     setJobApplication(jobApplication);
-    //     setOpen(true);
-    // };
-
-    // const handleClose = () => setOpen(false);
 
     const confirmDeleteJobApplication = () => {
         if (jobApplicationToDelete) {
@@ -69,13 +60,13 @@ export default function JobApplicationList({ searchTerm }) {
                     showSnackbar("Failed to delete the job application.");
                 });
         }
-        cancel();
+        handleConfirmDialogClose();
         setJobApplicationToDelete(null);
     };
 
     const handleDeleteJobApplication = (jobApplication) => {
         setJobApplicationToDelete(jobApplication);
-        openConfirmDialog();
+        handleConfirmDialogOpen();
     };
 
     const containsIgnoreCase = (str, searchTerm) =>
@@ -176,8 +167,8 @@ export default function JobApplicationList({ searchTerm }) {
                     )}
                 </Container>
                 <ConfirmDialog
-                    open={confirmOpen}
-                    onCancel={cancel}
+                    open={confirmDialogOpen}
+                    onCancel={handleConfirmDialogClose}
                     onConfirm={confirmDeleteJobApplication}
                     title="Confirm Deletion"
                     content="Are you sure you want to delete this job application? This action cannot be undone."
