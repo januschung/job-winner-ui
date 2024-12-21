@@ -100,9 +100,9 @@ beforeEach(() => {
     handleSnackbarClose: jest.fn(),
   });
   require('../hooks/useConfirmDialog').default.mockReturnValue({
-    confirmOpen: true,
-    openConfirmDialog: jest.fn(),
-    cancel: jest.fn(),
+    confirmDialogOpen: true,
+    handleConfirmDialogOpen: jest.fn(),
+    handleConfirmDialogClose: jest.fn(),
   });
 });
 
@@ -149,6 +149,7 @@ describe('JobApplicationList', () => {
 
     // Simulate clicking the delete button for the first job application
     const deleteButton = screen.getAllByText('Delete')[0];
+    console.log("zeon check: {}", deleteButton)
     userEvent.click(deleteButton);
 
     console.log("first check: {}", screen.getAllByText('Delete'))

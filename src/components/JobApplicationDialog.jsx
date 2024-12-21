@@ -35,6 +35,7 @@ export default function JobApplicationDialog({ jobApplication, handleClose, open
             }}
         >
             <DialogTitleBar title={(isNew ? 'Add ' : 'Edit ') + 'Job Application'} />
+            {!isNew && (
             <Tabs
                 value={activeTab}
                 onChange={handleTabChange}
@@ -46,6 +47,7 @@ export default function JobApplicationDialog({ jobApplication, handleClose, open
                 <Tab label="Interviews" />
                 <Tab label="Offer" />
             </Tabs>
+            )}
             {activeTab === 0 && (
                 <ApplicationForm
                     jobApplication={jobApplication}
@@ -56,7 +58,7 @@ export default function JobApplicationDialog({ jobApplication, handleClose, open
             )}
             {activeTab === 1 && (
                 <InterviewsForm 
-                    jobApplicationId={parseInt(jobApplication.id || 0)}
+                    jobApplicationId={parseInt(jobApplication?.id || 0)}
                 />
             )}
 

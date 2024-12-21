@@ -11,33 +11,45 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import { Tooltip } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import { GET_PROFILE, GET_ALL_OFFERS, GET_ALL_INTERVIEWS } from '../graphql/query';
 import SearchBar from './SearchBar';
+import InterviewListDialog from './InterviewListDialog';
 import JobApplicationDialog from './JobApplicationDialog';
 import OfferListDialog from './OfferListDialog';
+import useInterviewListDialog from './hooks/useInterviewDialog';
 import useJobApplicationDialog from './hooks/useJobApplicationDialog';
-import useOfferListDialog from './hooks/useOfferList';
+import useOfferListDialog from './hooks/useOfferListDialog';
 import ProfileDialog from './ProfileDialog';
 import JobApplicationList from './JobApplicationList';
 import MobileMenu from './MobileMenu';
-import dayjs from 'dayjs';
+import { getFilteredInterviews } from '../utils/interviewUtil';
 
 export default function AppHeader() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const [profile, setProfile] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const { data: offersData, loading: offersLoading, error: offersError, refetch } = useQuery(GET_ALL_OFFERS, {
+  const { data: offersData, loading: offersLoading, error: offersError, refetch: refetchOffers } = useQuery(GET_ALL_OFFERS, {
     fetchPolicy: 'network-only',
   });
-  const { open, handleOpen, handleClose } = useJobApplicationDialog(refetch);
+  const { data: interviewsData, loading: interviewsLoading, error: interviewsError, refetch: refetchInterviews } = useQuery(GET_ALL_INTERVIEWS, {
+    fetchPolicy: 'network-only',
+  });
+  const { open, handleOpen, handleClose } = useJobApplicationDialog(refetchOffers);
 
-  const { 
+  const {
     offerListingDialogOpen,
     handleOfferListDialogOpen,
     handleOfferListDialogClose,
-  } = useOfferListDialog(refetch);
+  } = useOfferListDialog(refetchOffers);
+
+  const {
+    interviewListingDialogOpen,
+    handleInterviewListDialogOpen,
+    handleInterviewListDialogClose,
+  } = useInterviewListDialog(refetchInterviews);
 
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -48,24 +60,9 @@ export default function AppHeader() {
     variables: { id },
   });
 
-  const { data: interviewsData, loading: interviewsLoading, error: interviewsError } = useQuery(GET_ALL_INTERVIEWS, {
-    fetchPolicy: 'network-only',
-  });
-
   const offerCount = offersData?.allOffer?.length || 0;
 
-  const filteredInterviews = interviewsData?.allInterview?.filter((interview) => {
-    const interviewDate = dayjs(interview.interviewDate);
-    if (!interviewDate.isValid()) {
-      console.warn('Invalid dayjs object for interviewDate:', interview.interviewDate);
-      return false;
-    }
-  
-    return (
-      (interviewDate.isSame(dayjs(), 'day') || interviewDate.isAfter(dayjs(), 'day')) &&
-      ['open', 'pending'].includes(interview.status)
-    );
-  }) || [];
+  const filteredInterviews = getFilteredInterviews(interviewsData?.allInterview);
   
   const interviewCount = filteredInterviews?.length || 0;
 
@@ -96,6 +93,11 @@ export default function AppHeader() {
         handleClose={handleProfileClose}
         setOpen={setProfileOpen}
       />
+      <InterviewListDialog
+        open={interviewListingDialogOpen}
+        handleClose={handleInterviewListDialogClose}
+        setOpen={handleInterviewListDialogOpen}
+      />
       <OfferListDialog
         open={offerListingDialogOpen}
         handleClose={handleOfferListDialogClose}
@@ -124,30 +126,38 @@ export default function AppHeader() {
           <SearchBar onSearch={handleSearch} />
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="New" color="inherit" onClick={handleOpen}>
-              <AddCircleIcon />
-            </IconButton>
-            <IconButton size="large" color="inherit" onClick={() => refetch()}>
-              <Badge badgeContent={interviewsLoading ? '...' : interviewCount} color="error">
-                <EventAvailableIcon />
-              </Badge>
-            </IconButton>
-            <IconButton size="large" color="inherit" onClick={handleOfferListDialogOpen}>
-              <Badge badgeContent={offersLoading ? '...' : offerCount} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls="primary-search-account-menu"
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+            <Tooltip title="New Job Application">
+              <IconButton size="large" aria-label="New" color="inherit" onClick={handleOpen}>
+                <AddCircleIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Interview List">
+              <IconButton size="large" color="inherit" onClick={handleInterviewListDialogOpen}>
+                <Badge badgeContent={interviewsLoading ? '...' : interviewCount} color="error">
+                  <EventAvailableIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Offer List">
+              <IconButton size="large" color="inherit" onClick={handleOfferListDialogOpen}>
+                <Badge badgeContent={offersLoading ? '...' : offerCount} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Profile">
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls="primary-search-account-menu"
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </Tooltip>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -168,6 +178,7 @@ export default function AppHeader() {
           handleMobileMenuClose={handleMobileMenuClose}
           handleProfileMenuOpen={handleProfileMenuOpen} 
           handleJobApplicationOpen={handleOpen}
+          handleInterviewListDialogOpen={handleInterviewListDialogOpen}
           handleOfferListDialogOpen={handleOfferListDialogOpen}
           interviewCount={interviewCount}
           offerCount={offerCount}

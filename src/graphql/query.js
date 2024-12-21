@@ -97,6 +97,16 @@ export const GET_ALL_INTERVIEWS = gql`
       interviewer
       description
       status
+      jobApplication {
+        id
+        companyName
+        description
+        jobTitle
+        jobUrl
+        appliedDate
+        salaryRange
+        status
+      }
     }
   }
 `;
