@@ -28,8 +28,6 @@ const SortableTable = ({ data, columns, handleSort, getSortIndicator }) => {
                   <TableSortLabel
                     active={getSortIndicator(column.key) === 'true'}
                     direction={getSortIndicator(column.key) === '↑' ? 'asc' : 'desc'}
-                    // direction={getSortIndicator(column.key) || '↑'}
-                    // direction={getSortIndicator(column.key) === 'asc' ? '↑' : '↓'}
                     onClick={() => handleSort(column.key)}
                   >
                     {column.label}
