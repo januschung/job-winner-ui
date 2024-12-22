@@ -17,43 +17,55 @@ That's the reason for me to build something for myself, and potentially you, to 
 
 ## Benefit of Job Winner
 
-With Job Winner, you can keep track of how many job applications you want, for free, without paying for a fee and have your personal data being sold.
+Job Winner helps you keep track of all your job applications in one place—totally free! No hidden fees, and you won't have to worry about your personal data being sold.
 
-Another feature of Job Winner is the `Profile Page`. With that one can store useful information a job application usually asks for (eg. LinkedIn url) in a single section. Besides that, the `Profile Page` provides a handy feature to automatically copy the field that you click on to your clipboard.
+One of the handy features is the Profile Page. This is where you can store all the personal information that job applications often ask for (like your LinkedIn URL). Plus, it has a super handy feature that lets you copy any field to your clipboard with just a click.
 
 ## Features
 
-Current function:
-1. An Index page to list all the job applications
-![index](readme-img/index.png)
-1. Create new job application
-![new](readme-img/add.png)
-1. Delete a job application
-1. Edit an existing job application
-![edit](readme-img/edit.png)
-1. A profile page to store personal information
-![profile](readme-img/profile.png)
+Key Functions:
+1. __Index Page:__
 
-Each job application has the following fields:
-1. Company Name
-1. Job Title
-1. Salary Range
-1. Applied Date
-1. Description
-1. Job Link
-1. Status
+    View a list of all your job applications in one place, with easy access to each application’s details and status.
+    ![index](readme-img/index.png)
+1. __Create New Job Application:__
 
-The personal page has the following fields:
-1. First Name
-1. Last Name
-1. Address Street 1
-1. Address Street 2
-1. Address City
-1. Address State
-1. Address Zip
-1. Linkedin url
-1. Github url
-1. Personal Website url
+    Easily add new job applications to your list with a user-friendly form.
+    ![new](readme-img/add.png)
+1. __Delete Job Application:__
+
+    Remove any applications you no longer need with a simple delete option.
+1. __Edit Job Application:__
+
+    Make updates to your existing job applications as the status of your applications change or new information becomes available.
+    ![edit](readme-img/edit.png)
+    - __Manage Interview:__
+
+      Keep track of your interviews with the ability to add and manage interview details.
+      ![edit](readme-img/interview.png)
+    - __Manage Offer:__
+
+      Track any job offers you’ve received, including details about the salary and offer date.
+      ![edit](readme-img/offer.png)
+1. __Profile Page:__
+    
+    Store and manage all your personal information in one spot
+    ![profile](readme-img/profile.png)
+1. __Interview List:__
+  
+    Keep track of all your interviews in one place, with easy-to-view details and statuses plus sortable headers.
+    ![profile](readme-img/interview-list.png)
+1. __Offer List:__
+    
+    Track all job offers you’ve received with sortable headers.
+    ![profile](readme-img/offer-list.png)
+
+1. __Search and Filter:__
+    
+    Quickly search for specific job applications based on keywords to help you stay organized. Whether it's the company name, job title, or description, finding the right job application is easy.
+1. __Interview and Offer Count:__
+    
+    Stay on top of your job search with an overview of how many interviews and offers you currently have, making it easier to manage multiple opportunities.
 
 ## Components
 
@@ -82,8 +94,13 @@ docker build -t job-winner-ui .
 docker run -p 3000:3000 -d job-winner-ui
 ```
 
-## Contributing 
+## Contributing
 
-I would like your help and input.
+We welcome contributions! If you'd like to help improve Job Winner, here's how you can contribute:
 
-I appreciate all suggestions or PRs which will help this project better. Feel free to fork the project and create a pull request with your idea.
+1. Fork the repository.
+1. Create a new branch for your feature or fix.
+1. Make your changes and ensure the tests are passing.
+1. Submit a pull request with a description of the changes you've made.
+
+Feel free to open an issue if you have any questions or suggestions!
