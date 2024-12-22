@@ -183,6 +183,7 @@ export default function InterviewsForm({ jobApplicationId }) {
                                             <MenuItem value="canceled">Canceled</MenuItem>
                                             <MenuItem value="pending">Pending</MenuItem>
                                             <MenuItem value="rejected">Rejected</MenuItem>
+                                            <MenuItem value="expired">Expired</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
-import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ErrorIcon from '@mui/icons-material/Error';
 import LinkRoundedIcon from '@mui/icons-material/LinkRounded';
@@ -28,6 +27,12 @@ import useJobApplicationDialog from './hooks/useJobApplicationDialog';
 import { DELETE_JOB_APPLICATION } from '../graphql/mutation';
 import { GET_JOB_APPLICATIONS } from '../graphql/query';
 
+const STATUS_COLORS = {
+    open: '#66BB6A',
+    active: '#42A5F5',
+    rejected: '#EF5350',
+};
+
 export default function JobApplicationList({ searchTerm }) {
     const [jobApplicationToDelete, setJobApplicationToDelete] = useState(null);
     const [localData, setLocalData] = useState([]);
@@ -41,9 +46,19 @@ export default function JobApplicationList({ searchTerm }) {
         refetchQueries: [{ query: GET_JOB_APPLICATIONS }],
     });
 
+    const sortJobApplications = (jobApplications) => {
+        const statusOrder = { active: 1, open: 2, rejected: 3 };
+
+        return [...jobApplications].sort((a, b) => {
+            const statusComparison = statusOrder[a.status] - statusOrder[b.status];
+            return statusComparison !== 0
+                ? statusComparison
+                : new Date(b.appliedDate) - new Date(a.appliedDate);
+        });
+    };
     useEffect(() => {
         if (data) {
-            setLocalData(data.allJobApplication);
+            setLocalData(sortJobApplications(data.allJobApplication));
         }
     }, [data]);
 
@@ -95,14 +110,25 @@ export default function JobApplicationList({ searchTerm }) {
                             Failed to fetch data. Please check your network connection and try again.
                         </Alert>
                     )}
-                    {!loading && !error && (
+                    {!loading && !error && filteredData.length === 0 && (
+                        <Typography variant="body1">No job applications match your search.</Typography>
+                    )}
+                    {!loading && !error && filteredData.length > 0 && (
                         <Grid container spacing={4}>
                             {filteredData.map((jobApplication) => (
                                 <Grid item key={jobApplication.id} xs={12} sm={6} md={4}>
-                                    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                                    <Card
+                                        sx={{
+                                            height: '100%',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            borderTop: 4,
+                                            borderColor: STATUS_COLORS[jobApplication.status] || 'grey',
+                                        }}
+                                    >
                                         <CardContent sx={{ flexGrow: 1 }}>
                                             <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                                                <CalendarMonthRoundedIcon fontSize="inherit" />{" "}
+                                                <CalendarMonthRoundedIcon fontSize="inherit" />{' '}
                                                 {jobApplication.appliedDate}
                                             </Typography>
                                             <Typography variant="h5" component="div">
@@ -111,15 +137,25 @@ export default function JobApplicationList({ searchTerm }) {
                                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
                                                 {jobApplication.jobTitle}
                                             </Typography>
-                                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                <MonetizationOnIcon fontSize="inherit" />
+                                            <Typography sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }} color="text.secondary">
+                                                <MonetizationOnIcon fontSize="inherit" sx={{ marginRight: 0.5 }} />
                                                 {jobApplication.salaryRange}
                                             </Typography>
                                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                Status: {jobApplication.status}
+                                                status: {jobApplication.status}
                                             </Typography>
-                                        </CardContent>
-                                        <CardContent sx={{ flexGrow: 1 }}>
+                                            <Typography sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }} color="text.secondary">
+                                                <LinkRoundedIcon fontSize="inherit" sx={{ marginRight: 0.5 }} />
+                                                <Link
+                                                    href={jobApplication.jobUrl || '#'}
+                                                    underline="hover"
+                                                    color="inherit"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    job link
+                                                </Link>
+                                            </Typography>
                                             <Typography
                                                 color="text.secondary"
                                                 sx={{
@@ -129,15 +165,7 @@ export default function JobApplicationList({ searchTerm }) {
                                                     WebkitLineClamp: 3,
                                                 }}
                                             >
-                                                <CommentRoundedIcon fontSize="inherit" />
-                                                <br />
                                                 {jobApplication.description}
-                                            </Typography>
-                                            <Typography color="text.secondary">
-                                                <LinkRoundedIcon fontSize="inherit" />{" "}
-                                                <Link href={jobApplication.jobUrl} underline="hover" color="inherit">
-                                                    job link
-                                                </Link>
                                             </Typography>
                                         </CardContent>
                                         <CardActions sx={{ justifyContent: 'flex-end' }}>
@@ -179,7 +207,6 @@ export default function JobApplicationList({ searchTerm }) {
                     severity="success"
                     onClose={handleSnackbarClose}
                 />
-
             </main>
         </div>
     );

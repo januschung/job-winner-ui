@@ -20,11 +20,11 @@ it('Should render New Job Application Dialog', async() => {
     expect(screen.getByDisplayValue("open")).toBeInTheDocument();
     const currentDate = dayjs(new Date()).format('MM/DD/YYYY')
     expect(screen.getByDisplayValue(currentDate)).toBeInTheDocument();
-    expect(screen.getByText("Company Name")).toBeInTheDocument();
-    expect(screen.getByText("Job Title")).toBeInTheDocument();
-    expect(screen.getByText("Salary Range")).toBeInTheDocument();
-    expect(screen.getByText("Description")).toBeInTheDocument();
-    expect(screen.getByText("Job Link")).toBeInTheDocument();
+    expect(screen.getByLabelText("Company Name *")).toBeInTheDocument();
+    expect(screen.getByLabelText("Job Title *")).toBeInTheDocument();
+    expect(screen.getByLabelText("Salary Range *")).toBeInTheDocument();
+    expect(screen.getByLabelText("Description")).toBeInTheDocument();
+    expect(screen.getByLabelText("Job Link")).toBeInTheDocument();
 
 });
 

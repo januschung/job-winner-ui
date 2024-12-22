@@ -10,7 +10,7 @@ const ProfileTextField = ({ id, label, value, onChange }) => (
         name={id}
         label={label}
         fullWidth
-        variant="standard"
+        variant="outlined"
         value={value}
         onChange={onChange}
       />

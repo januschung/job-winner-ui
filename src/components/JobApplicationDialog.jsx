@@ -47,6 +47,9 @@ export default function JobApplicationDialog({ jobApplication, handleClose, open
                 <Tab label="Interviews" />
                 <Tab label="Offer" />
             </Tabs>
+            )}  
+            {isNew && (
+                <div/>
             )}
             {activeTab === 0 && (
                 <ApplicationForm

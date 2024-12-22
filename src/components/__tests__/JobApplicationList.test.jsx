@@ -135,6 +135,19 @@ describe('JobApplicationList', () => {
     });
   });
 
+  test('filters job applications based on search term', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <JobApplicationList searchTerm="Backend" />
+      </MockedProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByText('Company A')).not.toBeInTheDocument();
+      expect(screen.getByText('Company B')).toBeInTheDocument();
+    });
+  });
+
   test('deletes a job application', async () => {
     render(
       <MockedProvider mocks={deleteMocks} addTypename={false}>
