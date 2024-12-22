@@ -41,11 +41,33 @@ export default function JobApplicationList({ searchTerm }) {
         refetchQueries: [{ query: GET_JOB_APPLICATIONS }],
     });
 
+    const sortJobApplications = (jobApplications) => {
+        const statusOrder = {
+            active: 1,
+            open: 2,
+            rejected: 3,
+        };
+    
+        // Create a shallow copy of the array
+        const jobApplicationsCopy = [...jobApplications];
+    
+        return jobApplicationsCopy.sort((a, b) => {
+            // First, compare by status
+            const statusComparison = statusOrder[a.status] - statusOrder[b.status];
+            if (statusComparison !== 0) return statusComparison;
+    
+            // If statuses are the same, compare by appliedDate
+            return new Date(b.appliedDate) - new Date(a.appliedDate);
+        });
+    };
+    
+    const sortedData = !loading && !error && data ? sortJobApplications(data.allJobApplication) : [];
+      
     useEffect(() => {
-        if (data) {
-            setLocalData(data.allJobApplication);
+        if (sortedData) {
+            setLocalData(sortedData);
         }
-    }, [data]);
+    }, [sortedData]);
 
     const confirmDeleteJobApplication = () => {
         if (jobApplicationToDelete) {
@@ -99,7 +121,20 @@ export default function JobApplicationList({ searchTerm }) {
                         <Grid container spacing={4}>
                             {filteredData.map((jobApplication) => (
                                 <Grid item key={jobApplication.id} xs={12} sm={6} md={4}>
-                                    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                                    <Card
+                                        sx={{
+                                            height: '100%',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            borderTop: 4,
+                                            borderColor:
+                                                jobApplication.status === 'open'
+                                                    ? '#66BB6A' // Green for open
+                                                    : jobApplication.status === 'active'
+                                                    ? '#42A5F5' // Blue for active
+                                                    : '#EF5350', // Red for rejected
+                                        }}
+                                    >
                                         <CardContent sx={{ flexGrow: 1 }}>
                                             <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
                                                 <CalendarMonthRoundedIcon fontSize="inherit" />{" "}
@@ -111,15 +146,19 @@ export default function JobApplicationList({ searchTerm }) {
                                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
                                                 {jobApplication.jobTitle}
                                             </Typography>
-                                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                <MonetizationOnIcon fontSize="inherit" />
+                                            <Typography sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }} color="text.secondary">
+                                                <MonetizationOnIcon fontSize="inherit" sx={{ marginRight: 0.5 }} />
                                                 {jobApplication.salaryRange}
                                             </Typography>
                                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                Status: {jobApplication.status}
+                                                status: {jobApplication.status}
                                             </Typography>
-                                        </CardContent>
-                                        <CardContent sx={{ flexGrow: 1 }}>
+                                            <Typography sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }} color="text.secondary">
+                                                <LinkRoundedIcon fontSize="inherit" sx={{ marginRight: 0.5 }} />
+                                                <Link href={jobApplication.jobUrl} underline="hover" color="inherit">
+                                                    job link
+                                                </Link>
+                                            </Typography>
                                             <Typography
                                                 color="text.secondary"
                                                 sx={{
@@ -129,15 +168,8 @@ export default function JobApplicationList({ searchTerm }) {
                                                     WebkitLineClamp: 3,
                                                 }}
                                             >
-                                                <CommentRoundedIcon fontSize="inherit" />
-                                                <br />
+                                                {/* <CommentRoundedIcon fontSize="inherit" sx={{ marginRight: 0.5 }} /> */}
                                                 {jobApplication.description}
-                                            </Typography>
-                                            <Typography color="text.secondary">
-                                                <LinkRoundedIcon fontSize="inherit" />{" "}
-                                                <Link href={jobApplication.jobUrl} underline="hover" color="inherit">
-                                                    job link
-                                                </Link>
                                             </Typography>
                                         </CardContent>
                                         <CardActions sx={{ justifyContent: 'flex-end' }}>
