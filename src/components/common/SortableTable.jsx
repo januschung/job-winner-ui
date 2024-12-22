@@ -22,6 +22,7 @@ const SortableTable = ({ data, columns, handleSort, getSortIndicator }) => {
                   cursor: 'pointer',
                   fontWeight: 'bold',
                   backgroundColor: '#e3f2fd',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 {column.sortable ? (
