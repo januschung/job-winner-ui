@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import JobApplicationDialog from '../JobApplicationDialog';
 import { MockedProvider } from "@apollo/client/testing";
+import { SnackbarProvider } from '../common/SnackbarContext';
 import dayjs from 'dayjs';
 
 
@@ -8,11 +9,13 @@ const mocks = [];
 
 it('Should render New Job Application Dialog', async() => {
     render(<MockedProvider mocks={mocks} addTypename={false}>
-            <JobApplicationDialog 
-                jobApplication={{"status": "open"}}
-                open={true} 
-                setOpen={false}
-                isNew={true} />
+            <SnackbarProvider>
+              <JobApplicationDialog 
+                  jobApplication={{"status": "open"}}
+                  open={true} 
+                  setOpen={false}
+                  isNew={true} />
+            </SnackbarProvider>
         </MockedProvider>
   );
     
@@ -30,6 +33,7 @@ it('Should render New Job Application Dialog', async() => {
 
 it('Should render Edit Job Application Dialog', async() => {
   render(<MockedProvider mocks={mocks} addTypename={false}>
+          <SnackbarProvider>
             <JobApplicationDialog 
                 jobApplication={{"companyName": "a",
                                 "jobTitle": "b",
@@ -41,6 +45,7 @@ it('Should render Edit Job Application Dialog', async() => {
                 open={true} 
                 setOpen={false}
                 isNew={false} />
+          </SnackbarProvider>
         </MockedProvider>
   );
     expect(screen.getByText("Edit Job Application")).toBeInTheDocument();

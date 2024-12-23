@@ -6,8 +6,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import SnackbarComponent from '../common/SnackbarComponent';
-import useSnackbar from '../hooks/useSnackbar';
+import { useSnackbar } from '../common/SnackbarContext';
 import { ADD_JOB_APPLICATION, UPDATE_JOB_APPLICATION } from '../../graphql/mutation';
 import { GET_JOB_APPLICATIONS } from '../../graphql/query';
 import dayjs from 'dayjs';
@@ -23,7 +22,7 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
         appliedDate: dayjs().format('YYYY-MM-DD'),
     });
     const [errors, setErrors] = useState({});
-    const { snackbarOpen, snackbarMessage, snackbarSeverity, showSnackbar, handleSnackbarClose } = useSnackbar();
+    const { showSnackbar } = useSnackbar();
 
     const [newJobApplication] = useMutation(ADD_JOB_APPLICATION, {
         refetchQueries: [{ query: GET_JOB_APPLICATIONS }],
@@ -221,12 +220,6 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
                     Save
                 </Button>
             </DialogActions>
-            <SnackbarComponent
-                open={snackbarOpen}
-                message={snackbarMessage}
-                severity={snackbarSeverity}
-                onClose={handleSnackbarClose}
-            />
         </>
     );
 }

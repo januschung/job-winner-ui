@@ -7,8 +7,7 @@ import Button from '@mui/material/Button';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
 import ConfirmDialog from '../common/ConfirmDialog';
-import SnackbarComponent from '../common/SnackbarComponent';
-import useSnackbar from '../hooks/useSnackbar';
+import { useSnackbar } from '../common/SnackbarContext';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -27,7 +26,7 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
-    const { snackbarOpen, snackbarMessage, snackbarSeverity, showSnackbar, handleSnackbarClose } = useSnackbar();
+    const { showSnackbar } = useSnackbar();
 
     const { data, loading: queryLoading, error } = useQuery(GET_OFFER, {
         variables: { jobApplicationId },
@@ -267,12 +266,6 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                 confirmColor="error"
                 title="Confirm Deletion"
                 content="Are you sure you want to delete this offer? This action cannot be undone."
-            />
-            <SnackbarComponent
-                open={snackbarOpen}
-                message={snackbarMessage}
-                severity={snackbarSeverity}
-                onClose={handleSnackbarClose}
             />
         </>
     );

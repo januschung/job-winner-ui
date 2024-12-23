@@ -19,9 +19,8 @@ import AlertTitle from '@mui/material/AlertTitle';
 import JobApplicationDialog from '../components/JobApplicationDialog';
 import Loading from './common/Loading';
 import ConfirmDialog from './common/ConfirmDialog';
-import SnackbarComponent from './common/SnackbarComponent';
+import { useSnackbar } from './common/SnackbarContext';
 import useJobApplications from './hooks/useJobApplications';
-import useSnackbar from './hooks/useSnackbar';
 import useConfirmDialog from './hooks/useConfirmDialog';
 import useJobApplicationDialog from './hooks/useJobApplicationDialog';
 import { DELETE_JOB_APPLICATION } from '../graphql/mutation';
@@ -38,7 +37,7 @@ export default function JobApplicationList({ searchTerm }) {
     const [localData, setLocalData] = useState([]);
 
     const { data, loading, error } = useJobApplications();
-    const { snackbarOpen, snackbarMessage, showSnackbar, handleSnackbarClose } = useSnackbar();
+    const { showSnackbar } = useSnackbar();
     const { confirmDialogOpen, handleConfirmDialogOpen, handleConfirmDialogClose } = useConfirmDialog();
     const { open, jobApplication, handleOpen, handleClose } = useJobApplicationDialog();
 
@@ -200,12 +199,6 @@ export default function JobApplicationList({ searchTerm }) {
                     onConfirm={confirmDeleteJobApplication}
                     title="Confirm Deletion"
                     content="Are you sure you want to delete this job application? This action cannot be undone."
-                />
-                <SnackbarComponent
-                    open={snackbarOpen}
-                    message={snackbarMessage}
-                    severity="success"
-                    onClose={handleSnackbarClose}
                 />
             </main>
         </div>

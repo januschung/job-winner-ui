@@ -11,8 +11,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useQuery, useMutation } from '@apollo/client';
 import ConfirmDialog from '../common/ConfirmDialog';
-import SnackbarComponent from '../common/SnackbarComponent';
-import useSnackbar from '../hooks/useSnackbar';
+import { useSnackbar } from '../common/SnackbarContext';
 import { ADD_INTERVIEW, UPDATE_INTERVIEW, DELETE_INTERVIEW } from '../../graphql/mutation';
 import { GET_INTERVIEWS_BY_JOB_APPLICATION_ID, GET_ALL_INTERVIEWS } from '../../graphql/query';
 import dayjs from 'dayjs';
@@ -22,7 +21,7 @@ export default function InterviewsForm({ jobApplicationId }) {
     const [interviews, setInterviews] = useState([]);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [interviewToDelete, setInterviewToDelete] = useState(null);
-    const { snackbarOpen, snackbarMessage, snackbarSeverity, showSnackbar, handleSnackbarClose } = useSnackbar();
+    const { showSnackbar } = useSnackbar();
 
     const { loading, error } = useQuery(GET_INTERVIEWS_BY_JOB_APPLICATION_ID, {
         variables: { jobApplicationId },
@@ -224,12 +223,6 @@ export default function InterviewsForm({ jobApplicationId }) {
                 onConfirm={confirmDeleteInterview}
                 title="Confirm Deletion"
                 content="Are you sure you want to delete this interview? This action cannot be undone."
-            />
-            <SnackbarComponent
-                open={snackbarOpen}
-                message={snackbarMessage}
-                severity={snackbarSeverity}
-                onClose={handleSnackbarClose}
             />
         </>
     );

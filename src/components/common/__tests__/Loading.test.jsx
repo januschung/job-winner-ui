@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import Loading from '../common/Loading';
+import Loading from '../Loading';
 
 jest.mock('@mui/material/styles', () => ({
   ...jest.requireActual('@mui/material/styles'),
