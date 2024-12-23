@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
+import { SnackbarProvider } from '../common/SnackbarContext';
 import JobApplicationList from '../JobApplicationList';
 import { GET_JOB_APPLICATIONS } from '../../graphql/query';
 import { DELETE_JOB_APPLICATION } from '../../graphql/mutation';
@@ -80,25 +81,12 @@ const deleteMocks = [
   },
 ];
 
-// Mock `useSnackbar` to simulate snackbar state
-jest.mock('../hooks/useSnackbar', () => ({
-  __esModule: true,
-  default: jest.fn(),
-}));
-
 jest.mock('../hooks/useConfirmDialog', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
 
 beforeEach(() => {
-  require('../hooks/useSnackbar').default.mockReturnValue({
-    snackbarOpen: true,
-    snackbarMessage: 'Job application deleted successfully!',
-    snackbarSeverity: 'success',
-    showSnackbar: jest.fn(),
-    handleSnackbarClose: jest.fn(),
-  });
   require('../hooks/useConfirmDialog').default.mockReturnValue({
     confirmDialogOpen: true,
     handleConfirmDialogOpen: jest.fn(),
@@ -110,7 +98,9 @@ describe('JobApplicationList', () => {
   test('renders error message on error', async () => {
     render(
       <MockedProvider mocks={errorMocks} addTypename={false}>
-        <JobApplicationList searchTerm="" />
+        <SnackbarProvider>
+          <JobApplicationList searchTerm="" />
+        </SnackbarProvider>
       </MockedProvider>
     );
 
@@ -122,7 +112,9 @@ describe('JobApplicationList', () => {
   test('renders job applications when data is fetched', async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <JobApplicationList searchTerm="" />
+        <SnackbarProvider>
+          <JobApplicationList searchTerm="" />
+        </SnackbarProvider>
       </MockedProvider>
     );
 
@@ -138,7 +130,9 @@ describe('JobApplicationList', () => {
   test('filters job applications based on search term', async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <JobApplicationList searchTerm="Backend" />
+        <SnackbarProvider>
+          <JobApplicationList searchTerm="Backend" />
+        </SnackbarProvider>
       </MockedProvider>
     );
 
@@ -151,7 +145,9 @@ describe('JobApplicationList', () => {
   test('deletes a job application', async () => {
     render(
       <MockedProvider mocks={deleteMocks} addTypename={false}>
-        <JobApplicationList searchTerm="" />
+        <SnackbarProvider>
+          <JobApplicationList searchTerm="" />
+        </SnackbarProvider>
       </MockedProvider>
     );
 
