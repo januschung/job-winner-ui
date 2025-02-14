@@ -4,11 +4,22 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Badge from '@mui/material/Badge';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
-export default function MobileMenu({ mobileMoreAnchorEl, isMobileMenuOpen, handleMobileMenuClose, handleProfileMenuOpen, handleJobApplicationOpen, handleInterviewListDialogOpen, handleOfferListDialogOpen, interviewCount, offerCount }) {
+export default function MobileMenu({ 
+  mobileMoreAnchorEl, 
+  isMobileMenuOpen, 
+  handleMobileMenuClose, 
+  handleProfileMenuOpen, 
+  handleJobApplicationOpen,
+  handleFrequentUrlsDialogOpen, 
+  handleInterviewListDialogOpen, 
+  handleOfferListDialogOpen, 
+  interviewCount, 
+  offerCount }) {
   const mobileMenuId = 'primary-search-account-menu-mobile';
   return (
     <Menu
@@ -31,6 +42,12 @@ export default function MobileMenu({ mobileMoreAnchorEl, isMobileMenuOpen, handl
           <AddCircleIcon />
         </IconButton>
         <p>New</p>
+      </MenuItem>
+      <MenuItem onClick={handleFrequentUrlsDialogOpen}>
+        <IconButton size="large" aria-label="New" color="inherit">
+          <BookmarksIcon />
+        </IconButton>
+        <p>Bookmarks</p>
       </MenuItem>
       <MenuItem onClick={handleInterviewListDialogOpen}>
         <IconButton size="large" color="inherit">

@@ -22,7 +22,6 @@ export const ADD_JOB_APPLICATION = gql`
       id, companyName, description, jobTitle, jobUrl, appliedDate, salaryRange, status
   }
   }
-
 `
 
 export const UPDATE_JOB_APPLICATION = gql`
@@ -49,7 +48,6 @@ export const UPDATE_JOB_APPLICATION = gql`
       id, companyName, description, jobTitle, jobUrl, appliedDate, salaryRange, status
   }
   }
-
 `
 
 export const DELETE_JOB_APPLICATION = gql`
@@ -62,7 +60,6 @@ export const DELETE_JOB_APPLICATION = gql`
       id, companyName, description, jobTitle, jobUrl, appliedDate, salaryRange, status
   }
   }
-
 `
 
 export const UPDATE_PROFILE = gql`
@@ -96,7 +93,6 @@ export const UPDATE_PROFILE = gql`
       id, firstName, lastName, addressStreet1, addressStreet2, addressCity, addressState, addressZip, linkedin, github, personalWebsite
   }
   }
-
 `
 
 export const ADD_OFFER = gql`
@@ -115,7 +111,6 @@ export const ADD_OFFER = gql`
       id, jobApplicationId, offerDate, salaryOffered, description
   }
   }
-
 `
 
 export const UPDATE_OFFER = gql`
@@ -136,7 +131,6 @@ export const UPDATE_OFFER = gql`
       id, jobApplicationId, offerDate, salaryOffered, description
   }
   }
-
 `
 
 export const DELETE_OFFER = gql`
@@ -149,7 +143,6 @@ export const DELETE_OFFER = gql`
         id, jobApplicationId, offerDate, salaryOffered, description
   }
   }
-
 `
 
 export const ADD_INTERVIEW = gql`
@@ -158,7 +151,7 @@ export const ADD_INTERVIEW = gql`
       id, jobApplicationId, interviewDate, interviewer, description, status
     }
   }
-`;
+`
 
 export const UPDATE_INTERVIEW = gql`
   mutation UpdateInterview($id: ID!, $interview: UpdateInterviewInput!) {
@@ -166,7 +159,7 @@ export const UPDATE_INTERVIEW = gql`
       id, jobApplicationId, interviewDate, interviewer, description, status
     }
   }
-`;
+`
 
 export const DELETE_INTERVIEW = gql`
   mutation DeleteInterview(
@@ -176,6 +169,48 @@ export const DELETE_INTERVIEW = gql`
         id: $id
       ) {
         id, jobApplicationId, interviewDate, interviewer, description, status
+  }
+  }
+
+`
+
+export const ADD_FREQUENT_URL = gql`
+  mutation AddFrequentUrl(
+    $title: String!,
+    $url: String!    
+  ){
+    addFrequentUrl(frequentUrlInput: {
+    title: $title,
+    url: $url
+    }) {
+      id, title, url
+    }
+  }
+`
+
+export const UPDATE_FREQUENT_URL = gql`
+  mutation UpdateFrequentUrl(
+    $id: ID!,
+    $title: String!,
+    $url: String!    
+  ){
+    updateFrequentUrl(frequentUrl: {
+    title: $title,
+    url: $url,
+    }) {
+    id, title, url
+  }
+  }
+`
+
+export const DELETE_FREQUENT_URL = gql`
+  mutation DeleteFrequentUrl(
+    $id: ID!
+  ){
+    deleteFrequentUrl(
+      id: $id
+    ){
+      id, title, url
   }
   }
 

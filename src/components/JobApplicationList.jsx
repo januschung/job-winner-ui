@@ -21,7 +21,7 @@ import Loading from './common/Loading';
 import ConfirmDialog from './common/ConfirmDialog';
 import { useSnackbar } from './common/SnackbarContext';
 import useJobApplications from './hooks/useJobApplications';
-import useConfirmDialog from './hooks/useConfirmDialog';
+import useDialog from './hooks/useDialog';
 import useJobApplicationDialog from './hooks/useJobApplicationDialog';
 import { DELETE_JOB_APPLICATION } from '../graphql/mutation';
 import { GET_JOB_APPLICATIONS } from '../graphql/query';
@@ -35,10 +35,12 @@ const STATUS_COLORS = {
 export default function JobApplicationList({ searchTerm }) {
     const [jobApplicationToDelete, setJobApplicationToDelete] = useState(null);
     const [localData, setLocalData] = useState([]);
-
     const { data, loading, error } = useJobApplications();
     const { showSnackbar } = useSnackbar();
-    const { confirmDialogOpen, handleConfirmDialogOpen, handleConfirmDialogClose } = useConfirmDialog();
+    const { 
+      dialogOpen: confirmDialogOpen, 
+      handleOpen: handleConfirmDialogOpen, 
+      handleClose: handleConfirmDialogClose } = useDialog();
     const { open, jobApplication, handleOpen, handleClose } = useJobApplicationDialog();
 
     const [deleteJobApplication] = useMutation(DELETE_JOB_APPLICATION, {
