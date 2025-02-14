@@ -14,7 +14,7 @@ export const GET_JOB_APPLICATIONS = gql`
       status
     }
   }
-`;
+`
 
 export const GET_PROFILES = gql`
   query GetProfiles {
@@ -63,7 +63,6 @@ export const GET_OFFER = gql`
     }
   }
 `
-;
 
 export const GET_ALL_OFFERS = gql`
   query GetOffers {
@@ -86,7 +85,6 @@ export const GET_ALL_OFFERS = gql`
     }
   }
 `
-;
 
 export const GET_ALL_INTERVIEWS = gql`
   query GetAllInterviews {
@@ -109,7 +107,7 @@ export const GET_ALL_INTERVIEWS = gql`
       }
     }
   }
-`;
+`
 
 export const GET_INTERVIEWS_BY_JOB_APPLICATION_ID = gql`
   query GetInterviewsByJobApplicationId($jobApplicationId: Int!) {
@@ -122,7 +120,7 @@ export const GET_INTERVIEWS_BY_JOB_APPLICATION_ID = gql`
       status
     }
   }
-`;
+`
 
 export const GET_INTERVIEW_BY_ID = gql`
   query GetInterviewById($id: ID!) {
@@ -135,4 +133,24 @@ export const GET_INTERVIEW_BY_ID = gql`
       status
     }
   }
-`;
+`
+
+export const GET_FREQUENT_URLS = gql`
+  query GetFrequentUrls {
+    allFrequentUrl {
+      id
+      title
+      url
+    }
+  }
+`
+
+export const GET_FREQUENT_URL = gql`
+  query GetFrequentUrl($id: ID!) {
+    frequentUrlById(id: $id) {
+      id
+      title
+      url
+    }
+  }
+`

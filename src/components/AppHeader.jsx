@@ -10,6 +10,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Tooltip } from '@mui/material';
 import { useQuery } from '@apollo/client';
@@ -18,13 +19,13 @@ import SearchBar from './SearchBar';
 import InterviewListDialog from './InterviewListDialog';
 import JobApplicationDialog from './JobApplicationDialog';
 import OfferListDialog from './OfferListDialog';
-import useInterviewListDialog from './hooks/useInterviewDialog';
 import useJobApplicationDialog from './hooks/useJobApplicationDialog';
-import useOfferListDialog from './hooks/useOfferListDialog';
+import useDialog from './hooks/useDialog';
 import ProfileDialog from './ProfileDialog';
 import JobApplicationList from './JobApplicationList';
 import MobileMenu from './MobileMenu';
 import { getFilteredInterviews } from '../utils/interviewUtil';
+import FrequentUrlDialog from './FrequentUrlDialog';
 
 export default function AppHeader() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -40,17 +41,22 @@ export default function AppHeader() {
   const { open, handleOpen, handleClose } = useJobApplicationDialog(refetchOffers);
 
   const {
-    offerListingDialogOpen,
-    handleOfferListDialogOpen,
-    handleOfferListDialogClose,
-  } = useOfferListDialog(refetchOffers);
+    dialogOpen: offerListingDialogOpen,
+    handleOpen: handleOfferListDialogOpen,
+    handleClose: handleOfferListDialogClose,
+  } = useDialog(refetchOffers);
 
   const {
-    interviewListingDialogOpen,
-    handleInterviewListDialogOpen,
-    handleInterviewListDialogClose,
-  } = useInterviewListDialog(refetchInterviews);
+    dialogOpen: interviewListingDialogOpen,
+    handleOpen: handleInterviewListDialogOpen,
+    handleClose: handleInterviewListDialogClose,
+  } = useDialog(refetchInterviews);
 
+  const {
+    dialogOpen: frequentUrlsDialogOpen,
+    handleOpen: handleFrequentUrlsDialogOpen,
+    handleClose: handleFrequentUrlsDialogClose,
+  } = useDialog();
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -86,6 +92,11 @@ export default function AppHeader() {
         handleClose={handleClose}
         setOpen={handleOpen}
         isNew
+      />
+      <FrequentUrlDialog
+        open={frequentUrlsDialogOpen}
+        handleClose={handleFrequentUrlsDialogClose}
+        setOpen={handleFrequentUrlsDialogOpen}
       />
       <ProfileDialog
         profile={profile}
@@ -129,6 +140,11 @@ export default function AppHeader() {
             <Tooltip title="New Job Application">
               <IconButton size="large" aria-label="New" color="inherit" onClick={handleOpen}>
                 <AddCircleIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Bookmarks">
+              <IconButton size="large" aria-label="New" color="inherit" onClick={handleFrequentUrlsDialogOpen}>
+                <BookmarksIcon />
               </IconButton>
             </Tooltip>
             <Tooltip title="Interview List">
@@ -178,6 +194,7 @@ export default function AppHeader() {
           handleMobileMenuClose={handleMobileMenuClose}
           handleProfileMenuOpen={handleProfileMenuOpen} 
           handleJobApplicationOpen={handleOpen}
+          handleFrequentUrlsDialogOpen={handleFrequentUrlsDialogOpen}
           handleInterviewListDialogOpen={handleInterviewListDialogOpen}
           handleOfferListDialogOpen={handleOfferListDialogOpen}
           interviewCount={interviewCount}
