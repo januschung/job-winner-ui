@@ -5,6 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Badge from '@mui/material/Badge';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -15,7 +16,8 @@ export default function MobileMenu({
   handleMobileMenuClose, 
   handleProfileMenuOpen, 
   handleJobApplicationOpen,
-  handleFrequentUrlsDialogOpen, 
+  handleFrequentUrlsDialogOpen,
+  handleQuestionDialogOpen,
   handleInterviewListDialogOpen, 
   handleOfferListDialogOpen, 
   interviewCount, 
@@ -48,6 +50,12 @@ export default function MobileMenu({
           <BookmarksIcon />
         </IconButton>
         <p>Bookmarks</p>
+      </MenuItem>
+      <MenuItem onClick={handleQuestionDialogOpen}>
+        <IconButton size="large" aria-label="New" color="inherit">
+          <QuestionAnswerIcon />
+        </IconButton>
+        <p>Q&A</p>
       </MenuItem>
       <MenuItem onClick={handleInterviewListDialogOpen}>
         <IconButton size="large" color="inherit">

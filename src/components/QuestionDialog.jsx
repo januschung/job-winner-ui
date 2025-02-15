@@ -30,7 +30,7 @@ export default function QuestionDialog({ handleClose, open, setOpen }) {
       }}
     >
       <AddOrEditQuestionDialog open={dialogOpen} handleClose={handleAddQuestionClose} />
-      <DialogTitleBar title={'Q & A'} />            
+      <DialogTitleBar title={'Q&A'} />            
         <QuestionContent />
         <DialogActions>
           <Button color="info" variant="outlined" startIcon={<CancelIcon />} onClick={handleClose}>
