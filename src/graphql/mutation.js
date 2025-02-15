@@ -195,6 +195,7 @@ export const UPDATE_FREQUENT_URL = gql`
     $url: String!    
   ){
     updateFrequentUrl(frequentUrl: {
+    id: $id,
     title: $title,
     url: $url,
     }) {
@@ -213,5 +214,46 @@ export const DELETE_FREQUENT_URL = gql`
       id, title, url
   }
   }
+`
 
+export const ADD_QUESTION = gql`
+  mutation AddQuestion(
+    $question: String!,
+    $answer: String!    
+  ){
+    addQuestion(questionInput: {
+    question: $question,
+    answer: $answer
+    }) {
+      id, question, answer
+    }
+  }
+`
+
+export const UPDATE_QUESTION = gql`
+  mutation UpdateQuestion(
+    $id: ID!,
+    $question: String!,
+    $answer: String!    
+  ){
+    updateQuestion(question: {
+    id: $id,
+    question: $question,
+    answer: $answer,
+    }) {
+    id, question, answer
+  }
+  }
+`
+
+export const DELETE_QUESTION = gql`
+  mutation DeleteQuestion(
+    $id: ID!
+  ){
+    deleteQuestion(
+      id: $id
+    ){
+      id, question, answer
+  }
+  }
 `

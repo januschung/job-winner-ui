@@ -10,30 +10,30 @@ import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitleBar from './DialogTitleBar';
 import { useSnackbar } from './common/SnackbarContext';
-import { ADD_FREQUENT_URL, UPDATE_FREQUENT_URL } from '../graphql/mutation';
-import { GET_FREQUENT_URLS } from '../graphql/query';
+import { ADD_QUESTION, UPDATE_QUESTION } from '../graphql/mutation';
+import { GET_QUESTIONS } from '../graphql/query';
 
 
-export default function AddOrEditFrequentUrlDialog({ handleClose, open, setOpen, frequentUrl }) {
+export default function AddOrEditQuestionDialog({ handleClose, open, setOpen, question }) {
   const [formData, setFormData] = useState({
-    title: '',
-    url: '',
+    question: '',
+    answer: '',
   });
   const [errors, setErrors] = useState({});
   const { showSnackbar } = useSnackbar();
 
-  const [addFrequentUrl] = useMutation(ADD_FREQUENT_URL, {
+  const [addQuestion] = useMutation(ADD_QUESTION, {
     refetchQueries: [
-      { query: GET_FREQUENT_URLS },
+      { query: GET_QUESTIONS },
     ],
   });
   
-  const [updateFrequentUrl] = useMutation(UPDATE_FREQUENT_URL);
+  const [updateQuestion] = useMutation(UPDATE_QUESTION);
 
   const validateFields = () => {
     const newErrors = {};
-    if (!formData.title) newErrors.title = 'Title is required.';
-    if (!formData.url) newErrors.url = 'Url is required.';
+    if (!formData.question) newErrors.question = 'Question is required.';
+    if (!formData.answer) newErrors.answer = 'Answer is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -50,32 +50,32 @@ export default function AddOrEditFrequentUrlDialog({ handleClose, open, setOpen,
     if (!validateFields()) return;
     try {
       event.preventDefault();
-      const mutationFn = frequentUrl ? updateFrequentUrl : addFrequentUrl;
+      const mutationFn = question ? updateQuestion : addQuestion;
       const variables = {
           ...formData,
-          ...(frequentUrl && { id: frequentUrl.id }),
-      };
+          ...(question && { id: question.id }),
+      }; 
       mutationFn({ variables });
 
-      showSnackbar('Bookmark updated successfully!', 'success');
+      showSnackbar('Q&A updated successfully!', 'success');
       setTimeout(() => handleClose(), 500);
     } catch (err) {
-      showSnackbar('Error saving bookmark. Please try again.' + err, 'error');
+      showSnackbar('Error saving Q&A. Please try again.' + err, 'error');
     }
   };
 
   useEffect(() => {
-      if (!frequentUrl) {
+      if (!question) {
           setFormData({
               ...formData,
           });
       } else {
           setFormData({
-              title: frequentUrl.title || '',
-              url: frequentUrl.url || '',
+              question: question.question || '',
+              answer: question.answer || '',
           });
       }
-  }, [frequentUrl]);
+  }, [question]);
 
   return (
     <Dialog
@@ -92,33 +92,34 @@ export default function AddOrEditFrequentUrlDialog({ handleClose, open, setOpen,
         },
       }}
     >
-      <DialogTitleBar title={(frequentUrl ? 'Edit ' : 'Add ') + 'Bookmark'} />             
+      <DialogTitleBar title={(question ? 'Edit ' : 'Add ') + 'Q&A'} />             
         <DialogContent dividers>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12}>
               <TextField
-                id="title"
-                name="title"
-                label="Title"
+                id="question"
+                name="question"
+                label="Question"
                 fullWidth
                 variant="outlined"
                 onChange={handleFormChange}
-                value={formData.title}
-                error={!!errors.title}
-                helperText={errors.title}
+                value={formData.question}
+                error={!!errors.question}
+                helperText={errors.question}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                id="url"
-                name="url"
-                label="Url"
+                id="answer"
+                name="answer"
+                label="Answer"
                 fullWidth
+                multiline
                 variant="outlined"
                 onChange={handleFormChange}
-                value={formData.url}
-                error={!!errors.url}
-                helperText={errors.url}
+                value={formData.answer}
+                error={!!errors.answer}
+                helperText={errors.answer}
               />
             </Grid>
           </Grid>
