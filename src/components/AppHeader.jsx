@@ -11,6 +11,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Tooltip } from '@mui/material';
 import { useQuery } from '@apollo/client';
@@ -26,6 +27,7 @@ import JobApplicationList from './JobApplicationList';
 import MobileMenu from './MobileMenu';
 import { getFilteredInterviews } from '../utils/interviewUtil';
 import FrequentUrlDialog from './FrequentUrlDialog';
+import QuestionDialog from './QuestionDialog';
 
 export default function AppHeader() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -56,6 +58,12 @@ export default function AppHeader() {
     dialogOpen: frequentUrlsDialogOpen,
     handleOpen: handleFrequentUrlsDialogOpen,
     handleClose: handleFrequentUrlsDialogClose,
+  } = useDialog();
+
+  const {
+    dialogOpen: questionDialogOpen,
+    handleOpen: handleQuestionDialogOpen,
+    handleClose: handleQuestionDialogClose,
   } = useDialog();
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -97,6 +105,11 @@ export default function AppHeader() {
         open={frequentUrlsDialogOpen}
         handleClose={handleFrequentUrlsDialogClose}
         setOpen={handleFrequentUrlsDialogOpen}
+      />
+      <QuestionDialog
+        open={questionDialogOpen}
+        handleClose={handleQuestionDialogClose}
+        setOpen={handleQuestionDialogOpen}
       />
       <ProfileDialog
         profile={profile}
@@ -147,6 +160,11 @@ export default function AppHeader() {
                 <BookmarksIcon />
               </IconButton>
             </Tooltip>
+            <Tooltip title="Q&A">
+              <IconButton size="large" aria-label="New" color="inherit" onClick={handleQuestionDialogOpen}>
+                <QuestionAnswerIcon />
+              </IconButton>
+            </Tooltip>
             <Tooltip title="Interview List">
               <IconButton size="large" color="inherit" onClick={handleInterviewListDialogOpen}>
                 <Badge badgeContent={interviewsLoading ? '...' : interviewCount} color="error">
@@ -195,6 +213,7 @@ export default function AppHeader() {
           handleProfileMenuOpen={handleProfileMenuOpen} 
           handleJobApplicationOpen={handleOpen}
           handleFrequentUrlsDialogOpen={handleFrequentUrlsDialogOpen}
+          handleQuestionDialogOpen={handleQuestionDialogOpen}
           handleInterviewListDialogOpen={handleInterviewListDialogOpen}
           handleOfferListDialogOpen={handleOfferListDialogOpen}
           interviewCount={interviewCount}

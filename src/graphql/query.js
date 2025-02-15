@@ -154,3 +154,23 @@ export const GET_FREQUENT_URL = gql`
     }
   }
 `
+
+export const GET_QUESTIONS = gql`
+  query GetQuestions {
+    allQuestion {
+      id
+      question
+      answer
+    }
+  }
+`
+
+export const GET_QUESTION = gql`
+  query GetQuestion($id: ID!) {
+    questionById(id: $id) {
+      id
+      question
+      answer
+    }
+  }
+`
