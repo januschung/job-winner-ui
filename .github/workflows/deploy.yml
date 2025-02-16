@@ -1,7 +1,9 @@
 name: Deploy to Demo Server
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - main
 
