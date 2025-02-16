@@ -156,16 +156,11 @@ describe('JobApplicationList', () => {
       expect(screen.getByText('Company A')).toBeInTheDocument();
     });
 
-    // Simulate clicking the delete button for the first job application
-    const deleteButton = screen.getAllByText('Delete')[0];
-    console.log("zeon check: {}", deleteButton)
-    userEvent.click(deleteButton);
+    // Simulate clicking the delete icon for the first job application
+    const deleteIcon = screen.getAllByTestId("delete-icon")[0];
+    userEvent.click(deleteIcon);
 
-    console.log("first check: {}", screen.getAllByText('Delete'))
-
-    // Simulate confirming the deletion in the dialog, index is 2 as there are two job applilcations and hence two existing delete buttons
-    const confirmButton = screen.getAllByText('Delete')[2];
-    console.log("second check: {}", screen.getAllByText('Delete'))
+    const confirmButton = screen.getByText('Delete');
     userEvent.click(confirmButton);
 
     // Wait for the job application to be removed from the DOM

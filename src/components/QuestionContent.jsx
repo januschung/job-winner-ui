@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import DialogContent from '@mui/material/DialogContent';
-import { Typography, Grid, Button, Card, Avatar, CardContent, Link, Box } from '@mui/material';
-import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Typography } from '@mui/material';
+import ActionIcons from './common/ActionIcons';
 import Accordion from '@mui/material/Accordion';
-import AccordionActions from '@mui/material/AccordionActions';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -83,24 +81,11 @@ export default function QuestionContent({ }) {
                     <Typography component="span" sx={{ flexGrow: 1 }}>
                       {question.question}
                     </Typography>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <EditNoteOutlinedIcon 
-                        fontSize="inherit" 
-                        color="info"
-                        onClick={(event) => { 
-                          event.stopPropagation(); 
-                          handleOpenEditDialog(question);
-                        }}
-                      />
-                      <DeleteIcon
-                        fontSize="inherit"
-                        color="warning"
-                        onClick={(event) => { 
-                          event.stopPropagation(); 
-                          handleDeleteQuestion(question);
-                        }}
-                      />
-                    </Box>
+                    <ActionIcons 
+                      onEdit={() => handleOpenEditDialog(question)} 
+                      onDelete={() => handleDeleteQuestion(question)} 
+                      stopPropagation 
+                    />
                   </AccordionSummary>
                   <AccordionDetails>
                     {question.answer}
