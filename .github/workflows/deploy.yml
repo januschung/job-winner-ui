@@ -39,10 +39,11 @@ jobs:
 
       - name: Upload artifact via SCP
         run: |
-          scp -i ~/.ssh/deploy_key -r ./build ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/home/opc/build
+          scp -i ~/.ssh/deploy_key -r ./build/* ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/home/opc/build
 
       - name: Move to Nginx Folder
         run: |
           ssh -i ~/.ssh/deploy_key ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} << 'EOF'
           sudo cp -r /home/opc/build/* /usr/share/nginx/html/
+          rm -rf /home/opc/build
           EOF
