@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import ErrorIcon from '@mui/icons-material/Error';
 import LinkRoundedIcon from '@mui/icons-material/LinkRounded';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -20,6 +22,7 @@ import JobApplicationDialog from '../components/JobApplicationDialog';
 import Loading from './common/Loading';
 import ConfirmDialog from './common/ConfirmDialog';
 import { useSnackbar } from './common/SnackbarContext';
+import ActionIcons from './common/ActionIcons';
 import useJobApplications from './hooks/useJobApplications';
 import useDialog from './hooks/useDialog';
 import useJobApplicationDialog from './hooks/useJobApplicationDialog';
@@ -170,24 +173,10 @@ export default function JobApplicationList({ searchTerm }) {
                                             </Typography>
                                         </CardContent>
                                         <CardActions sx={{ justifyContent: 'flex-end' }}>
-                                            <Button
-                                                size="small"
-                                                color="info"
-                                                variant="outlined"
-                                                startIcon={<ReadMoreIcon />}
-                                                onClick={() => handleOpen(jobApplication)}
-                                            >
-                                                Edit
-                                            </Button>
-                                            <Button
-                                                size="small"
-                                                color="warning"
-                                                variant="outlined"
-                                                startIcon={<DeleteIcon />}
-                                                onClick={() => handleDeleteJobApplication(jobApplication)}
-                                            >
-                                                Delete
-                                            </Button>
+                                          <ActionIcons 
+                                            onEdit={() => handleOpen(jobApplication)} 
+                                            onDelete={() => handleDeleteJobApplication(jobApplication)} 
+                                          />
                                         </CardActions>
                                     </Card>
                                 </Grid>

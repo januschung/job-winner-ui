@@ -4,12 +4,12 @@ import DialogContent from '@mui/material/DialogContent';
 import { Typography, Grid, Button, Card, Avatar, CardContent, Link, Box } from '@mui/material';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
-
 import useFrequentUrls from './hooks/useFrequentUrls';
 import Loading from './common/Loading';
 import { stringAvatar } from '../utils/avatarUtil';
 import ConfirmDialog from './common/ConfirmDialog';
 import { useSnackbar } from './common/SnackbarContext';
+import ActionIcons from './common/ActionIcons';
 import useDialog from './hooks/useDialog';
 import { DELETE_FREQUENT_URL } from '../graphql/mutation';
 import { GET_FREQUENT_URLS } from '../graphql/query';
@@ -102,19 +102,11 @@ export default function FrequentUrlContent({ }) {
                           {frequentUrl.title}
                         </Link>
                       </Box>
-
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <EditNoteOutlinedIcon 
-                          fontSize="inherit" 
-                          color="info"
-                          onClick={() => handleOpenEditDialog(frequentUrl)}
-                        />
-                        <DeleteIcon
-                          fontSize="inherit"
-                          color="warning"
-                          onClick={() => handleDeleteFrequentUrl(frequentUrl)}
-                        />
-                      </Box>
+                      <ActionIcons 
+                        onEdit={() => handleOpenEditDialog(frequentUrl)}
+                        onDelete={() => handleDeleteFrequentUrl(frequentUrl)}
+                        stopPropagation 
+                      />
                     </Grid>
                   </CardContent>
                 </Card>
