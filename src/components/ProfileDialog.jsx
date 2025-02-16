@@ -7,7 +7,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitleBar from './DialogTitleBar'
-import { Typography, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { UPDATE_PROFILE } from '../graphql/mutation';
 import { GET_PROFILE } from '../graphql/query';
 import ProfileTextField from './ProfileTextField';
@@ -102,9 +102,6 @@ export default function ProfileDialog({ profile, handleClose, open, setOpen }) {
               />
             ))}
           </Grid>
-          <Typography variant="overline" align="right" paragraph>
-            * Click the copy icon to copy to clipboard
-          </Typography>
         </DialogContent>
         <DialogActions>
           <Button color="info" variant="outlined" startIcon={<CancelIcon />} onClick={handleClose}>
