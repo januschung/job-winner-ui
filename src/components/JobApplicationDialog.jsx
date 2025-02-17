@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-
-import Dialog from '@mui/material/Dialog';
-
-import DialogTitleBar from './DialogTitleBar';
-
 import ApplicationForm from './forms/ApplicationForm';
 import InterviewsForm from './forms/InterviewsForm';
 import OfferForm from './forms/OfferForm';
+import CustomDialog from './common/CustomDialog';
 
 
 export default function JobApplicationDialog({ jobApplication, handleClose, open, setOpen, isNew }) {
@@ -20,57 +16,47 @@ export default function JobApplicationDialog({ jobApplication, handleClose, open
     };
 
     return (
-        <Dialog
-            open={open}
-            onClose={handleClose}
-            fullWidth
-            maxWidth="md"
-            height="lg"
-            slotProps={{
-                backdrop: {
-                    sx: {
-                        backdropFilter: 'blur(8px)'
-                    },
-                },
-            }}
+        <CustomDialog
+          open={open}
+          onClose={handleClose}
+          title={(isNew ? 'Add ' : 'Edit ') + 'Job Application'}
         >
-            <DialogTitleBar title={(isNew ? 'Add ' : 'Edit ') + 'Job Application'} />
-            {!isNew && (
-            <Tabs
-                value={activeTab}
-                onChange={handleTabChange}
-                indicatorColor="primary"
-                textColor="primary"
-                variant="fullWidth"
-            >
-                <Tab label="Application" />
-                <Tab label="Interviews" />
-                <Tab label="Offer" />
-            </Tabs>
-            )}  
-            {isNew && (
-                <div/>
-            )}
-            {activeTab === 0 && (
-                <ApplicationForm
-                    jobApplication={jobApplication}
-                    isNew={isNew}
-                    setOpen={setOpen}
-                    handleClose={handleClose}
-                />
-            )}
-            {activeTab === 1 && (
-                <InterviewsForm 
-                    jobApplicationId={parseInt(jobApplication?.id || 0)}
-                />
-            )}
+          {!isNew && (
+          <Tabs
+            value={activeTab}
+            onChange={handleTabChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+          >
+            <Tab label="Application" />
+            <Tab label="Interviews" />
+            <Tab label="Offer" />
+          </Tabs>
+          )}  
+          {isNew && (
+            <div/>
+          )}
+          {activeTab === 0 && (
+            <ApplicationForm
+              jobApplication={jobApplication}
+              isNew={isNew}
+              setOpen={setOpen}
+              handleClose={handleClose}
+            />
+          )}
+          {activeTab === 1 && (
+            <InterviewsForm 
+              jobApplicationId={parseInt(jobApplication?.id || 0)}
+            />
+          )}
 
-            {activeTab === 2 && (
-                <OfferForm
-                    jobApplicationId={parseInt(jobApplication?.id || 0)}
-                    handleClose={handleClose}
-                />
-            )}
-        </Dialog>
+          {activeTab === 2 && (
+            <OfferForm
+              jobApplicationId={parseInt(jobApplication?.id || 0)}
+              handleClose={handleClose}
+            />
+          )}
+        </CustomDialog>
     );
 }

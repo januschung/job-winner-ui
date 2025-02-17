@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-
-import Dialog from '@mui/material/Dialog';
 import { Grid, TextField } from '@mui/material';
 import DialogContent from '@mui/material/DialogContent';
-import CancelIcon from '@mui/icons-material/Cancel';
-import SaveIcon from '@mui/icons-material/Save';
-import Button from '@mui/material/Button';
-import DialogActions from '@mui/material/DialogActions';
-import DialogTitleBar from './DialogTitleBar';
 import { useSnackbar } from './common/SnackbarContext';
 import { ADD_QUESTION, UPDATE_QUESTION } from '../graphql/mutation';
 import { GET_QUESTIONS } from '../graphql/query';
+import CustomDialog from './common/CustomDialog';
 
 
 export default function AddOrEditQuestionDialog({ handleClose, open, setOpen, question }) {
@@ -78,60 +72,44 @@ export default function AddOrEditQuestionDialog({ handleClose, open, setOpen, qu
   }, [question]);
 
   return (
-    <Dialog
+    <CustomDialog
       open={open}
       onClose={handleClose}
-      fullWidth
-      maxWidth="md"
-      height="lg"
-      slotProps={{
-        backdrop: {
-          sx: {
-            backdropFilter: 'blur(8px)'
-          },
-        },
-      }}
-    >
-      <DialogTitleBar title={(question ? 'Edit ' : 'Add ') + 'Q&A'} />             
-        <DialogContent dividers>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12}>
-              <TextField
-                id="question"
-                name="question"
-                label="Question"
-                fullWidth
-                variant="outlined"
-                onChange={handleFormChange}
-                value={formData.question}
-                error={!!errors.question}
-                helperText={errors.question}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                id="answer"
-                name="answer"
-                label="Answer"
-                fullWidth
-                multiline
-                variant="outlined"
-                onChange={handleFormChange}
-                value={formData.answer}
-                error={!!errors.answer}
-                helperText={errors.answer}
-              />
-            </Grid>
+      onCancel={handleClose}
+      onSave={handleSubmit}
+      title={(question ? 'Edit ' : 'Add ') + 'Q&A'}
+    >      
+      <DialogContent dividers>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12}>
+            <TextField
+              id="question"
+              name="question"
+              label="Question"
+              fullWidth
+              variant="outlined"
+              onChange={handleFormChange}
+              value={formData.question}
+              error={!!errors.question}
+              helperText={errors.question}
+            />
           </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button color="info" variant="outlined" startIcon={<CancelIcon />} onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button color="info" variant="contained" startIcon={<SaveIcon />} onClick={handleSubmit}>
-            Save
-          </Button>
-      </DialogActions>
-    </Dialog>
+          <Grid item xs={12}>
+            <TextField
+              id="answer"
+              name="answer"
+              label="Answer"
+              fullWidth
+              multiline
+              variant="outlined"
+              onChange={handleFormChange}
+              value={formData.answer}
+              error={!!errors.answer}
+              helperText={errors.answer}
+            />
+          </Grid>
+        </Grid>
+      </DialogContent>
+    </CustomDialog>
   );
 }

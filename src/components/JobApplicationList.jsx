@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import ErrorIcon from '@mui/icons-material/Error';
 import LinkRoundedIcon from '@mui/icons-material/LinkRounded';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import ReadMoreIcon from '@mui/icons-material/ReadMore';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';

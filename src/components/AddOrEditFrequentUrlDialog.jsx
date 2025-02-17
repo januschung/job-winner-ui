@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-
-import Dialog from '@mui/material/Dialog';
 import { Grid, TextField } from '@mui/material';
 import DialogContent from '@mui/material/DialogContent';
-import CancelIcon from '@mui/icons-material/Cancel';
-import SaveIcon from '@mui/icons-material/Save';
-import Button from '@mui/material/Button';
-import DialogActions from '@mui/material/DialogActions';
-import DialogTitleBar from './DialogTitleBar';
 import { useSnackbar } from './common/SnackbarContext';
 import { ADD_FREQUENT_URL, UPDATE_FREQUENT_URL } from '../graphql/mutation';
 import { GET_FREQUENT_URLS } from '../graphql/query';
+import CustomDialog from './common/CustomDialog';
 
 
 export default function AddOrEditFrequentUrlDialog({ handleClose, open, setOpen, frequentUrl }) {
@@ -78,59 +72,43 @@ export default function AddOrEditFrequentUrlDialog({ handleClose, open, setOpen,
   }, [frequentUrl]);
 
   return (
-    <Dialog
+    <CustomDialog
       open={open}
       onClose={handleClose}
-      fullWidth
-      maxWidth="md"
-      height="lg"
-      slotProps={{
-        backdrop: {
-          sx: {
-            backdropFilter: 'blur(8px)'
-          },
-        },
-      }}
+      onCancel={handleClose}
+      onSave={handleSubmit}
+      title={(frequentUrl ? 'Edit ' : 'Add ') + 'Bookmark'}
     >
-      <DialogTitleBar title={(frequentUrl ? 'Edit ' : 'Add ') + 'Bookmark'} />             
-        <DialogContent dividers>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12}>
-              <TextField
-                id="title"
-                name="title"
-                label="Title"
-                fullWidth
-                variant="outlined"
-                onChange={handleFormChange}
-                value={formData.title}
-                error={!!errors.title}
-                helperText={errors.title}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                id="url"
-                name="url"
-                label="Url"
-                fullWidth
-                variant="outlined"
-                onChange={handleFormChange}
-                value={formData.url}
-                error={!!errors.url}
-                helperText={errors.url}
-              />
-            </Grid>
+      <DialogContent dividers>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12}>
+            <TextField
+              id="title"
+              name="title"
+              label="Title"
+              fullWidth
+              variant="outlined"
+              onChange={handleFormChange}
+              value={formData.title}
+              error={!!errors.title}
+              helperText={errors.title}
+            />
           </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button color="info" variant="outlined" startIcon={<CancelIcon />} onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button color="info" variant="contained" startIcon={<SaveIcon />} onClick={handleSubmit}>
-            Save
-          </Button>
-      </DialogActions>
-    </Dialog>
+          <Grid item xs={12}>
+            <TextField
+              id="url"
+              name="url"
+              label="Url"
+              fullWidth
+              variant="outlined"
+              onChange={handleFormChange}
+              value={formData.url}
+              error={!!errors.url}
+              helperText={errors.url}
+            />
+          </Grid>
+        </Grid>
+      </DialogContent>
+    </CustomDialog>
   );
 }
