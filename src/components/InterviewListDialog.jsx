@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-import CancelIcon from '@mui/icons-material/Cancel';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
@@ -11,10 +8,10 @@ import Typography from '@mui/material/Typography';
 import { GET_ALL_INTERVIEWS } from '../graphql/query';
 import useJobApplicationDialog from './hooks/useJobApplicationDialog';
 import JobApplicationDialog from './JobApplicationDialog';
-import DialogTitleBar from './DialogTitleBar';
 import useSortableTable from './hooks/useSortableTable';
 import SortableTable from './common/SortableTable';
 import { getFilteredInterviews } from '../utils/interviewUtil';
+import CustomDialog from './common/CustomDialog';
 
 export default function InterviewListDialog({ handleClose, open }) {
   const [interviews, setInterviews] = useState([]);
@@ -74,20 +71,12 @@ export default function InterviewListDialog({ handleClose, open }) {
   }, [open, refetch]);
 
   return (
-    <Dialog
+    <CustomDialog
       open={open}
       onClose={handleClose}
-      fullWidth
-      maxWidth="md"
-      slotProps={{
-        backdrop: {
-          sx: {
-            backdropFilter: 'blur(8px)',
-          },
-        },
-      }}
+      onCancel={handleClose}
+      title="Interview List"
     >
-      <DialogTitleBar title="Interview List" />
       <DialogContent dividers>
         {loading ? (
           <Box display="flex" justifyContent="center" alignItems="center" height="200px">
@@ -106,16 +95,11 @@ export default function InterviewListDialog({ handleClose, open }) {
           />
         )}
       </DialogContent>
-      <DialogActions>
-        <Button color="info" variant="outlined" startIcon={<CancelIcon />} onClick={handleClose}>
-          Cancel
-        </Button>
-      </DialogActions>
       <JobApplicationDialog
         jobApplication={jobApplication}
         open={jobDialogOpen}
         handleClose={handleJobDialogClose}
       />
-    </Dialog>
+    </CustomDialog>
   );
 }

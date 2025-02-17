@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import CancelIcon from '@mui/icons-material/Cancel';
-import SaveIcon from '@mui/icons-material/Save';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitleBar from './DialogTitleBar'
 import { Grid } from '@mui/material';
 import { UPDATE_PROFILE } from '../graphql/mutation';
 import { GET_PROFILE } from '../graphql/query';
 import ProfileTextField from './ProfileTextField';
+import CustomDialog from './common/CustomDialog';
 
 export default function ProfileDialog({ profile, handleClose, open, setOpen }) {
   const id = 1;
@@ -73,45 +68,28 @@ export default function ProfileDialog({ profile, handleClose, open, setOpen }) {
   };
 
   return (
-    <Dialog 
+    <CustomDialog 
       open={open} 
-      onClose={handleClose} 
-      aria-labelledby="modal-title" 
-      aria-describedby="modal-description" 
-      fullWidth maxWidth="sm"
-      slotProps={{
-        backdrop: {
-            sx: {
-                backdropFilter: 'blur(8px)'
-            },
-        },
-    }}
+      maxWidth='sm'
+      onClose={handleClose}
+      onCancel={handleClose}
+      onSave={handleUpdateProfile}
+      title="Profile"
     >
-      <DialogTitleBar title="Profile" />
-      <form onSubmit={handleUpdateProfile}>
-        <DialogContent dividers>
-          <Grid container spacing={2} alignItems="center">
-            {fields.map((field) => (
-              <ProfileTextField
-                key={field.id}
-                id={field.id}
-                label={field.label}
-                value={formData[field.id]}
-                onChange={handleChange}
-                name={field.id}
-              />
-            ))}
-          </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button color="info" variant="outlined" startIcon={<CancelIcon />} onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button color="info" variant="contained" startIcon={<SaveIcon />} type="submit">
-            Save
-          </Button>
-        </DialogActions>
-      </form>
-    </Dialog>
+      <DialogContent dividers>
+        <Grid container spacing={2} alignItems="center">
+          {fields.map((field) => (
+            <ProfileTextField
+              key={field.id}
+              id={field.id}
+              label={field.label}
+              value={formData[field.id]}
+              onChange={handleChange}
+              name={field.id}
+            />
+          ))}
+        </Grid>
+      </DialogContent>
+    </CustomDialog>
   );
 }
