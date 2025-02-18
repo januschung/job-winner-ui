@@ -7,17 +7,20 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import useQuestion from './hooks/useQuestion';
 import Loading from './common/Loading';
 import ConfirmDialog from './common/ConfirmDialog';
 import { useSnackbar } from './common/SnackbarContext';
-import useDialog from './hooks/useDialog';
+import useDialog from '../hooks/useDialog';
+import useQuestion from '../hooks/useQuestion';
 import { DELETE_QUESTION } from '../graphql/mutation';
 import { GET_QUESTIONS } from '../graphql/query';
 import AddOrEditQuestionDialog from './AddOrEditQuestionDialog';
+import { useTheme } from "@mui/material/styles";
 
 
-export default function QuestionContent({ }) {
+export default function QuestionContent() {
+  const theme = useTheme();
+
   const [question, setQuestion] = useState(null);
   const { dialogOpen: confirmDialogOpen, 
           handleOpen: handleConfirmDialogOpen, 
@@ -36,10 +39,10 @@ export default function QuestionContent({ }) {
       variables: { id: question.id }
     })
       .then(() => {
-        showSnackbar("Bookmark deleted successfully!");
+        showSnackbar("Question deleted successfully!");
     })
       .catch(() => {
-        showSnackbar("Failed to delete the bookmark.");
+        showSnackbar("Failed to delete the question.");
     });
     handleConfirmDialogClose();
   }
@@ -64,7 +67,7 @@ export default function QuestionContent({ }) {
         {!loading && !error && data?.allQuestion?.length > 0 && (
           <>
             {data.allQuestion.map((question) => (
-              <>
+              // <>
                 <Accordion>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -74,8 +77,11 @@ export default function QuestionContent({ }) {
                       display: "flex", 
                       alignItems: "center", 
                       width: "100%", 
-                      backgroundColor: "#e3f2fd",
-                      "&:hover": { backgroundColor: "#e0e0e0" }
+                      // backgroundColor: "#e3f2fd",
+                      backgroundColor: theme.palette.custom.table.header,
+                      "&:hover": { backgroundColor: theme.palette.custom.table.headerHover }
+                      // "&:hover": { backgroundColor: "#757575" }
+                      // "&:hover": { backgroundColor: "theme.palette.action.hover" }
                     }}
                   >
                     <Typography component="span" sx={{ flexGrow: 1 }}>
@@ -91,7 +97,7 @@ export default function QuestionContent({ }) {
                     {question.answer}
                   </AccordionDetails>
                 </Accordion>
-              </>
+              // </>
               ))}
             </>
           )}

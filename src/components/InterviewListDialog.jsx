@@ -6,12 +6,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { GET_ALL_INTERVIEWS } from '../graphql/query';
-import useJobApplicationDialog from './hooks/useJobApplicationDialog';
+import useJobApplicationDialog from '../hooks/useJobApplicationDialog';
+import useSortableTable from '../hooks/useSortableTable';
 import JobApplicationDialog from './JobApplicationDialog';
-import useSortableTable from './hooks/useSortableTable';
+import CustomDialog from './common/CustomDialog';
 import SortableTable from './common/SortableTable';
 import { getFilteredInterviews } from '../utils/interviewUtil';
-import CustomDialog from './common/CustomDialog';
+
 
 export default function InterviewListDialog({ handleClose, open }) {
   const [interviews, setInterviews] = useState([]);

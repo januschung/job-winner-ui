@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { GET_JOB_APPLICATIONS } from '../../graphql/query';
+import { GET_JOB_APPLICATIONS } from '../graphql/query';
 
 function useJobApplications() {
     const { data, error, loading } = useQuery(GET_JOB_APPLICATIONS, {

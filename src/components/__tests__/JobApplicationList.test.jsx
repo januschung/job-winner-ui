@@ -81,13 +81,13 @@ const deleteMocks = [
   },
 ];
 
-jest.mock('../hooks/useDialog', () => ({
+jest.mock('../../hooks/useDialog', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
 
 beforeEach(() => {
-  require('../hooks/useDialog').default.mockReturnValue({
+  require('../../hooks/useDialog').default.mockReturnValue({
     dialogOpen: true,
     handleOpen: jest.fn(),
     handleClose: jest.fn(),

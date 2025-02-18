@@ -1,21 +1,27 @@
-import CssBaseline from '@mui/material/CssBaseline';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import AppHeader from './components/AppHeader';
+import React, { useState, useMemo } from "react";
+import { CssBaseline } from "@mui/material";
+// import { createAppTheme } from "./config/theme";
+import AppHeader from "./components/AppHeader";
 import { SnackbarProvider } from './components/common/SnackbarContext';
-
-const theme = createTheme();
-
+import { ThemeContextProvider } from "./components/ThemeContext";
 
 function App() {
+  // const [mode, setMode] = useState("light");
+
+  // const theme = useMemo(() => createAppTheme(mode), [mode]);
+
+  // const toggleColorMode = () => {
+  //   setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+  // };
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeContextProvider>
       <CssBaseline />
       <SnackbarProvider>
-        <AppHeader/>
-          <div className="App">
-          </div>
+        <AppHeader />
+        <div className="App"></div>
       </SnackbarProvider>
-    </ThemeProvider>
+    </ThemeContextProvider>
   );
 }
 

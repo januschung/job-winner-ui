@@ -1,6 +1,6 @@
 import React from 'react';
 import FrequentUrlContent from './FrequentUrlContent';
-import useDialog from './hooks/useDialog';
+import useDialog from '../hooks/useDialog';
 import AddOrEditFrequentUrlDialog from './AddOrEditFrequentUrlDialog';
 import CustomDialog from './common/CustomDialog';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import QuestionContent from './QuestionContent';
-import useDialog from './hooks/useDialog';
+import useDialog from '../hooks/useDialog';
 import AddOrEditQuestionDialog from './AddOrEditQuestionDialog';
 import CustomDialog from './common/CustomDialog';
 
