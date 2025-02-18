@@ -12,6 +12,7 @@ import JobApplicationDialog from './JobApplicationDialog';
 import CustomDialog from './common/CustomDialog';
 import SortableTable from './common/SortableTable';
 import { getFilteredInterviews } from '../utils/interviewUtil';
+import CustomDialog from './common/CustomDialog';
 
 
 export default function InterviewListDialog({ handleClose, open }) {
