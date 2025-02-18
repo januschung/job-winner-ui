@@ -18,9 +18,9 @@ import Loading from './common/Loading';
 import ConfirmDialog from './common/ConfirmDialog';
 import { useSnackbar } from './common/SnackbarContext';
 import ActionIcons from './common/ActionIcons';
-import useJobApplications from './hooks/useJobApplications';
-import useDialog from './hooks/useDialog';
-import useJobApplicationDialog from './hooks/useJobApplicationDialog';
+import useDialog from '../hooks/useDialog';
+import useJobApplications from '../hooks/useJobApplications';
+import useJobApplicationDialog from '../hooks/useJobApplicationDialog';
 import { DELETE_JOB_APPLICATION } from '../graphql/mutation';
 import { GET_JOB_APPLICATIONS } from '../graphql/query';
 

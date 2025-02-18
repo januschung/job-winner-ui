@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTheme } from "@mui/material/styles";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -9,6 +10,8 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
 
 const SortableTable = ({ data, columns, handleSort, getSortIndicator }) => {
+  const theme = useTheme();
+
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -21,7 +24,7 @@ const SortableTable = ({ data, columns, handleSort, getSortIndicator }) => {
                 style={{
                   cursor: 'pointer',
                   fontWeight: 'bold',
-                  backgroundColor: '#e3f2fd',
+                  backgroundColor: theme.palette.action.hover,
                   whiteSpace: 'nowrap',
                 }}
               >

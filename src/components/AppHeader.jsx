@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -11,6 +11,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import { Brightness4, Brightness7 } from "@mui/icons-material";
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Tooltip } from '@mui/material';
@@ -20,20 +21,23 @@ import SearchBar from './SearchBar';
 import InterviewListDialog from './InterviewListDialog';
 import JobApplicationDialog from './JobApplicationDialog';
 import OfferListDialog from './OfferListDialog';
-import useJobApplicationDialog from './hooks/useJobApplicationDialog';
-import useDialog from './hooks/useDialog';
+import useJobApplicationDialog from '../hooks/useJobApplicationDialog';
+import useDialog from '../hooks/useDialog';
 import ProfileDialog from './ProfileDialog';
 import JobApplicationList from './JobApplicationList';
 import MobileMenu from './MobileMenu';
 import { getFilteredInterviews } from '../utils/interviewUtil';
 import FrequentUrlDialog from './FrequentUrlDialog';
 import QuestionDialog from './QuestionDialog';
+import { useColorMode } from "./ThemeContext";
 
 export default function AppHeader() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const [profile, setProfile] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const { mode, toggleColorMode } = useColorMode();
+
   const { data: offersData, loading: offersLoading, error: offersError, refetch: refetchOffers } = useQuery(GET_ALL_OFFERS, {
     fetchPolicy: 'network-only',
   });
@@ -177,6 +181,11 @@ export default function AppHeader() {
                 <Badge badgeContent={offersLoading ? '...' : offerCount} color="error">
                   <NotificationsIcon />
                 </Badge>
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={(mode === "dark" ? 'Light' : 'Dark') + ' Mode'}>
+              <IconButton onClick={toggleColorMode} color="inherit">
+                {mode === "dark" ? <Brightness7 /> : <Brightness4 />}
               </IconButton>
             </Tooltip>
             <Tooltip title="Profile">

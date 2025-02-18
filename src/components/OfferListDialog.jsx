@@ -6,9 +6,9 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { GET_ALL_OFFERS } from '../graphql/query';
-import useJobApplicationDialog from './hooks/useJobApplicationDialog';
 import JobApplicationDialog from './JobApplicationDialog';
-import useSortableTable from './hooks/useSortableTable';
+import useJobApplicationDialog from '../hooks/useJobApplicationDialog';
+import useSortableTable from '../hooks/useSortableTable';
 import SortableTable from './common/SortableTable';
 import CustomDialog from './common/CustomDialog';
 

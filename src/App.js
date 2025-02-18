@@ -1,21 +1,19 @@
-import CssBaseline from '@mui/material/CssBaseline';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import AppHeader from './components/AppHeader';
+import React from "react";
+import { CssBaseline } from "@mui/material";
+import AppHeader from "./components/AppHeader";
 import { SnackbarProvider } from './components/common/SnackbarContext';
-
-const theme = createTheme();
-
+import { ThemeContextProvider } from "./components/ThemeContext";
 
 function App() {
+  
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeContextProvider>
       <CssBaseline />
       <SnackbarProvider>
-        <AppHeader/>
-          <div className="App">
-          </div>
+        <AppHeader />
+        <div className="App"></div>
       </SnackbarProvider>
-    </ThemeProvider>
+    </ThemeContextProvider>
   );
 }
 
