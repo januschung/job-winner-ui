@@ -7,6 +7,8 @@ const globals = require('globals');
 
 module.exports = [
   pluginJs.configs.recommended,
+  reactPlugin.configs.flat.recommended, // This is not a plugin object, but a shareable config object
+  reactPlugin.configs.flat['jsx-runtime'], // Add this if you are using React 17+
   {
     plugins: {
       js: pluginJs,
@@ -15,7 +17,6 @@ module.exports = [
   },
   {
     files: ["src/**/*.js"],
-    ...reactPlugin.configs.flat.recommended,
     settings: {
       react: {
         version: "detect",
