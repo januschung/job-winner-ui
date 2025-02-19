@@ -227,6 +227,8 @@ export default function AppHeader() {
           handleOfferListDialogOpen={handleOfferListDialogOpen}
           interviewCount={interviewCount}
           offerCount={offerCount}
+          colorMode={mode}
+          toggleColorMode={toggleColorMode}
         />
       </AppBar>
       <JobApplicationList searchTerm={searchTerm} />
