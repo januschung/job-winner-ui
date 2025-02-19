@@ -8,6 +8,7 @@ import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import { Brightness4, Brightness7 } from "@mui/icons-material";
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
 export default function MobileMenu({ 
@@ -20,8 +21,10 @@ export default function MobileMenu({
   handleQuestionDialogOpen,
   handleInterviewListDialogOpen, 
   handleOfferListDialogOpen, 
-  interviewCount, 
-  offerCount }) {
+  interviewCount,
+  offerCount,
+  colorMode,
+  toggleColorMode }) {
   const mobileMenuId = 'primary-search-account-menu-mobile';
   return (
     <Menu
@@ -72,6 +75,12 @@ export default function MobileMenu({
           </Badge>
         </IconButton>
         <p>Offers</p>
+      </MenuItem>
+      <MenuItem onClick={toggleColorMode}>
+        <IconButton size="large" color="inherit">
+          {colorMode === "dark" ? <Brightness7 /> : <Brightness4 />}
+        </IconButton>
+        <p>{ (colorMode === "dark" ? 'Light' : 'Dark') + ' Mode' }</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton size="large" aria-label="account of current user" aria-controls="primary-search-account-menu" aria-haspopup="true" color="inherit">
