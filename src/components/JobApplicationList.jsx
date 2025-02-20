@@ -123,6 +123,11 @@ export default function JobApplicationList({ searchTerm }) {
                                             flexDirection: 'column',
                                             borderTop: 4,
                                             borderColor: STATUS_COLORS[jobApplication.status] || 'grey',
+                                            transition: 'transform 0.2s ease-in-out',
+                                                        '&:hover': {
+                                                          transform: 'scale(1.05)',
+                                                          boxShadow: 6,
+                                                        },
                                         }}
                                     >
                                         <CardContent sx={{ flexGrow: 1 }}>
