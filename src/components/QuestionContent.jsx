@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import DialogContent from '@mui/material/DialogContent';
 import { Typography } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
 import ActionIcons from './common/ActionIcons';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -60,14 +61,28 @@ export default function QuestionContent() {
   return (
     <DialogContent dividers>
       <AddOrEditQuestionDialog open={dialogOpen} handleClose={handleClose} question={question} />
-        {loading && <Loading />}
+      {loading && (
+        Array.from(new Array(4)).map((_, index) => (
+          <Accordion key={index}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              sx={{ backgroundColor: theme.palette.custom.table.header }}
+            >
+              <Skeleton variant="text" width="80%" height={24} />
+            </AccordionSummary>
+            <AccordionDetails>
+              <Skeleton variant="text" width="90%" height={20} />
+              <Skeleton variant="text" width="60%" height={20} />
+            </AccordionDetails>
+          </Accordion>
+        ))
+      )}
         {!loading && !error && data?.allQuestion?.length === 0 && (
           <Typography variant="body1">No Q&A</Typography>
         )}
         {!loading && !error && data?.allQuestion?.length > 0 && (
           <>
             {data.allQuestion.map((question) => (
-              // <>
                 <Accordion>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -77,11 +92,8 @@ export default function QuestionContent() {
                       display: "flex", 
                       alignItems: "center", 
                       width: "100%", 
-                      // backgroundColor: "#e3f2fd",
                       backgroundColor: theme.palette.custom.table.header,
                       "&:hover": { backgroundColor: theme.palette.custom.table.headerHover }
-                      // "&:hover": { backgroundColor: "#757575" }
-                      // "&:hover": { backgroundColor: "theme.palette.action.hover" }
                     }}
                   >
                     <Typography component="span" sx={{ flexGrow: 1 }}>
@@ -97,7 +109,6 @@ export default function QuestionContent() {
                     {question.answer}
                   </AccordionDetails>
                 </Accordion>
-              // </>
               ))}
             </>
           )}
