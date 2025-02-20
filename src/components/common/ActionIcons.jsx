@@ -20,6 +20,7 @@ const ActionIcons = ({ onEdit, onDelete, stopPropagation = false }) => {
         color="info"
         data-testid="edit-icon"
         sx={{
+          justifyContent: 'flex-end',
           transition: "transform 0.2s ease-in-out",
           "&:hover": {
             transform: "scale(1.3)",
@@ -34,6 +35,7 @@ const ActionIcons = ({ onEdit, onDelete, stopPropagation = false }) => {
         data-testid="delete-icon"
         sx={{
           transition: "transform 0.2s ease-in-out",
+          justifyContent: 'flex-end',
           "&:hover": {
             transform: "scale(1.3)",
             cursor: "pointer",

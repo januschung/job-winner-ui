@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
 import ErrorIcon from '@mui/icons-material/Error';
-import LinkRoundedIcon from '@mui/icons-material/LinkRounded';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -135,30 +134,28 @@ export default function JobApplicationList({ searchTerm }) {
                                                 <CalendarMonthRoundedIcon fontSize="inherit" />{' '}
                                                 {jobApplication.appliedDate}
                                             </Typography>
-                                            <Typography variant="h5" component="div">
-                                                {jobApplication.companyName}
+                                            <Typography sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }} color="text.secondary">
+                                                <Link
+                                                    href={jobApplication.jobUrl || '#'}
+                                                    variant="h5"
+                                                    underline="hover"
+                                                    color="inherit"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    {jobApplication.companyName}
+                                                </Link>
                                             </Typography>
                                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
                                                 {jobApplication.jobTitle}
                                             </Typography>
+                                            
                                             <Typography sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }} color="text.secondary">
                                                 <MonetizationOnIcon fontSize="inherit" sx={{ marginRight: 0.5 }} />
                                                 {jobApplication.salaryRange}
                                             </Typography>
                                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
                                                 status: {jobApplication.status}
-                                            </Typography>
-                                            <Typography sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }} color="text.secondary">
-                                                <LinkRoundedIcon fontSize="inherit" sx={{ marginRight: 0.5 }} />
-                                                <Link
-                                                    href={jobApplication.jobUrl || '#'}
-                                                    underline="hover"
-                                                    color="inherit"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    job link
-                                                </Link>
                                             </Typography>
                                             <Typography
                                                 color="text.secondary"
