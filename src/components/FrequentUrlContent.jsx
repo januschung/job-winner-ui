@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import DialogContent from '@mui/material/DialogContent';
+import Skeleton from '@mui/material/Skeleton';
 import { Typography, Grid, Card, Avatar, CardContent, Link, Box } from '@mui/material';
 import useFrequentUrls from '../hooks/useFrequentUrls';
 import useDialog from '../hooks/useDialog';
-import Loading from './common/Loading';
 import { stringAvatar } from '../utils/avatarUtil';
 import ConfirmDialog from './common/ConfirmDialog';
 import { useSnackbar } from './common/SnackbarContext';
@@ -55,7 +55,21 @@ export default function FrequentUrlContent({ }) {
     <DialogContent dividers>
       <AddOrEditFrequentUrlDialog open={dialogOpen} handleClose={handleClose} frequentUrl={frequentUrl} />
       <Grid container spacing={2} alignItems="center">
-        {loading && <Loading />}
+      {loading && (
+          Array.from(new Array(6)).map((_, index) => (
+            <Grid item key={index} xs={12} sm={6} md={4}>
+              <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <CardContent sx={{ flexGrow: 1, height: '20%', '&:last-child': { pb: 2 }}}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexGrow: 1 }}>
+                    <Skeleton variant="circular" width={40} height={40} />
+                    <Skeleton variant="text" width="80%" height={12} />
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+        )}
+
         {!loading && !error && data?.allFrequentUrl?.length === 0 && (
           <Typography variant="body1">No URLs</Typography>
         )}
