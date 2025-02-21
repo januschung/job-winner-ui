@@ -17,6 +17,7 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
         jobTitle: '',
         salaryRange: '',
         description: '',
+        note: '',
         jobUrl: '',
         status: 'open',
         appliedDate: dayjs().format('YYYY-MM-DD'),
@@ -43,6 +44,7 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
                 jobTitle: jobApplication.jobTitle || '',
                 salaryRange: jobApplication.salaryRange || '',
                 description: jobApplication.description || '',
+                note: jobApplication.note || '',
                 jobUrl: jobApplication.jobUrl || '',
                 status: jobApplication.status || 'open',
                 appliedDate: jobApplication.appliedDate || dayjs().format('YYYY-MM-DD'),
@@ -198,6 +200,19 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
                             variant="outlined"
                             onChange={handleFormChange}
                             value={formData.jobUrl}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            id="note"
+                            name="note"
+                            label="Note"
+                            multiline
+                            rows={4}
+                            fullWidth
+                            variant="outlined"
+                            onChange={handleFormChange}
+                            value={formData.note}
                         />
                     </Grid>
                 </Grid>

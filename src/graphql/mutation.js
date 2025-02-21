@@ -5,21 +5,23 @@ export const ADD_JOB_APPLICATION = gql`
       $companyName: String!,
       $jobTitle: String!,
       $description: String!,
+      $note: String!,
       $salaryRange: String!,
       $status: String!,
       $jobUrl: String!,
       $appliedDate: String!
   ){
-      addJobApplication(addJobApplicationInput: {
+      addJobApplication(jobApplicationInput: {
       companyName: $companyName,
       jobTitle: $jobTitle,
       description: $description,
+      note: $note,
       salaryRange: $salaryRange,
       status: $status,
       jobUrl: $jobUrl,
       appliedDate: $appliedDate
       }) {
-      id, companyName, description, jobTitle, jobUrl, appliedDate, salaryRange, status
+      id, companyName, description, note, jobTitle, jobUrl, appliedDate, salaryRange, status
   }
   }
 `
@@ -30,6 +32,7 @@ export const UPDATE_JOB_APPLICATION = gql`
       $companyName: String!,
       $jobTitle: String!,
       $description: String!,
+      $note: String!,
       $salaryRange: String!,
       $status: String!,
       $jobUrl: String!,
@@ -40,12 +43,13 @@ export const UPDATE_JOB_APPLICATION = gql`
       companyName: $companyName,
       jobTitle: $jobTitle,
       description: $description,
+      note: $note,
       salaryRange: $salaryRange,
       status: $status,
       jobUrl: $jobUrl,
       appliedDate: $appliedDate
       }) {
-      id, companyName, description, jobTitle, jobUrl, appliedDate, salaryRange, status
+      id, companyName, description, note, jobTitle, jobUrl, appliedDate, salaryRange, status
   }
   }
 `
@@ -57,7 +61,7 @@ export const DELETE_JOB_APPLICATION = gql`
       deleteJobApplication(
         id: $id
       ) {
-      id, companyName, description, jobTitle, jobUrl, appliedDate, salaryRange, status
+      id, companyName, description, note, jobTitle, jobUrl, appliedDate, salaryRange, status
   }
   }
 `

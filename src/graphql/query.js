@@ -7,6 +7,7 @@ export const GET_JOB_APPLICATIONS = gql`
       id
       companyName
       description
+      note
       jobTitle
       jobUrl
       appliedDate
@@ -76,6 +77,7 @@ export const GET_ALL_OFFERS = gql`
         id
         companyName
         description
+        note
         jobTitle
         jobUrl
         appliedDate
@@ -99,6 +101,7 @@ export const GET_ALL_INTERVIEWS = gql`
         id
         companyName
         description
+        note
         jobTitle
         jobUrl
         appliedDate
