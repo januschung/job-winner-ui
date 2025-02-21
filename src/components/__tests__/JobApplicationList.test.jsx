@@ -18,6 +18,7 @@ const mockApplications = [
     salaryRange: '50k - 70k',
     status: 'Pending',
     description: 'Developing cool stuff',
+    note: 'whatever',
     jobUrl: 'http://example.com/job1',
   },
   {
@@ -28,6 +29,7 @@ const mockApplications = [
     salaryRange: '60k - 80k',
     status: 'Interview',
     description: 'Building APIs',
+    note: 'whatsoever',
     jobUrl: 'http://example.com/job2',
   },
 ];
@@ -74,6 +76,7 @@ const deleteMocks = [
           salaryRange: '50k - 70k',
           status: 'Pending',
           description: 'Developing cool stuff',
+          note: 'whatever',
           jobUrl: 'http://example.com/job1',
         },
       },
