@@ -160,6 +160,7 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
                             />
                         </LocalizationProvider>
                     </Grid>
+                    {!isNew && (
                     <Grid item xs={12} sm={4}>
                         <FormControl fullWidth variant="outlined">
                             <InputLabel>Status</InputLabel>
@@ -168,14 +169,15 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
                                 label="Status"
                                 value={formData.status}
                                 onChange={handleFormChange}
-                                disabled={isNew}
                             >
                                 <MenuItem value="open">Open</MenuItem>
                                 <MenuItem value="active">Active</MenuItem>
+                                <MenuItem value="ghosted">Ghosted</MenuItem>
                                 <MenuItem value="rejected">Rejected</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
+                    )}
                     <Grid item xs={12}>
                         <TextField
                             id="description"

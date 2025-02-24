@@ -113,7 +113,7 @@ export default function JobApplicationList({ searchTerm }) {
           handleClose={handleClose}
           open={open}
         />
-        <Container sx={{ py: 8 }} maxWidth="lg">
+        <Container sx={{ py: 4 }} maxWidth="lg" >
           {loading && <Loading />}
           {error && (
             <Alert severity="error" icon={<ErrorIcon fontSize="inherit" />} sx={{ mt: 2 }}>
@@ -168,9 +168,6 @@ export default function JobApplicationList({ searchTerm }) {
                         <Typography sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }} color="text.secondary">
                           <MonetizationOnIcon fontSize="inherit" sx={{ marginRight: 0.5 }} />
                           {jobApplication.salaryRange}
-                        </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                          status: {jobApplication.status}
                         </Typography>
                         <Typography
                           color="text.secondary"
