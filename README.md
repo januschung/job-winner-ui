@@ -2,7 +2,7 @@
 
 ## Live Demo
 
-🚀 Check out the live demo! 👉 http://jobwinner.duckdns.org (or http://132.226.145.245)
+🚀 Check out the live demo! 👉 https://jobwinner.duckdns.org
 
 ✨ The data refreshes automatically every hour, so feel free to explore and test out any feature!
 
@@ -90,7 +90,7 @@ This is the UI for Job Winner and here is the stack:
 
 ## To build 
 
-Please follow the build instruction from the [UI repo](https://github.com/januschung/job-winner) to bring up the backend.
+Please follow the build instruction from the [Backend repo](https://github.com/januschung/job-winner) to bring up the backend.
 
 ```console
 npm start
