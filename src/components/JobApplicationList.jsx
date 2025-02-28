@@ -51,11 +51,10 @@ export default function JobApplicationList({ searchTerm }) {
         : new Date(b.appliedDate) - new Date(a.appliedDate);
     });
   };
+  
   useEffect(() => {
-    if (data) {
-      setLocalData(sortJobApplications(data.allJobApplication));
-    }
-  }, [data]);
+    setSelectedStatus('all');
+  }, [searchTerm]);
 
   useEffect(() => {
     if (data?.allJobApplication) {
