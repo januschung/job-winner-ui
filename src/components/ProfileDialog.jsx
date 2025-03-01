@@ -4,10 +4,11 @@ import DialogContent from '@mui/material/DialogContent';
 import { Grid } from '@mui/material';
 import { UPDATE_PROFILE } from '../graphql/mutation';
 import { GET_PROFILE } from '../graphql/query';
+import { useSnackbar } from './common/SnackbarContext';
 import ProfileTextField from './ProfileTextField';
 import CustomDialog from './common/CustomDialog';
 
-export default function ProfileDialog({ profile, handleClose, open, setOpen }) {
+export default function ProfileDialog({ profile, handleClose, open }) {
   const id = 1;
 
   const fields = [
@@ -31,10 +32,12 @@ export default function ProfileDialog({ profile, handleClose, open, setOpen }) {
 
   const [formData, setFormData] = useState(initialFormData);
 
-  const { error, data, loading } = useQuery(GET_PROFILE, {
-    variables: { id },
-    fetchPolicy: 'network-only',
-  });
+  const { showSnackbar } = useSnackbar();
+
+  // const { error, data, loading } = useQuery(GET_PROFILE, {
+  //   variables: { id },
+  //   fetchPolicy: 'network-only',
+  // });
 
   useEffect(() => {
     if (profile) {
@@ -64,7 +67,7 @@ export default function ProfileDialog({ profile, handleClose, open, setOpen }) {
         ...formData,
       },
     });
-    setOpen(false);
+    showSnackbar("Profile Saved Successfully.", "success");
   };
 
   return (
