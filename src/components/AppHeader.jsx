@@ -119,7 +119,6 @@ export default function AppHeader() {
         profile={profile}
         open={profileOpen}
         handleClose={handleProfileClose}
-        setOpen={setProfileOpen}
       />
       <InterviewListDialog
         open={interviewListingDialogOpen}
