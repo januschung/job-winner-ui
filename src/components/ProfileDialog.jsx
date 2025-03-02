@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import DialogContent from '@mui/material/DialogContent';
 import { Grid } from '@mui/material';
 import { UPDATE_PROFILE } from '../graphql/mutation';
@@ -33,11 +33,6 @@ export default function ProfileDialog({ profile, handleClose, open }) {
   const [formData, setFormData] = useState(initialFormData);
 
   const { showSnackbar } = useSnackbar();
-
-  // const { error, data, loading } = useQuery(GET_PROFILE, {
-  //   variables: { id },
-  //   fetchPolicy: 'network-only',
-  // });
 
   useEffect(() => {
     if (profile) {
