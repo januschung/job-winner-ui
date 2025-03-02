@@ -39,4 +39,4 @@ jobs:
 
       - name: Upload artifact via SCP
         run: |
-          scp -i ~/.ssh/deploy_key -r ./build/* ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/home/opc/build
+          scp -i ~/.ssh/deploy_key -r ./dist/* ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/home/opc/build

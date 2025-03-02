@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from "vitest";
 import SnackbarComponent from '../SnackbarComponent';
 
 describe('SnackbarComponent', () => {
@@ -10,15 +11,16 @@ describe('SnackbarComponent', () => {
         open={true}
         message="Test message"
         severity="error"
-        onClose={jest.fn()}
+        onClose={vi.fn()}
       />
     );
 
     // Assert that the message is displayed
-    expect(screen.getByText('Test message')).toBeInTheDocument();
+    expect(screen.getByText('Test message')).not.toBeNull();
 
     // Assert that the Snackbar has the correct severity
-    expect(screen.getByRole('alert')).toHaveClass('MuiAlert-filledError'); // Check MUI class for "error"
+    const alert = screen.getByRole('alert');
+    expect(alert.classList.contains('MuiAlert-filledError')).toBe(true); // Check MUI class for "error"
   });
 
   it('does not render the Snackbar when open is false', () => {
@@ -27,16 +29,16 @@ describe('SnackbarComponent', () => {
         open={false}
         message="Test message"
         severity="info"
-        onClose={jest.fn()}
+        onClose={vi.fn()}
       />
     );
 
     // Assert that the Snackbar is not visible
-    expect(screen.queryByText('Test message')).not.toBeInTheDocument();
+    expect(screen.queryByText('Test message')).toBeNull();
   });
 
   it('calls the onClose handler when the close button is clicked', async () => {
-    const handleClose = jest.fn();
+    const handleClose = vi.fn();
     render(
       <SnackbarComponent
         open={true}
@@ -55,8 +57,8 @@ describe('SnackbarComponent', () => {
   });
 
   it('closes automatically after the specified duration', async () => {
-    jest.useFakeTimers();
-    const handleClose = jest.fn();
+    vi.useFakeTimers();
+    const handleClose = vi.fn();
     render(
       <SnackbarComponent
         open={true}
@@ -67,11 +69,11 @@ describe('SnackbarComponent', () => {
     );
 
     // Fast-forward the timer to trigger auto-close
-    jest.advanceTimersByTime(3000);
+    vi.advanceTimersByTime(3000);
 
     // Assert that the onClose handler was called
     expect(handleClose).toHaveBeenCalledTimes(1);
 
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 });

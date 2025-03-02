@@ -93,7 +93,7 @@ This is the UI for Job Winner and here is the stack:
 Please follow the build instruction from the [Backend repo](https://github.com/januschung/job-winner) to bring up the backend.
 
 ```console
-npm start
+npm run dev
 ```
 or use docker
 ```console
