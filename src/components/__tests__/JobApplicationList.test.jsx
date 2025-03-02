@@ -165,8 +165,6 @@ describe("JobApplicationList", () => {
     const deleteIcon = screen.getAllByTestId("delete-icon")[0];
     userEvent.click(deleteIcon);
 
-    // console.log(screen);
-
     const confirmButton = screen.getByText("Delete");
     userEvent.click(confirmButton);
 

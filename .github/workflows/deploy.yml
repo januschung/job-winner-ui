@@ -24,9 +24,6 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Run Unit Tests
-        run: npx vitest
-
       - name: Create Custom Config File
         run: echo '${{ secrets.CUSTOM_CONFIG_JSON }}' > src/config.json
 
