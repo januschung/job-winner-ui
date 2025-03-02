@@ -1,16 +1,17 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
 import ProfileTextField from '../ProfileTextField';
 
-
-jest.mock('../CopyButton', () => {
-  return function MockCopyButton({ text }) {
+vi.mock('../CopyButton', () => ({
+  default: function MockCopyButton({ text }) {
     return <button>{text}</button>;
-  };
-});
+  },
+}));
+
 
 describe('ProfileTextField', () => {
-  const mockOnChange = jest.fn();
+  const mockOnChange = vi.fn();
 
   beforeEach(() => {
     render(
@@ -25,8 +26,8 @@ describe('ProfileTextField', () => {
 
   test('renders the TextField with the correct label and value', () => {
     const textField = screen.getByLabelText(/First Name/i);
-    expect(textField).toBeInTheDocument();
-    expect(textField).toHaveValue('John');
+    expect(textField).not.toBeNull();
+    expect(textField.value).toBe('John');
   });
 
   test('calls onChange when the TextField value changes', () => {
@@ -37,6 +38,6 @@ describe('ProfileTextField', () => {
 
   test('renders the CopyButton with the correct text', () => {
     const copyButton = screen.getByRole('button', { name: 'John' });
-    expect(copyButton).toBeInTheDocument();
+    expect(copyButton).not.toBeNull();
   });
 });

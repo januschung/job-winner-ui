@@ -1,18 +1,18 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { vi } from 'vitest';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Loading from '../Loading';
 
-jest.mock('@mui/material/styles', () => ({
-  ...jest.requireActual('@mui/material/styles'),
-  useTheme: jest.fn(),
+vi.mock('@mui/material/styles', () => ({
+  ...vi.importActual('@mui/material/styles'),
+  useTheme: vi.fn(),
 }));
 
-jest.mock('@mui/material', () => ({
-  ...jest.requireActual('@mui/material'),
-  useMediaQuery: jest.fn(),
+vi.mock('@mui/material', () => ({
+  ...vi.importActual('@mui/material'),
+  useMediaQuery: vi.fn(),
 }));
 
 const mockTheme = {

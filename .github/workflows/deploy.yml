@@ -24,6 +24,9 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Run Unit Tests
+        run: npx vitest
+
       - name: Create Custom Config File
         run: echo '${{ secrets.CUSTOM_CONFIG_JSON }}' > src/config.json
 
@@ -39,4 +42,4 @@ jobs:
 
       - name: Upload artifact via SCP
         run: |
-          scp -i ~/.ssh/deploy_key -r ./build/* ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/home/opc/build
+          scp -i ~/.ssh/deploy_key -r ./dist/* ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/home/opc/build

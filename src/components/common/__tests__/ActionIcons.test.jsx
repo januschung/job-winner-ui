@@ -1,12 +1,13 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { vi } from "vitest";
 import ActionIcons from "../ActionIcons";
 
 describe("ActionIcons Component", () => {
   test("calls onEdit when edit icon is clicked", () => {
-    const onEditMock = jest.fn();
-    const onDeleteMock = jest.fn();
+    const onEditMock = vi.fn();
+    const onDeleteMock = vi.fn();
 
     render(<ActionIcons onEdit={onEditMock} onDelete={onDeleteMock} />);
 
@@ -18,8 +19,8 @@ describe("ActionIcons Component", () => {
   });
 
   test("calls onDelete when delete icon is clicked", () => {
-    const onEditMock = jest.fn();
-    const onDeleteMock = jest.fn();
+    const onEditMock = vi.fn();
+    const onDeleteMock = vi.fn();
 
     render(<ActionIcons onEdit={onEditMock} onDelete={onDeleteMock} />);
 
@@ -32,21 +33,20 @@ describe("ActionIcons Component", () => {
 
   test("prevents event propagation when stopPropagation is true", async () => {
     const user = userEvent.setup();
-    const onEditMock = jest.fn();
-    const onDeleteMock = jest.fn();
-    
+    const onEditMock = vi.fn();
+    const onDeleteMock = vi.fn();
+
     render(<ActionIcons onEdit={onEditMock} onDelete={onDeleteMock} stopPropagation />);
-  
+
     const editIcon = screen.getByTestId("edit-icon");
-  
-    const stopPropagationSpy = jest.spyOn(Event.prototype, "stopPropagation");
-  
+
+    const stopPropagationSpy = vi.spyOn(Event.prototype, "stopPropagation");
+
     await user.click(editIcon);
-  
+
     expect(stopPropagationSpy).toHaveBeenCalled();
     expect(onEditMock).toHaveBeenCalledTimes(1);
-  
+
     stopPropagationSpy.mockRestore();
   });
-  
 });
