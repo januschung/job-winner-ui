@@ -150,7 +150,7 @@ export const DELETE_OFFER = gql`
 `
 
 export const ADD_INTERVIEW = gql`
-  mutation AddInterview($interviewInput: AddInterviewInput!) {
+  mutation AddInterview($interviewInput: InterviewInput!) {
     addInterview(interviewInput: $interviewInput) {
       id, jobApplicationId, interviewDate, interviewer, description, status
     }
