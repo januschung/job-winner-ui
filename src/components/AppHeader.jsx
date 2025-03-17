@@ -1,34 +1,34 @@
-import React, { useContext, useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { Brightness4, Brightness7, GitHub } from "@mui/icons-material";
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import { Tooltip } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import BookmarksIcon from '@mui/icons-material/Bookmarks';
-import { Brightness4, Brightness7 } from "@mui/icons-material";
-import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
-import MoreIcon from '@mui/icons-material/MoreVert';
-import { Tooltip } from '@mui/material';
-import { useQuery } from '@apollo/client';
-import { GET_PROFILE, GET_ALL_OFFERS, GET_ALL_INTERVIEWS } from '../graphql/query';
-import SearchBar from './SearchBar';
-import InterviewListDialog from './InterviewListDialog';
-import JobApplicationDialog from './JobApplicationDialog';
-import OfferListDialog from './OfferListDialog';
-import useJobApplicationDialog from '../hooks/useJobApplicationDialog';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import React, { useState } from 'react';
+import { GET_ALL_INTERVIEWS, GET_ALL_OFFERS, GET_PROFILE } from '../graphql/query';
 import useDialog from '../hooks/useDialog';
-import ProfileDialog from './ProfileDialog';
-import JobApplicationList from './JobApplicationList';
-import MobileMenu from './MobileMenu';
+import useJobApplicationDialog from '../hooks/useJobApplicationDialog';
 import { getFilteredInterviews } from '../utils/interviewUtil';
 import FrequentUrlDialog from './FrequentUrlDialog';
+import InterviewListDialog from './InterviewListDialog';
+import JobApplicationDialog from './JobApplicationDialog';
+import JobApplicationList from './JobApplicationList';
+import MobileMenu from './MobileMenu';
+import OfferListDialog from './OfferListDialog';
+import ProfileDialog from './ProfileDialog';
 import QuestionDialog from './QuestionDialog';
+import SearchBar from './SearchBar';
 import { useColorMode } from "./ThemeContext";
 
 export default function AppHeader() {
@@ -185,6 +185,11 @@ export default function AppHeader() {
             <Tooltip title={(mode === "dark" ? 'Light' : 'Dark') + ' Mode'}>
               <IconButton onClick={toggleColorMode} color="inherit">
                 {mode === "dark" ? <Brightness7 /> : <Brightness4 />}
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={'Like it? Give us a ⭐ on GitHub!'}>
+              <IconButton href="https://github.com/januschung/job-winner-ui" target="_blank" color="inherit">
+                <GitHub />
               </IconButton>
             </Tooltip>
             <Tooltip title="Profile">
