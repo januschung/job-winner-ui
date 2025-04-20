@@ -24,8 +24,8 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Create Custom Config File
-        run: echo '${{ secrets.CUSTOM_CONFIG_JSON }}' > src/config.json
+      - name: Create Custom .env File
+        run: echo '${{ secrets.DEMO_ENV }}' > .env
 
       - name: Build Project
         run: npm run build

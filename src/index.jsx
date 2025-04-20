@@ -5,10 +5,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
 import { BrowserRouter } from 'react-router-dom';
-import configData from './config.json'
 
 const client = new ApolloClient({
-  uri: configData.SERVER_URL,
+  uri: import.meta.env.VITE_BACKEND_URL,
   cache: new InMemoryCache()
 })
 
