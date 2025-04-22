@@ -95,8 +95,7 @@ Please follow the build instruction from the [Backend repo](https://github.com/j
 ```console
 npm run dev
 ```
-
-2, Use Docker
+or use docker
 ```console
 docker build -t job-winner-ui .
 docker run -p 3000:3000 -d job-winner-ui
