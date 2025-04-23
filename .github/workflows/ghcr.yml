@@ -10,7 +10,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+    steps:
       - name: Log in to ghcr.io
         uses: docker/login-action@v3
         with:
