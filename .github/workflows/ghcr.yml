@@ -11,10 +11,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
-        
+    steps:        
       - name: Log in to ghcr.io
         uses: docker/login-action@v3
         with:
@@ -27,18 +24,6 @@ jobs:
           commit_sha=${{ github.sha }}
           echo "COMMIT_SHA=${commit_sha:0:7}" >> $GITHUB_ENV
         shell: bash
-
-        - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build Project
-        run: npm run build
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
