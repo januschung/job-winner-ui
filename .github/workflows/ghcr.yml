@@ -10,8 +10,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
-    steps:        
+    
       - name: Log in to ghcr.io
         uses: docker/login-action@v3
         with:
@@ -35,5 +34,4 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
           tags: ghcr.io/januschung/job-winner-ui:${{ env.COMMIT_SHA }}
