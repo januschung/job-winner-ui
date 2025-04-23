@@ -37,5 +37,5 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: .
+          push: true
           tags: ghcr.io/januschung/job-winner-ui:${{ env.COMMIT_SHA }}
