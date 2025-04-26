@@ -42,7 +42,7 @@ export default function JobApplicationList({ searchTerm }) {
   });
 
   const sortJobApplications = (jobApplications) => {
-    const statusOrder = { active: 1, open: 2, rejected: 3 };
+    const statusOrder = { active: 1, open: 2, ghosted: 3, rejected: 4 };
 
     return [...jobApplications].sort((a, b) => {
       const statusComparison = statusOrder[a.status] - statusOrder[b.status];
