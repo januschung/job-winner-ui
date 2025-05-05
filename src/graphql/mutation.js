@@ -79,6 +79,8 @@ export const UPDATE_PROFILE = gql`
       $linkedin: String!,
       $github: String!,
       $personalWebsite: String!
+      $email: String!
+      $telephone: String!
   ){
       updateProfile(profile: {
       id: $id,
@@ -92,9 +94,11 @@ export const UPDATE_PROFILE = gql`
       linkedin: $linkedin
       github: $github
       personalWebsite: $personalWebsite
+      email: $email
+      telephone: $telephone
 
       }) {
-      id, firstName, lastName, addressStreet1, addressStreet2, addressCity, addressState, addressZip, linkedin, github, personalWebsite
+      id, firstName, lastName, addressStreet1, addressStreet2, addressCity, addressState, addressZip, linkedin, github, personalWebsite, email, telephone
   }
   }
 `

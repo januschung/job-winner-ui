@@ -19,6 +19,8 @@ export default function ProfileDialog({ profile, handleClose, open }) {
     { id: 'addressCity', label: 'City' },
     { id: 'addressState', label: 'State' },
     { id: 'addressZip', label: 'ZIP Code' },
+    { id: 'email', label: 'Email' },
+    { id: 'telephone', label: 'Phone Number' },
     { id: 'linkedin', label: 'LinkedIn' },
     { id: 'github', label: 'GitHub' },
     { id: 'personalWebsite', label: 'Personal Website' },

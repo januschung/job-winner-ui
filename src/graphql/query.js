@@ -31,6 +31,8 @@ export const GET_PROFILES = gql`
       linkedin
       github
       personalWebsite
+      email
+      telephone
     }
   }
 `
@@ -49,6 +51,8 @@ export const GET_PROFILE = gql`
       linkedin
       github
       personalWebsite
+      email
+      telephone
     }
   }
 `
