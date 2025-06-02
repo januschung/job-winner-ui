@@ -8,6 +8,7 @@ import { DELETE_JOB_APPLICATION } from "../../graphql/mutation";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 import useDialog from "../../hooks/useDialog";
+import i18n from "../../i18n";
 
 // Mock data
 const mockApplications = [

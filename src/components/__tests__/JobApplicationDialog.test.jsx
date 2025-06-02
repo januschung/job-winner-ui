@@ -3,6 +3,7 @@ import JobApplicationDialog from "../JobApplicationDialog";
 import { MockedProvider } from "@apollo/client/testing";
 import { SnackbarProvider } from "../common/SnackbarContext";
 import dayjs from "dayjs";
+import i18n from "../../i18n";
 
 const mocks = [];
 
