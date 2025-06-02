@@ -6,18 +6,20 @@ import SaveIcon from '@mui/icons-material/Save';
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitleBar from '../DialogTitleBar';
+import { useTranslation } from 'react-i18next';
 
 export default function CustomDialog({ 
   open,
   onClose,
   title, 
   children, 
-  maxWidth='md',
+  maxWidth = 'md',
   onCancel = null,
   onAdd = null,
   onSave = null
 }) {
-  
+  const { t } = useTranslation();
+
   return (
     <Dialog
       open={open}
@@ -33,21 +35,20 @@ export default function CustomDialog({
       <DialogActions>
         {onCancel && (
           <Button color="info" variant="outlined" startIcon={<CancelIcon />} onClick={onClose}>
-            Cancel
+            {t('common.cancel')}
           </Button>
         )}
         {onAdd && (
           <Button color="info" variant="contained" startIcon={<AddCircleIcon />} onClick={onAdd}>
-            Add
+            {t('common.add')}
           </Button>
         )}
         {onSave && (
           <Button color="info" variant="contained" startIcon={<SaveIcon />} onClick={onSave}>
-            Save
+            {t('common.save')}
           </Button>
         )}
       </DialogActions>
-
     </Dialog>
   );
 }

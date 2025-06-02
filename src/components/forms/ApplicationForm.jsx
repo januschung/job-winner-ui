@@ -10,6 +10,7 @@ import { useSnackbar } from '../common/SnackbarContext';
 import { ADD_JOB_APPLICATION, UPDATE_JOB_APPLICATION } from '../../graphql/mutation';
 import { GET_JOB_APPLICATIONS } from '../../graphql/query';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 export default function ApplicationForm({ jobApplication, isNew, handleClose }) {
     const [formData, setFormData] = useState({
@@ -24,6 +25,7 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
     });
     const [errors, setErrors] = useState({});
     const { showSnackbar } = useSnackbar();
+    const { t } = useTranslation();
 
     const [newJobApplication] = useMutation(ADD_JOB_APPLICATION, {
         refetchQueries: [{ query: GET_JOB_APPLICATIONS }],
@@ -54,11 +56,11 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
 
     const validateFields = () => {
         const newErrors = {};
-        if (!formData.companyName) newErrors.companyName = 'Company Name is required.';
-        if (!formData.jobTitle) newErrors.jobTitle = 'Job Title is required.';
-        if (!formData.salaryRange) newErrors.salaryRange = 'Salary Range is required.';
+        if (!formData.companyName) newErrors.companyName = t('forms.applicationForm.errors.companyNameRequired');
+        if (!formData.jobTitle) newErrors.jobTitle = t('forms.applicationForm.errors.jobTitleRequired');
+        if (!formData.salaryRange) newErrors.salaryRange = t('forms.applicationForm.errors.salaryRangeRequired');
         if (!formData.appliedDate || !dayjs(formData.appliedDate).isValid()) {
-            newErrors.appliedDate = 'Valid Applied date is required.';
+            newErrors.appliedDate = t('forms.applicationForm.errors.appliedDateRequired');
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -82,10 +84,10 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
                 ...(jobApplication && { id: jobApplication.id }),
             };
             mutationFn({ variables });
-            showSnackbar('Job Application updated successfully!', 'success');
+            showSnackbar(t('forms.applicationForm.success'), 'success');
             setTimeout(() => handleClose(), 500);
         } catch (err) {
-            showSnackbar('Error saving job application. Please try again.', 'error');
+            showSnackbar(t('forms.applicationForm.error'), 'error');
         }
     };
 
@@ -98,7 +100,7 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
                             required
                             id="companyName"
                             name="companyName"
-                            label="Company Name"
+                            label={t('forms.applicationForm.fields.companyName')}
                             fullWidth
                             variant="outlined"
                             onChange={handleFormChange}
@@ -112,7 +114,7 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
                             required
                             id="jobTitle"
                             name="jobTitle"
-                            label="Job Title"
+                            label={t('forms.applicationForm.fields.jobTitle')}
                             fullWidth
                             variant="outlined"
                             onChange={handleFormChange}
@@ -126,7 +128,7 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
                             required
                             id="salaryRange"
                             name="salaryRange"
-                            label="Salary Range"
+                            label={t('forms.applicationForm.fields.salaryRange')}
                             fullWidth
                             variant="outlined"
                             onChange={handleFormChange}
@@ -139,7 +141,7 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DesktopDatePicker
                                 id="appliedDate"
-                                label="Applied Date"
+                                label={t('forms.applicationForm.fields.appliedDate')}
                                 inputFormat="MM/DD/YYYY"
                                 disablePast
                                 value={formData.appliedDate}
@@ -161,28 +163,28 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
                         </LocalizationProvider>
                     </Grid>
                     {!isNew && (
-                    <Grid item xs={12} sm={4}>
-                        <FormControl fullWidth variant="outlined">
-                            <InputLabel>Status</InputLabel>
-                            <Select
-                                name="status"
-                                label="Status"
-                                value={formData.status}
-                                onChange={handleFormChange}
-                            >
-                                <MenuItem value="open">Open</MenuItem>
-                                <MenuItem value="active">Active</MenuItem>
-                                <MenuItem value="ghosted">Ghosted</MenuItem>
-                                <MenuItem value="rejected">Rejected</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <FormControl fullWidth variant="outlined">
+                                <InputLabel>{t('forms.applicationForm.fields.status')}</InputLabel>
+                                <Select
+                                    name="status"
+                                    label={t('forms.applicationForm.fields.status')}
+                                    value={formData.status}
+                                    onChange={handleFormChange}
+                                >
+                                    <MenuItem value="open">{t('forms.applicationForm.status.open')}</MenuItem>
+                                    <MenuItem value="active">{t('forms.applicationForm.status.active')}</MenuItem>
+                                    <MenuItem value="ghosted">{t('forms.applicationForm.status.ghosted')}</MenuItem>
+                                    <MenuItem value="rejected">{t('forms.applicationForm.status.rejected')}</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
                     )}
                     <Grid item xs={12}>
                         <TextField
                             id="description"
                             name="description"
-                            label="Description"
+                            label={t('forms.applicationForm.fields.description')}
                             multiline
                             rows={4}
                             fullWidth
@@ -195,7 +197,7 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
                         <TextField
                             id="jobUrl"
                             name="jobUrl"
-                            label="Job Link"
+                            label={t('forms.applicationForm.fields.jobUrl')}
                             multiline
                             rows={2}
                             fullWidth
@@ -208,7 +210,7 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
                         <TextField
                             id="note"
                             name="note"
-                            label="Note"
+                            label={t('forms.applicationForm.fields.note')}
                             multiline
                             rows={4}
                             fullWidth
@@ -226,7 +228,7 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
                     startIcon={<CancelIcon />}
                     onClick={handleClose}
                 >
-                    Cancel
+                    {t('common.cancel')}
                 </Button>
                 <Button
                     color="info"
@@ -234,7 +236,7 @@ export default function ApplicationForm({ jobApplication, isNew, handleClose }) 
                     startIcon={<SaveIcon />}
                     onClick={handleSubmit}
                 >
-                    Save
+                    {t('common.save')}
                 </Button>
             </DialogActions>
         </>

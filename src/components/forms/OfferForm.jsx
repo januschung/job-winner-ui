@@ -15,6 +15,7 @@ import { ADD_OFFER, UPDATE_OFFER, DELETE_OFFER } from '../../graphql/mutation';
 import { GET_OFFER, GET_ALL_OFFERS } from '../../graphql/query';
 import dayjs from 'dayjs';
 import { Grid } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export default function OfferForm({ jobApplicationId, handleClose }) {
     const [offerData, setOfferData] = useState({
@@ -27,6 +28,7 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
     const { showSnackbar } = useSnackbar();
+    const { t } = useTranslation();
 
     const { data, loading: queryLoading, error } = useQuery(GET_OFFER, {
         variables: { jobApplicationId },
@@ -70,18 +72,20 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
 
     const validateFields = () => {
         const newErrors = {};
-        if (!offerData.salaryOffered) newErrors.salaryOffered = 'Salary is required.';
-        if (!offerData.description) newErrors.description = 'Notes are required.';
+        if (!offerData.salaryOffered) newErrors.salaryOffered = t('forms.offerForm.errors.salaryOfferedRequired');
         if (!offerData.offerDate || !dayjs(offerData.offerDate).isValid()) {
-            newErrors.offerDate = 'Valid offer date is required.';
+            newErrors.offerDate = t('forms.offerForm.errors.offerDateRequired');
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleOfferChange = (e) => {
+    const handleFormChange = (e) => {
         const { name, value } = e.target;
-        setOfferData({ ...offerData, [name]: value });
+        setOfferData({
+            ...offerData,
+            [name]: value,
+        });
         setErrors({ ...errors, [name]: '' }); // Clear error when user types
     };
 
@@ -99,7 +103,7 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                         offerDate: offerData.offerDate,
                     },
                 });
-                showSnackbar('Offer updated successfully!', 'success');
+                showSnackbar(t('forms.offerForm.messages.updateSuccess'), 'success');
             } else {
                 await addOffer({
                     variables: {
@@ -110,11 +114,11 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                     },
                     refetchQueries: [{ query: GET_ALL_OFFERS }],
                 });
-                showSnackbar('Offer added successfully!', 'success');
+                showSnackbar(t('forms.offerForm.messages.addSuccess'), 'success');
             }
             setTimeout(() => handleClose(), 500); 
         } catch (err) {
-            showSnackbar('Error saving offer. Please try again.', 'error');
+            showSnackbar(t('forms.offerForm.messages.error'), 'error');
         }
     };
 
@@ -144,11 +148,11 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                 const { id } = data.offerByJobApplicationId;
                 await deleteOffer({ variables: { id } });
                 resetForm();
-                showSnackbar('Offer deleted successfully!', 'success');
+                showSnackbar(t('forms.offerForm.messages.deleteSuccess'), 'success');
             }
         } catch (err) {
             console.error('Error deleting offer:', err.message);
-            showSnackbar('Error deleting offer. Please try again.', 'error');
+            showSnackbar(t('forms.offerForm.messages.deleteError'), 'error');
         } finally {
             setConfirmDeleteOpen(false);
         }
@@ -167,7 +171,7 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                     {!isFormVisible && (
                         <Grid container justifyContent="center" sx={{ marginTop: 3 }}>
                             <Button variant="contained" onClick={() => setIsFormVisible(true)}>
-                                Add Offer
+                                {t('forms.offerForm.buttons.addOffer')}
                             </Button>
                         </Grid>
                     )}
@@ -177,7 +181,7 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DesktopDatePicker
                                         id="offerDate"
-                                        label="Offer Date"
+                                        label={t('forms.offerForm.fields.offerDate')}
                                         inputFormat="MM/DD/YYYY"
                                         disablePast
                                         value={offerData.offerDate}
@@ -200,9 +204,9 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                                     required
                                     id="salaryOffered"
                                     name="salaryOffered"
-                                    label="Salary Offered"
+                                    label={t('forms.offerForm.fields.salaryOffered')}
                                     value={offerData.salaryOffered}
-                                    onChange={handleOfferChange}
+                                    onChange={handleFormChange}
                                     variant="outlined"
                                     error={!!errors.salaryOffered}
                                     helperText={errors.salaryOffered}
@@ -214,9 +218,9 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                                     required
                                     id="description"
                                     name="description"
-                                    label="Notes"
+                                    label={t('forms.offerForm.fields.description')}
                                     value={offerData.description}
-                                    onChange={handleOfferChange}
+                                    onChange={handleFormChange}
                                     variant="outlined"
                                     multiline
                                     error={!!errors.description}
@@ -231,7 +235,7 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                                     onClick={handleDelete}
                                     disabled={isLoading}
                                 >
-                                    Delete
+                                    {t('forms.offerForm.buttons.delete')}
                                 </Button>
                             </Grid>
                         </>
@@ -246,7 +250,7 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                     onClick={handleClose}
                     disabled={isLoading}
                 >
-                    Cancel
+                    {t('common.cancel')}
                 </Button>
                 <Button
                     color="info"
@@ -255,17 +259,17 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                     onClick={handleSave}
                     disabled={isLoading || !isFormVisible}
                 >
-                    Save
+                    {t('common.save')}
                 </Button>
             </DialogActions>
             <ConfirmDialog
                 open={confirmDeleteOpen}
                 onCancel={cancelDeleteOffer}
                 onConfirm={confirmDeleteOffer}
-                confirmText="Delete"
+                confirmText={t('forms.offerForm.buttons.confirmDelete')}
                 confirmColor="error"
-                title="Confirm Deletion"
-                content="Are you sure you want to delete this offer? This action cannot be undone."
+                title={t('forms.offerForm.dialogs.confirmDelete.title')}
+                content={t('forms.offerForm.dialogs.confirmDelete.content')}
             />
         </>
     );

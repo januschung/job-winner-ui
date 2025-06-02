@@ -12,11 +12,12 @@ import JobApplicationDialog from './JobApplicationDialog';
 import CustomDialog from './common/CustomDialog';
 import SortableTable from './common/SortableTable';
 import { getFilteredInterviews } from '../utils/interviewUtil';
-
+import { useTranslation } from 'react-i18next';
 
 export default function InterviewListDialog({ handleClose, open }) {
   const [interviews, setInterviews] = useState([]);
-  
+  const { t } = useTranslation();
+
   const { loading, error, data, refetch } = useQuery(GET_ALL_INTERVIEWS, {
     fetchPolicy: 'network-only',
     onCompleted: (data) => setInterviews(getFilteredInterviews(data.allInterview)),
@@ -33,18 +34,18 @@ export default function InterviewListDialog({ handleClose, open }) {
 
   const columns = [
     {
-      key: 'jobApplication.companyName', // Nested property example
-      label: 'Company Name',
+      key: 'jobApplication.companyName',
+      label: t('dialogs.interviewList.columns.companyName'),
       sortable: true,
-      render: (value, row) => value || row.jobApplication?.companyName || 'N/A', // Fallback for nested value
+      render: (value, row) => value || row.jobApplication?.companyName || t('common.na'),
     },
-    { key: 'interviewDate', label: 'Interview Date', sortable: true },
-    { key: 'interviewer', label: 'Interviewer', sortable: true },
-    { key: 'description', label: 'Note' },
-    { key: 'status', label: 'Status', sortable: true },
+    { key: 'interviewDate', label: t('dialogs.interviewList.columns.interviewDate'), sortable: true },
+    { key: 'interviewer', label: t('dialogs.interviewList.columns.interviewer'), sortable: true },
+    { key: 'description', label: t('dialogs.interviewList.columns.note') },
+    { key: 'status', label: t('dialogs.interviewList.columns.status'), sortable: true },
     {
       key: 'actions',
-      label: 'Job Application',
+      label: t('dialogs.interviewList.columns.jobApplication'),
       render: (value, row) => (
         <Button 
           size="small" 
@@ -52,7 +53,7 @@ export default function InterviewListDialog({ handleClose, open }) {
           variant="outlined" 
           onClick={() => handleJobDialogOpen(row.jobApplication)}
         >
-          Job Details
+          {t('dialogs.interviewList.jobDetails')}
         </Button>
       ),
       align: 'center',
@@ -76,7 +77,7 @@ export default function InterviewListDialog({ handleClose, open }) {
       open={open}
       onClose={handleClose}
       onCancel={handleClose}
-      title="Interview List"
+      title={t('dialogs.interviewList.title')}
     >
       <DialogContent dividers>
         {loading ? (
@@ -85,7 +86,7 @@ export default function InterviewListDialog({ handleClose, open }) {
           </Box>
         ) : error ? (
           <Typography variant="body1" color="error" align="center">
-            Something went wrong. Please try again later.
+            {t('common.errorMessage')}
           </Typography>
         ) : (
           <SortableTable

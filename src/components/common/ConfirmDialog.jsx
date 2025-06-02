@@ -4,22 +4,23 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
+import { useTranslation } from 'react-i18next';
 
 function ConfirmDialog({ open, onCancel, onConfirm, title, content }) {
-    return (
-        <Dialog open={open} onClose={onCancel}>
-            <DialogTitle>{title}</DialogTitle>
-            <DialogContent>{content}</DialogContent>
-            <DialogActions>
-                <Button onClick={onCancel} color="primary">
-                    Cancel
-                </Button>
-                <Button onClick={onConfirm} color="warning">
-                    Delete
-                </Button>
-            </DialogActions>
-        </Dialog>
-    );
+  const { t } = useTranslation();
+
+  return (
+    <Dialog open={open} onClose={onCancel}>
+      <DialogTitle>{t(title)}</DialogTitle>
+      <DialogContent>{t(content)}</DialogContent>
+      <DialogActions>
+        <Button onClick={onCancel}>{t('common.cancel')}</Button>
+        <Button onClick={onConfirm} color="primary">
+          {t('common.delete')}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 }
 
 export default ConfirmDialog;

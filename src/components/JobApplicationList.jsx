@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
 import ErrorIcon from '@mui/icons-material/Error';
@@ -11,7 +12,6 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import React, { useEffect, useState } from 'react';
 import JobApplicationDialog from '../components/JobApplicationDialog';
 import { STATUS_COLORS } from '../config/statusColor';
 import { DELETE_JOB_APPLICATION } from '../graphql/mutation';
@@ -24,6 +24,7 @@ import ConfirmDialog from './common/ConfirmDialog';
 import Loading from './common/Loading';
 import { useSnackbar } from './common/SnackbarContext';
 import JobStatusBar from './JobStatusBar';
+import { useTranslation } from 'react-i18next';
 
 export default function JobApplicationList({ searchTerm }) {
   const [jobApplicationToDelete, setJobApplicationToDelete] = useState(null);
@@ -34,8 +35,10 @@ export default function JobApplicationList({ searchTerm }) {
   const {
     dialogOpen: confirmDialogOpen,
     handleOpen: handleConfirmDialogOpen,
-    handleClose: handleConfirmDialogClose } = useDialog();
+    handleClose: handleConfirmDialogClose,
+  } = useDialog();
   const { open, jobApplication, handleOpen, handleClose } = useJobApplicationDialog();
+  const { t } = useTranslation();
 
   const [deleteJobApplication] = useMutation(DELETE_JOB_APPLICATION, {
     refetchQueries: [{ query: GET_JOB_APPLICATIONS }],
@@ -51,20 +54,20 @@ export default function JobApplicationList({ searchTerm }) {
         : new Date(b.appliedDate) - new Date(a.appliedDate);
     });
   };
-  
+
   useEffect(() => {
     setSelectedStatus('all');
   }, [searchTerm]);
 
   useEffect(() => {
     if (data?.allJobApplication) {
-      if (data?.allJobApplication) {
-        setLocalData(sortJobApplications(
+      setLocalData(
+        sortJobApplications(
           selectedStatus === 'all'
             ? data.allJobApplication
             : data.allJobApplication.filter((job) => job.status === selectedStatus)
-        ));
-      }
+        )
+      );
     }
   }, [data, selectedStatus]);
 
@@ -75,10 +78,10 @@ export default function JobApplicationList({ searchTerm }) {
       })
         .then(() => {
           setLocalData(localData.filter((jobApp) => jobApp.id !== jobApplicationToDelete.id));
-          showSnackbar("Job application deleted successfully!");
+          showSnackbar(t('jobApplicationList.messages.deleteSuccess'), 'success');
         })
         .catch(() => {
-          showSnackbar("Failed to delete the job application.");
+          showSnackbar(t('jobApplicationList.messages.deleteError'), 'error');
         });
     }
     handleConfirmDialogClose();
@@ -91,7 +94,7 @@ export default function JobApplicationList({ searchTerm }) {
   };
 
   const containsIgnoreCase = (str, searchTerm) =>
-    str.toLowerCase().includes(searchTerm?.toLowerCase() || "");
+    str.toLowerCase().includes(searchTerm?.toLowerCase() || '');
 
   const filteredData = localData.filter(
     (jobApp) =>
@@ -112,16 +115,16 @@ export default function JobApplicationList({ searchTerm }) {
           handleClose={handleClose}
           open={open}
         />
-        <Container sx={{ py: 4 }} maxWidth="lg" >
+        <Container sx={{ py: 4 }} maxWidth="lg">
           {loading && <Loading />}
           {error && (
             <Alert severity="error" icon={<ErrorIcon fontSize="inherit" />} sx={{ mt: 2 }}>
-              <AlertTitle>Error</AlertTitle>
-              Failed to fetch data. Please check your network connection and try again.
+              <AlertTitle>{t('common.error')}</AlertTitle>
+              {t('jobApplicationList.messages.fetchError')}
             </Alert>
           )}
           {!loading && !error && filteredData.length === 0 && (
-            <Typography variant="body1">No job applications match your search.</Typography>
+            <Typography variant="body1">{t('jobApplicationList.messages.noResults')}</Typography>
           )}
           {!loading && !error && filteredData.length > 0 && (
             <>
@@ -145,10 +148,12 @@ export default function JobApplicationList({ searchTerm }) {
                     >
                       <CardContent sx={{ flexGrow: 1 }}>
                         <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                          <CalendarMonthRoundedIcon fontSize="inherit" />{' '}
-                          {jobApplication.appliedDate}
+                          <CalendarMonthRoundedIcon fontSize="inherit" /> {jobApplication.appliedDate}
                         </Typography>
-                        <Typography sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }} color="text.secondary">
+                        <Typography
+                          sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }}
+                          color="text.secondary"
+                        >
                           <Link
                             href={jobApplication.jobUrl || '#'}
                             variant="h5"
@@ -163,8 +168,10 @@ export default function JobApplicationList({ searchTerm }) {
                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
                           {jobApplication.jobTitle}
                         </Typography>
-
-                        <Typography sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }} color="text.secondary">
+                        <Typography
+                          sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }}
+                          color="text.secondary"
+                        >
                           <MonetizationOnIcon fontSize="inherit" sx={{ marginRight: 0.5 }} />
                           {jobApplication.salaryRange}
                         </Typography>
@@ -197,8 +204,8 @@ export default function JobApplicationList({ searchTerm }) {
           open={confirmDialogOpen}
           onCancel={handleConfirmDialogClose}
           onConfirm={confirmDeleteJobApplication}
-          title="Confirm Deletion"
-          content="Are you sure you want to delete this job application? This action cannot be undone."
+          title={t('jobApplicationList.dialogs.confirmDelete.title')}
+          content={t('jobApplicationList.dialogs.confirmDelete.content')}
         />
       </main>
     </div>
