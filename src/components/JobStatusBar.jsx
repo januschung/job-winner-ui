@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Chip } from '@mui/material'
+import { Chip } from '@mui/material';
 import Container from '@mui/material/Container';
 import { STATUS_COLORS } from '../config/statusColor';
-
+import { useTranslation } from 'react-i18next';
 
 export default function JobStatusBar({ data, handleStatusClick }) {
-
   const [statusCounts, setStatusCounts] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (data) {
@@ -26,7 +26,7 @@ export default function JobStatusBar({ data, handleStatusClick }) {
     <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pb: 3 }}>
       <div>
         <Chip
-          label={`All ${data.allJobApplication.length || 0}`}
+          label={`${t('jobStatusBar.all')} ${data.allJobApplication.length || 0}`}
           onClick={() => handleStatusClick('all')}
           sx={{
             backgroundColor: STATUS_COLORS.all,
@@ -36,7 +36,7 @@ export default function JobStatusBar({ data, handleStatusClick }) {
           }}
         />
         <Chip
-          label={`Open ${statusCounts?.open || 0}`}
+          label={`${t('jobStatusBar.open')} ${statusCounts?.open || 0}`}
           onClick={() => handleStatusClick('open')}
           disabled={!statusCounts.open}
           sx={{
@@ -47,7 +47,7 @@ export default function JobStatusBar({ data, handleStatusClick }) {
           }}
         />
         <Chip
-          label={`Active ${statusCounts?.active || 0}`}
+          label={`${t('jobStatusBar.active')} ${statusCounts?.active || 0}`}
           onClick={() => handleStatusClick('active')}
           disabled={!statusCounts.active}
           sx={{
@@ -58,7 +58,7 @@ export default function JobStatusBar({ data, handleStatusClick }) {
           }}
         />
         <Chip
-          label={`Ghosted ${statusCounts?.ghosted || 0}`}
+          label={`${t('jobStatusBar.ghosted')} ${statusCounts?.ghosted || 0}`}
           onClick={() => handleStatusClick('ghosted')}
           disabled={!statusCounts.ghosted}
           sx={{
@@ -69,7 +69,7 @@ export default function JobStatusBar({ data, handleStatusClick }) {
           }}
         />
         <Chip
-          label={`Rejected ${statusCounts?.rejected || 0}`}
+          label={`${t('jobStatusBar.rejected')} ${statusCounts?.rejected || 0}`}
           onClick={() => handleStatusClick('rejected')}
           disabled={!statusCounts.rejected}
           sx={{

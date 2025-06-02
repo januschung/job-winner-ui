@@ -14,8 +14,10 @@
     "@testing-library/user-event": "^14.5.2",
     "dayjs": "^1.11.13",
     "graphql": "^16.9.0",
+    "i18next": "^25.2.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-i18next": "^15.5.2",
     "react-loading": "^2.0.3",
     "react-router-dom": "^6.26.1",
     "web-vitals": "^4.2.3"

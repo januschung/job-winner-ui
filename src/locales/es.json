@@ -1,0 +1,257 @@
+{
+  "appHeader": {
+    "appTitle": "JOB WINNER",
+    "selectLanguage": "Seleccionar Idioma",
+    "darkMode": "Modo Oscuro",
+    "lightMode": "Modo Claro",
+    "newJobApplication": "Nueva Solicitud de Empleo",
+    "bookmarks": "Marcadores",
+    "qa": "Preguntas y Respuestas",
+    "interviewList": "Lista de Entrevistas",
+    "offerList": "Lista de Ofertas",
+    "profile": "Perfil",
+    "githubStar": "¿Te gusta? ¡Danos una ⭐ en GitHub!",
+    "githubLink": "Danos una ⭐"
+  },
+  "searchBar": {
+    "placeholder": "Buscar…"
+  },
+  "dialogs": {
+    "confirmDeletion": {
+      "title": "Confirmar Eliminación",
+      "content": "¿Está seguro de que desea eliminar este marcador? Esta acción no se puede deshacer.",
+      "cancel": "Cancelar",
+      "delete": "Eliminar"
+    },
+    "addBookmark": {
+      "title": "Marcadores",
+      "editTitle": "Editar Marcador",
+      "fields": {
+        "title": "Título",
+        "url": "URL"
+      },
+      "errors": {
+        "titleRequired": "El título es obligatorio.",
+        "urlRequired": "La URL es obligatoria."
+      },
+      "success": "¡Marcador eliminado con éxito!",
+      "error": "Error al eliminar el marcador.",
+      "noUrls": "No hay URLs"
+    },
+    "addQuestion": {
+      "title": "Agregar Pregunta y Respuesta",
+      "editTitle": "Editar Pregunta y Respuesta",
+      "fields": {
+        "question": "Pregunta",
+        "answer": "Respuesta"
+      },
+      "errors": {
+        "questionRequired": "La pregunta es obligatoria.",
+        "answerRequired": "La respuesta es obligatoria."
+      },
+      "success": "¡Pregunta y respuesta actualizadas con éxito!",
+      "error": "Error al guardar la pregunta y respuesta. Por favor, inténtelo de nuevo."
+    },
+    "addApplication": {
+      "title": "Agregar Solicitud de Empleo",
+      "editTitle": "Editar Solicitud de Empleo"
+    },
+    "editApplication": {
+      "title": "Editar Solicitud de Empleo"
+    },
+    "applicationTabs": {
+      "details": "Detalles",
+      "notes": "Notas"
+    },
+    "interviewList": {
+      "title": "Lista de Entrevistas",
+      "columns": {
+        "companyName": "Nombre de la Empresa",
+        "interviewDate": "Fecha de Entrevista",
+        "interviewer": "Entrevistador",
+        "note": "Nota",
+        "status": "Estado",
+        "jobApplication": "Solicitud de Empleo"
+      },
+      "jobDetails": "Detalles del Trabajo"
+    },
+    "jobApplication": {
+      "addTitle": "Agregar Solicitud de Empleo",
+      "editTitle": "Editar Solicitud de Empleo",
+      "tabs": {
+        "application": "Solicitud",
+        "interviews": "Entrevistas",
+        "offer": "Oferta"
+      }
+    },
+    "question": {
+      "title": "Preguntas y Respuestas"
+    },
+    "profile": {
+      "title": "Perfil",
+      "fields": {
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "addressStreet1": "Dirección Línea 1",
+        "addressStreet2": "Dirección Línea 2",
+        "addressCity": "Ciudad",
+        "addressState": "Estado",
+        "addressZip": "Código Postal",
+        "email": "Correo Electrónico",
+        "telephone": "Número de Teléfono",
+        "linkedin": "LinkedIn",
+        "github": "GitHub",
+        "personalWebsite": "Sitio Web Personal"
+      },
+      "success": "¡Perfil guardado con éxito!"
+    },
+    "offerList": {
+      "title": "Lista de Ofertas",
+      "columns": {
+        "companyName": "Nombre de la Empresa",
+        "offerDate": "Fecha de Oferta",
+        "salaryOffered": "Salario Ofrecido",
+        "note": "Nota",
+        "jobApplication": "Solicitud de Empleo"
+      },
+      "jobDetails": "Detalles del Trabajo"
+    },
+    "confirmDeletion": {
+      "title": "Confirmar Eliminación",
+      "content": "¿Está seguro de que desea eliminar esta entrevista? Esta acción no se puede deshacer."
+    }
+  },
+  "forms": {
+    "applicationForm": {
+      "fields": {
+        "companyName": "Nombre de la Empresa",
+        "jobTitle": "Título del Trabajo",
+        "salaryRange": "Rango Salarial",
+        "description": "Descripción",
+        "note": "Nota",
+        "jobUrl": "Enlace del Trabajo",
+        "status": "Estado",
+        "appliedDate": "Fecha de Aplicación"
+      },
+      "status": {
+        "open": "Abierto",
+        "active": "Activo",
+        "ghosted": "Sin Respuesta",
+        "rejected": "Rechazado"
+      },
+      "errors": {
+        "companyNameRequired": "El nombre de la empresa es obligatorio.",
+        "jobTitleRequired": "El título del trabajo es obligatorio.",
+        "salaryRangeRequired": "El rango salarial es obligatorio.",
+        "appliedDateRequired": "Se requiere una fecha de aplicación válida."
+      }
+    },
+    "offerForm": {
+      "fields": {
+        "offerDate": "Fecha de Oferta",
+        "salaryOffered": "Salario Ofrecido",
+        "description": "Descripción"
+      },
+      "errors": {
+        "offerDateRequired": "La Fecha de Oferta es obligatoria.",
+        "salaryOfferedRequired": "El Salario Ofrecido es obligatorio."
+      },
+      "messages": {
+        "addSuccess": "¡Oferta agregada con éxito!",
+        "updateSuccess": "¡Oferta actualizada con éxito!",
+        "deleteSuccess": "¡Oferta eliminada con éxito!",
+        "deleteError": "Error al eliminar la oferta.",
+        "error": "Ocurrió un error. Por favor, inténtelo de nuevo."
+      },
+      "buttons": {
+        "addOffer": "Agregar Oferta",
+        "delete": "Eliminar",
+        "confirmDelete": "Confirmar Eliminación"
+      },
+      "dialogs": {
+        "confirmDelete": {
+          "title": "Confirmar Eliminación",
+          "content": "¿Está seguro de que desea eliminar esta oferta? Esta acción no se puede deshacer."
+        }
+      }
+    },
+    "interviewsForm": {
+      "fields": {
+        "interviewDate": "Fecha de Entrevista",
+        "interviewer": "Entrevistador",
+        "description": "Descripción",
+        "status": "Estado"
+      },
+      "errors": {
+        "interviewDateRequired": "Se requiere una fecha de entrevista válida."
+      }
+    }
+  },
+  "jobApplicationList": {
+    "messages": {
+      "deleteSuccess": "¡Solicitud de empleo eliminada con éxito!",
+      "deleteError": "Error al eliminar la solicitud de empleo.",
+      "fetchError": "Error al obtener los datos. Por favor, verifique su conexión a la red e inténtelo de nuevo.",
+      "noResults": "No hay solicitudes de empleo que coincidan con su búsqueda."
+    },
+    "dialogs": {
+      "confirmDelete": {
+        "title": "Confirmar Eliminación",
+        "content": "¿Está seguro de que desea eliminar esta solicitud de empleo? Esta acción no se puede deshacer."
+      }
+    }
+  },
+  "jobStatusBar": {
+    "all": "Todos",
+    "open": "Abierto",
+    "active": "Activo",
+    "ghosted": "Sin Respuesta",
+    "rejected": "Rechazado"
+  },
+  "common": {
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "add": "Agregar",
+    "delete": "Eliminar",
+    "loading": "Cargando...",
+    "noData": "No hay datos disponibles.",
+    "na": "N/D",
+    "errorMessage": "Algo salió mal. Por favor, inténtelo de nuevo más tarde.",
+    "error": "Error"
+  },
+  "questionContent": {
+    "messages": {
+      "deleteSuccess": "¡Pregunta eliminada con éxito!",
+      "deleteError": "Error al eliminar la pregunta.",
+      "noQuestions": "No hay preguntas y respuestas disponibles."
+    },
+    "dialogs": {
+      "confirmDelete": {
+        "title": "Confirmar Eliminación",
+        "content": "¿Está seguro de que desea eliminar esta pregunta y respuesta? Esta acción no se puede deshacer."
+      }
+    }
+  },
+  "interviews": {
+    "date": "Fecha de Entrevista",
+    "interviewer": "Entrevistador",
+    "status": "Estado",
+    "statuses": {
+      "open": "Abierto",
+      "canceled": "Cancelado",
+      "pending": "Pendiente",
+      "rejected": "Rechazado",
+      "expired": "Expirado"
+    },
+    "description": "Descripción",
+    "add": "Agregar Entrevista",
+    "messages": {
+      "addSuccess": "¡Entrevista agregada con éxito!",
+      "saveSuccess": "¡Entrevista guardada con éxito!",
+      "deleteSuccess": "¡Entrevista eliminada con éxito!",
+      "addError": "Error al agregar la entrevista.",
+      "saveError": "Error al guardar la entrevista.",
+      "deleteError": "Error al eliminar la entrevista."
+    }
+  }
+}

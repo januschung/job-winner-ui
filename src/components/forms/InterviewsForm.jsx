@@ -16,12 +16,14 @@ import { ADD_INTERVIEW, UPDATE_INTERVIEW, DELETE_INTERVIEW } from '../../graphql
 import { GET_INTERVIEWS_BY_JOB_APPLICATION_ID, GET_ALL_INTERVIEWS } from '../../graphql/query';
 import dayjs from 'dayjs';
 import { Grid } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export default function InterviewsForm({ jobApplicationId }) {
     const [interviews, setInterviews] = useState([]);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [interviewToDelete, setInterviewToDelete] = useState(null);
     const { showSnackbar } = useSnackbar();
+    const { t } = useTranslation();
 
     const { loading, error } = useQuery(GET_INTERVIEWS_BY_JOB_APPLICATION_ID, {
         variables: { jobApplicationId },
@@ -48,8 +50,8 @@ export default function InterviewsForm({ jobApplicationId }) {
             { query: GET_ALL_INTERVIEWS }
         ],
         onError: (err) => {
-            console.error('Error deleting interview:', err.message);
-            showSnackbar('Error deleting interview', 'error');
+            console.error(t('interviews.messages.deleteError'), err.message);
+            showSnackbar(t('interviews.messages.deleteError'), 'error');
         }
     });
     
@@ -68,13 +70,13 @@ export default function InterviewsForm({ jobApplicationId }) {
             });
             if (data?.addInterview?.id) {
                 setInterviews([...interviews, data.addInterview]);
-                showSnackbar('Interview added successfully', 'success');
+                showSnackbar(t('interviews.messages.addSuccess'), 'success');
             } else {
-                console.warn('Failed to retrieve ID for the new interview');
+                console.warn(t('interviews.messages.addError'));
             }
         } catch (err) {
-            console.error('Error adding interview:', err.message);
-            showSnackbar('Error adding interview', 'error');
+            console.error(t('interviews.messages.addError'), err.message);
+            showSnackbar(t('interviews.messages.addError'), 'error');
         }
     };
 
@@ -105,10 +107,10 @@ export default function InterviewsForm({ jobApplicationId }) {
                 },
             });
     
-            showSnackbar('Interview saved successfully', 'success');
+            showSnackbar(t('interviews.messages.saveSuccess'), 'success');
         } catch (err) {
-            console.error('Error saving interview:', err.message);
-            showSnackbar('Error saving interview', 'error');
+            console.error(t('interviews.messages.saveError'), err.message);
+            showSnackbar(t('interviews.messages.saveError'), 'error');
         }
     };
 
@@ -121,10 +123,10 @@ export default function InterviewsForm({ jobApplicationId }) {
         try {
             await deleteInterview({ variables: { id: interviewToDelete } });
             setInterviews((prev) => prev.filter((interview) => interview.id !== interviewToDelete));
-            showSnackbar('Interview deleted successfully', 'success');
+            showSnackbar(t('interviews.messages.deleteSuccess'), 'success');
         } catch (err) {
-            console.error('Error deleting interview:', err.message);
-            showSnackbar('Error deleting interview', 'error');
+            console.error(t('interviews.messages.deleteError'), err.message);
+            showSnackbar(t('interviews.messages.deleteError'), 'error');
         } finally {
             setInterviewToDelete(null);
             setConfirmDeleteOpen(false);
@@ -137,8 +139,8 @@ export default function InterviewsForm({ jobApplicationId }) {
         setInterviewToDelete(null);
     };
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error.message}</p>;
+    if (loading) return <p>{t('common.loading')}</p>;
+    if (error) return <p>{t('common.error')}: {error.message}</p>;
 
     return (
         <>
@@ -150,7 +152,7 @@ export default function InterviewsForm({ jobApplicationId }) {
                                 <Grid item xs={12} sm={4}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DesktopDatePicker
-                                            label="Interview Date"
+                                            label={t('interviews.date')}
                                             inputFormat="MM/DD/YYYY"
                                             value={interview.interviewDate}
                                             onChange={(date) =>
@@ -162,7 +164,7 @@ export default function InterviewsForm({ jobApplicationId }) {
                                 </Grid>
                                 <Grid item xs={12} sm={4}>
                                     <TextField
-                                        label="Interviewer"
+                                        label={t('interviews.interviewer')}
                                         value={interview.interviewer}
                                         onChange={(e) => handleEdit(interview.id, 'interviewer', e.target.value)}
                                         onBlur={() => handleSaveInline(interview.id)}
@@ -171,24 +173,24 @@ export default function InterviewsForm({ jobApplicationId }) {
                                 </Grid>
                                 <Grid item xs={12} sm={4}>
                                     <FormControl fullWidth>
-                                        <InputLabel>Status</InputLabel>
+                                        <InputLabel>{t('interviews.status')}</InputLabel>
                                         <Select
-                                            label="Status"
+                                            label={t('interviews.status')}
                                             value={interview.status}
                                             onChange={(e) => handleEdit(interview.id, 'status', e.target.value)}
                                             onBlur={() => handleSaveInline(interview.id)}
                                         >
-                                            <MenuItem value="open">Open</MenuItem>
-                                            <MenuItem value="canceled">Canceled</MenuItem>
-                                            <MenuItem value="pending">Pending</MenuItem>
-                                            <MenuItem value="rejected">Rejected</MenuItem>
-                                            <MenuItem value="expired">Expired</MenuItem>
+                                            <MenuItem value="open">{t('interviews.statuses.open')}</MenuItem>
+                                            <MenuItem value="canceled">{t('interviews.statuses.canceled')}</MenuItem>
+                                            <MenuItem value="pending">{t('interviews.statuses.pending')}</MenuItem>
+                                            <MenuItem value="rejected">{t('interviews.statuses.rejected')}</MenuItem>
+                                            <MenuItem value="expired">{t('interviews.statuses.expired')}</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12} sm={8}>
                                     <TextField
-                                        label="Description"
+                                        label={t('interviews.description')}
                                         value={interview.description}
                                         onChange={(e) => handleEdit(interview.id, 'description', e.target.value)}
                                         multiline
@@ -202,7 +204,7 @@ export default function InterviewsForm({ jobApplicationId }) {
                                         color="warning"
                                         onClick={() => handleDelete(interview.id)}
                                     >
-                                        Delete
+                                        {t('common.delete')}
                                     </Button>
                                 </Grid>
                             </Grid>
@@ -212,7 +214,7 @@ export default function InterviewsForm({ jobApplicationId }) {
 
                 <Grid container justifyContent="center" sx={{ marginTop: 3 }}>
                     <Button variant="contained" onClick={handleAddInterview} disabled={loading}>
-                        Add Interview
+                        {t('interviews.add')}
                     </Button>
                 </Grid>
             </DialogContent>
@@ -221,8 +223,8 @@ export default function InterviewsForm({ jobApplicationId }) {
                 open={confirmDeleteOpen}
                 onCancel={cancelDeleteInterview}
                 onConfirm={confirmDeleteInterview}
-                title="Confirm Deletion"
-                content="Are you sure you want to delete this interview? This action cannot be undone."
+                title={t('dialogs.confirmDeletion.title')}
+                content={t('dialogs.confirmDeletion.content')}
             />
         </>
     );

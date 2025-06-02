@@ -5,11 +5,11 @@ import ApplicationForm from './forms/ApplicationForm';
 import InterviewsForm from './forms/InterviewsForm';
 import OfferForm from './forms/OfferForm';
 import CustomDialog from './common/CustomDialog';
-
+import { useTranslation } from 'react-i18next';
 
 export default function JobApplicationDialog({ jobApplication, handleClose, open, setOpen, isNew }) {
-
     const [activeTab, setActiveTab] = useState(0);
+    const { t } = useTranslation();
 
     const handleTabChange = (event, newValue) => {
         setActiveTab(newValue);
@@ -19,7 +19,7 @@ export default function JobApplicationDialog({ jobApplication, handleClose, open
         <CustomDialog
           open={open}
           onClose={handleClose}
-          title={(isNew ? 'Add ' : 'Edit ') + 'Job Application'}
+          title={t(isNew ? 'dialogs.jobApplication.addTitle' : 'dialogs.jobApplication.editTitle')}
         >
           {!isNew && (
           <Tabs
@@ -29,9 +29,9 @@ export default function JobApplicationDialog({ jobApplication, handleClose, open
             textColor="primary"
             variant="fullWidth"
           >
-            <Tab label="Application" />
-            <Tab label="Interviews" />
-            <Tab label="Offer" />
+            <Tab label={t('dialogs.jobApplication.tabs.application')} />
+            <Tab label={t('dialogs.jobApplication.tabs.interviews')} />
+            <Tab label={t('dialogs.jobApplication.tabs.offer')} />
           </Tabs>
           )}  
           {isNew && (

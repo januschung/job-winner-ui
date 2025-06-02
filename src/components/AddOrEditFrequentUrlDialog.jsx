@@ -6,7 +6,7 @@ import { useSnackbar } from './common/SnackbarContext';
 import { ADD_FREQUENT_URL, UPDATE_FREQUENT_URL } from '../graphql/mutation';
 import { GET_FREQUENT_URLS } from '../graphql/query';
 import CustomDialog from './common/CustomDialog';
-
+import { useTranslation } from 'react-i18next';
 
 export default function AddOrEditFrequentUrlDialog({ handleClose, open, setOpen, frequentUrl }) {
   const [formData, setFormData] = useState({
@@ -15,6 +15,7 @@ export default function AddOrEditFrequentUrlDialog({ handleClose, open, setOpen,
   });
   const [errors, setErrors] = useState({});
   const { showSnackbar } = useSnackbar();
+  const { t } = useTranslation();
 
   const [addFrequentUrl] = useMutation(ADD_FREQUENT_URL, {
     refetchQueries: [
@@ -85,26 +86,26 @@ export default function AddOrEditFrequentUrlDialog({ handleClose, open, setOpen,
             <TextField
               id="title"
               name="title"
-              label="Title"
+              label={t('dialogs.addBookmark.fields.title')}
               fullWidth
               variant="outlined"
               onChange={handleFormChange}
               value={formData.title}
               error={!!errors.title}
-              helperText={errors.title}
+              helperText={errors.title && t('dialogs.addBookmark.errors.titleRequired')}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               id="url"
               name="url"
-              label="Url"
+              label={t('dialogs.addBookmark.fields.url')}
               fullWidth
               variant="outlined"
               onChange={handleFormChange}
               value={formData.url}
               error={!!errors.url}
-              helperText={errors.url}
+              helperText={errors.url && t('dialogs.addBookmark.errors.urlRequired')}
             />
           </Grid>
         </Grid>

@@ -11,10 +11,12 @@ import useJobApplicationDialog from '../hooks/useJobApplicationDialog';
 import useSortableTable from '../hooks/useSortableTable';
 import SortableTable from './common/SortableTable';
 import CustomDialog from './common/CustomDialog';
+import { useTranslation } from 'react-i18next';
 
 export default function OfferListDialog({ handleClose, open }) {
   const [offers, setOffers] = useState([]);
-  
+  const { t } = useTranslation();
+
   const { loading, error, data, refetch } = useQuery(GET_ALL_OFFERS, {
     fetchPolicy: 'network-only',
     onCompleted: (data) => setOffers(data.allOffer),
@@ -31,17 +33,17 @@ export default function OfferListDialog({ handleClose, open }) {
 
   const columns = [
     {
-      key: 'jobApplication.companyName', // Nested property example
-      label: 'Company Name',
+      key: 'jobApplication.companyName',
+      label: t('dialogs.offerList.columns.companyName'),
       sortable: true,
-      render: (value, row) => value || row.jobApplication?.companyName || 'N/A', // Fallback for nested value
+      render: (value, row) => value || row.jobApplication?.companyName || t('common.na'),
     },
-    { key: 'offerDate', label: 'Offer Date', sortable: true },
-    { key: 'salaryOffered', label: 'Salary Offered', sortable: true },
-    { key: 'description', label: 'Note' },
+    { key: 'offerDate', label: t('dialogs.offerList.columns.offerDate'), sortable: true },
+    { key: 'salaryOffered', label: t('dialogs.offerList.columns.salaryOffered'), sortable: true },
+    { key: 'description', label: t('dialogs.offerList.columns.note') },
     {
       key: 'actions',
-      label: 'Job Application',
+      label: t('dialogs.offerList.columns.jobApplication'),
       render: (value, row) => (
         <Button 
           size="small" 
@@ -49,7 +51,7 @@ export default function OfferListDialog({ handleClose, open }) {
           variant="outlined" 
           onClick={() => handleJobDialogOpen(row.jobApplication)}
         >
-          Job Details
+          {t('dialogs.offerList.jobDetails')}
         </Button>
       ),
       align: 'center',
@@ -73,7 +75,7 @@ export default function OfferListDialog({ handleClose, open }) {
       open={open}
       onClose={handleClose}
       onCancel={handleClose}
-      title="Offer List"
+      title={t('dialogs.offerList.title')}
     >
       <DialogContent dividers>
         {loading ? (
@@ -82,7 +84,7 @@ export default function OfferListDialog({ handleClose, open }) {
           </Box>
         ) : error ? (
           <Typography variant="body1" color="error" align="center">
-            Something went wrong. Please try again later.
+            {t('common.errorMessage')}
           </Typography>
         ) : (
           <SortableTable

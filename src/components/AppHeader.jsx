@@ -30,6 +30,9 @@ import ProfileDialog from './ProfileDialog';
 import QuestionDialog from './QuestionDialog';
 import SearchBar from './SearchBar';
 import { useColorMode } from "./ThemeContext";
+import { useTranslation } from 'react-i18next';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 export default function AppHeader() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -37,6 +40,7 @@ export default function AppHeader() {
   const [profile, setProfile] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const { mode, toggleColorMode } = useColorMode();
+  const { t, i18n } = useTranslation();
 
   const { data: offersData, loading: offersLoading, error: offersError, refetch: refetchOffers } = useQuery(GET_ALL_OFFERS, {
     fetchPolicy: 'network-only',
@@ -96,6 +100,10 @@ export default function AppHeader() {
     setSearchTerm(text);
   };
 
+  const handleLanguageChange = (event) => {
+    i18n.changeLanguage(event.target.value);
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <JobApplicationDialog
@@ -148,51 +156,63 @@ export default function AppHeader() {
               textDecoration: 'none',
             }}
           >
-            JOB WINNER
+            {t('appHeader.appTitle')}
           </Typography>
           <SearchBar onSearch={handleSearch} />
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <Tooltip title="New Job Application">
+            <Tooltip title={t('appHeader.newJobApplication')}>
               <IconButton size="large" aria-label="New" color="inherit" onClick={handleOpen}>
                 <AddCircleIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Bookmarks">
-              <IconButton size="large" aria-label="New" color="inherit" onClick={handleFrequentUrlsDialogOpen}>
+            <Tooltip title={t('appHeader.bookmarks')}>
+              <IconButton size="large" aria-label="Bookmarks" color="inherit" onClick={handleFrequentUrlsDialogOpen}>
                 <BookmarksIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Q&A">
-              <IconButton size="large" aria-label="New" color="inherit" onClick={handleQuestionDialogOpen}>
+            <Tooltip title={t('appHeader.qa')}>
+              <IconButton size="large" aria-label="Q&A" color="inherit" onClick={handleQuestionDialogOpen}>
                 <QuestionAnswerIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Interview List">
+            <Tooltip title={t('appHeader.interviewList')}>
               <IconButton size="large" color="inherit" onClick={handleInterviewListDialogOpen}>
                 <Badge badgeContent={interviewsLoading ? '...' : interviewCount} color="error">
                   <EventAvailableIcon />
                 </Badge>
               </IconButton>
             </Tooltip>
-            <Tooltip title="Offer List">
+            <Tooltip title={t('appHeader.offerList')}>
               <IconButton size="large" color="inherit" onClick={handleOfferListDialogOpen}>
                 <Badge badgeContent={offersLoading ? '...' : offerCount} color="error">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
             </Tooltip>
-            <Tooltip title={(mode === "dark" ? 'Light' : 'Dark') + ' Mode'}>
+            <Select
+              value={i18n.language}
+              onChange={handleLanguageChange}
+              sx={{
+                color: 'inherit',
+                border: 'none',
+                '& .MuiSelect-icon': { color: 'inherit' },
+              }}
+            >
+              <MenuItem value="en">EN</MenuItem>
+              <MenuItem value="es">ES</MenuItem>
+            </Select>
+            <Tooltip title={mode === 'dark' ? t('appHeader.lightMode') : t('appHeader.darkMode')}>
               <IconButton onClick={toggleColorMode} color="inherit">
-                {mode === "dark" ? <Brightness7 /> : <Brightness4 />}
+                {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
               </IconButton>
             </Tooltip>
-            <Tooltip title={'Like it? Give us a ⭐ on GitHub!'}>
+            <Tooltip title={t('appHeader.githubStar')}>
               <IconButton href="https://github.com/januschung/job-winner-ui" target="_blank" color="inherit">
                 <GitHub />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Profile">
+            <Tooltip title={t('appHeader.profile')}>
               <IconButton
                 size="large"
                 edge="end"
@@ -233,6 +253,7 @@ export default function AppHeader() {
           offerCount={offerCount}
           colorMode={mode}
           toggleColorMode={toggleColorMode}
+          i18n={i18n}
         />
       </AppBar>
       <JobApplicationList searchTerm={searchTerm} />

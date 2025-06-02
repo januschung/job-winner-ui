@@ -12,7 +12,7 @@ import ActionIcons from './common/ActionIcons';
 import { DELETE_FREQUENT_URL } from '../graphql/mutation';
 import { GET_FREQUENT_URLS } from '../graphql/query';
 import AddOrEditFrequentUrlDialog from './AddOrEditFrequentUrlDialog';
-
+import { useTranslation } from 'react-i18next';
 
 export default function FrequentUrlContent({ }) {
   const [frequentUrl, setFrequentUrl] = useState(null);
@@ -24,6 +24,8 @@ export default function FrequentUrlContent({ }) {
 
   const { data, loading, error } = useFrequentUrls();
   const { showSnackbar } = useSnackbar();
+  const { t } = useTranslation();
+
   const [deleteFrequentUrl] = useMutation(DELETE_FREQUENT_URL, {
     refetchQueries: [{ query: GET_FREQUENT_URLS }],
   });
@@ -33,10 +35,10 @@ export default function FrequentUrlContent({ }) {
       variables: { id: frequentUrl.id }
     })
       .then(() => {
-        showSnackbar("Bookmark deleted successfully!");
+        showSnackbar(t('dialogs.addBookmark.success'), 'success');
     })
       .catch(() => {
-        showSnackbar("Failed to delete the bookmark.");
+        showSnackbar(t('dialogs.addBookmark.error'), 'error');
     });
     handleConfirmDialogClose();
   }
@@ -71,7 +73,7 @@ export default function FrequentUrlContent({ }) {
         )}
 
         {!loading && !error && data?.allFrequentUrl?.length === 0 && (
-          <Typography variant="body1">No URLs</Typography>
+          <Typography variant="body1">{t('dialogs.addBookmark.noUrls')}</Typography>
         )}
         {!loading && !error && data?.allFrequentUrl?.length > 0 && (
           <>
@@ -131,8 +133,8 @@ export default function FrequentUrlContent({ }) {
             open={confirmDialogOpen}
             onCancel={handleConfirmDialogClose}
             onConfirm={confirmDeleteFrequentUrl}
-            title="Confirm Deletion"
-            content="Are you sure you want to delete this bookmark? This action cannot be undone."
+            title={t('dialogs.confirmDeletion.title')}
+            content={t('dialogs.confirmDeletion.content')}
         />
       </DialogContent>
     );

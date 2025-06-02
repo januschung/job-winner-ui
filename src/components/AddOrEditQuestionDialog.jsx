@@ -6,7 +6,7 @@ import { useSnackbar } from './common/SnackbarContext';
 import { ADD_QUESTION, UPDATE_QUESTION } from '../graphql/mutation';
 import { GET_QUESTIONS } from '../graphql/query';
 import CustomDialog from './common/CustomDialog';
-
+import { useTranslation } from 'react-i18next';
 
 export default function AddOrEditQuestionDialog({ handleClose, open, setOpen, question }) {
   const [formData, setFormData] = useState({
@@ -15,19 +15,20 @@ export default function AddOrEditQuestionDialog({ handleClose, open, setOpen, qu
   });
   const [errors, setErrors] = useState({});
   const { showSnackbar } = useSnackbar();
+  const { t } = useTranslation();
 
   const [addQuestion] = useMutation(ADD_QUESTION, {
     refetchQueries: [
       { query: GET_QUESTIONS },
     ],
   });
-  
+
   const [updateQuestion] = useMutation(UPDATE_QUESTION);
 
   const validateFields = () => {
     const newErrors = {};
-    if (!formData.question) newErrors.question = 'Question is required.';
-    if (!formData.answer) newErrors.answer = 'Answer is required.';
+    if (!formData.question) newErrors.question = t('dialogs.addQuestion.errors.questionRequired');
+    if (!formData.answer) newErrors.answer = t('dialogs.addQuestion.errors.answerRequired');
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -46,29 +47,30 @@ export default function AddOrEditQuestionDialog({ handleClose, open, setOpen, qu
       event.preventDefault();
       const mutationFn = question ? updateQuestion : addQuestion;
       const variables = {
-          ...formData,
-          ...(question && { id: question.id }),
-      }; 
+        ...formData,
+        ...(question && { id: question.id }),
+      };
       mutationFn({ variables });
 
-      showSnackbar('Q&A updated successfully!', 'success');
+      showSnackbar(t('dialogs.addQuestion.success'), 'success');
       setTimeout(() => handleClose(), 500);
     } catch (err) {
-      showSnackbar('Error saving Q&A. Please try again.' + err, 'error');
+      showSnackbar(t('dialogs.addQuestion.error'), 'error');
     }
   };
 
   useEffect(() => {
-      if (!question) {
-          setFormData({
-              ...formData,
-          });
-      } else {
-          setFormData({
-              question: question.question || '',
-              answer: question.answer || '',
-          });
-      }
+    if (!question) {
+      setFormData({
+        question: '',
+        answer: '',
+      });
+    } else {
+      setFormData({
+        question: question.question || '',
+        answer: question.answer || '',
+      });
+    }
   }, [question]);
 
   return (
@@ -77,15 +79,15 @@ export default function AddOrEditQuestionDialog({ handleClose, open, setOpen, qu
       onClose={handleClose}
       onCancel={handleClose}
       onSave={handleSubmit}
-      title={(question ? 'Edit ' : 'Add ') + 'Q&A'}
-    >      
+      title={t(question ? 'dialogs.addQuestion.editTitle' : 'dialogs.addQuestion.title')}
+    >
       <DialogContent dividers>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12}>
             <TextField
               id="question"
               name="question"
-              label="Question"
+              label={t('dialogs.addQuestion.fields.question')}
               fullWidth
               variant="outlined"
               onChange={handleFormChange}
@@ -98,7 +100,7 @@ export default function AddOrEditQuestionDialog({ handleClose, open, setOpen, qu
             <TextField
               id="answer"
               name="answer"
-              label="Answer"
+              label={t('dialogs.addQuestion.fields.answer')}
               fullWidth
               multiline
               variant="outlined"

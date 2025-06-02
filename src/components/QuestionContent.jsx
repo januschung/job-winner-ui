@@ -16,10 +16,11 @@ import { DELETE_QUESTION } from '../graphql/mutation';
 import { GET_QUESTIONS } from '../graphql/query';
 import AddOrEditQuestionDialog from './AddOrEditQuestionDialog';
 import { useTheme } from "@mui/material/styles";
-
+import { useTranslation } from 'react-i18next';
 
 export default function QuestionContent() {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   const [question, setQuestion] = useState(null);
   const { dialogOpen: confirmDialogOpen, 
@@ -39,10 +40,10 @@ export default function QuestionContent() {
       variables: { id: question.id }
     })
       .then(() => {
-        showSnackbar("Question deleted successfully!");
+        showSnackbar(t('questionContent.messages.deleteSuccess'), 'success');
     })
       .catch(() => {
-        showSnackbar("Failed to delete the question.");
+        showSnackbar(t('questionContent.messages.deleteError'), 'error');
     });
     handleConfirmDialogClose();
   }
@@ -77,12 +78,12 @@ export default function QuestionContent() {
         ))
       )}
         {!loading && !error && data?.allQuestion?.length === 0 && (
-          <Typography variant="body1">No Q&A</Typography>
+          <Typography variant="body1">{t('questionContent.messages.noQuestions')}</Typography>
         )}
         {!loading && !error && data?.allQuestion?.length > 0 && (
           <>
             {data.allQuestion.map((question) => (
-                <Accordion>
+                <Accordion key={question.id}>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1-content"
@@ -115,8 +116,8 @@ export default function QuestionContent() {
             open={confirmDialogOpen}
             onCancel={handleConfirmDialogClose}
             onConfirm={confirmDeleteQuestion}
-            title="Confirm Deletion"
-            content="Are you sure you want to delete this Q&A? This action cannot be undone."
+            title={t('questionContent.dialogs.confirmDelete.title')}
+            content={t('questionContent.dialogs.confirmDelete.content')}
         />
       </DialogContent>
     );
