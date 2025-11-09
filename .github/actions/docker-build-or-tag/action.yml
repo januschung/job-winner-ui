@@ -2,6 +2,9 @@ name: docker-build-or-tag
 description: Builds new docker image or re-tags existing docker image
 
 inputs:
+  token:
+    description: Github PAT used to login to ghcr.io
+    required: true
   image-repo:
     description: org/repo associated with image
     required: false
@@ -16,12 +19,6 @@ inputs:
     description: commit sha associated with image
     required: false
     default: ${{ github.sha }}
-  app-id:
-    description: 'GitHub App ID'
-    required: true
-  private-key:
-    description: 'GitHub App private key'
-    required: true
 
 runs:
   using: composite
@@ -29,21 +26,12 @@ runs:
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: Generate GitHub App token
-      id: app-token
-      uses: actions/create-github-app-token@v2
-      with:
-        app-id: ${{ inputs.app-id }}
-        private-key: ${{ inputs.private-key }}
-        owner: januschung
-        repository: argocd
-
     - name: Log in to ghcr.io
       uses: docker/login-action@v3
       with:
         registry: ghcr.io
         username: januschung
-        password: ${{ steps.app-token.outputs.token }}
+        password: ${{ inputs.token }}
 
     - name: Set abbreviated sha
       run: |
