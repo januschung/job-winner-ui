@@ -16,10 +16,10 @@ inputs:
     description: commit sha associated with image
     required: false
     default: ${{ github.sha }}
-  app_id:
+  app-id:
     description: 'GitHub App ID'
     required: true
-  private_key:
+  private-key:
     description: 'GitHub App private key'
     required: true
 
@@ -33,8 +33,8 @@ runs:
       id: app-token
       uses: actions/create-github-app-token@v2
       with:
-        app-id: ${{ inputs.app_id }}
-        private-key: ${{ inputs.private_key }}
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.private-key }}
         owner: januschung
         repository: argocd
 

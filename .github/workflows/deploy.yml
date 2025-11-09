@@ -17,9 +17,9 @@ jobs:
         uses: ./.github/actions/docker-build-or-tag
         with:
           image-name: job-winner-ui
-          dockerfile-dir: .
+          dockerfile_dir: .
           app-id: ${{ secrets.GH_APP_ID }}
-          private_key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
   update-deploy-repo-tag:
     needs:
@@ -32,7 +32,7 @@ jobs:
         id: app-token
         uses: ./.github/actions/update-deployment-repo
         with:
-          app_name: job-winner
-          deployment_type: frontend
-          app_id: ${{ secrets.GH_APP_ID }}
-          private_key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          app-name: job-winner
+          deployment-type: frontend
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
