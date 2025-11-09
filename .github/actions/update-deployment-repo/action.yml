@@ -6,16 +6,16 @@ inputs:
     description: commit sha associated with image
     required: false
     default: ${{ github.sha }}
-  app_name:
+  app-name:
     description: Deployment to update (path name under lab)
     required: true
-  deployment_type:
+  deployment-type:
     description: Component to update (frontend/backend)
     required: false
-  app_id:
+  app-id:
     description: 'GitHub App ID'
     required: true
-  private_key:
+  private-key:
     description: 'GitHub App private key'
     required: true
 
@@ -26,8 +26,8 @@ runs:
       id: app-token
       uses: actions/create-github-app-token@v2
       with:
-        app-id: ${{ inputs.app_id }}
-        private-key: ${{ inputs.private_key }}
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.private-key }}
         owner: januschung
         repository: argocd
 
@@ -47,7 +47,7 @@ runs:
           -H "Authorization: token ${{ steps.app-token.outputs.token }}" \
           -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/januschung/argocd/dispatches \
-          -d '{"event_type":"update-tag","client_payload":{"tag":"${{ env.COMMIT_SHA }}","app_name":"${{ inputs.app_name }}","deployment_type":"${{ inputs.deployment_type }}"}}'
+          -d '{"event_type":"update-tag","client_payload":{"tag":"${{ env.COMMIT_SHA }}","app_name":"${{ inputs.app-name }}","deployment_type":"${{ inputs.deployment-type }}"}}'
           )
           echo "HTTP status: $http_code"
           if [[ "$http_code" -lt 200 || "$http_code" -ge 300 ]]; then
