@@ -1,0 +1,58 @@
+name: Update Image Tag in Argo Deployment Repo
+description: Updates the image tag for a given environment in the Argo deployment repository
+
+inputs:
+  commit-sha:
+    description: commit sha associated with image
+    required: false
+    default: ${{ github.sha }}
+  app_name:
+    description: Deployment to update (path name under lab)
+    required: true
+  deployment_type:
+    description: Component to update (frontend/backend)
+    required: false
+  app_id:
+    description: 'GitHub App ID'
+    required: true
+  private_key:
+    description: 'GitHub App private key'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Generate GitHub App token
+      id: app-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ inputs.app_id }}
+        private-key: ${{ inputs.private_key }}
+        owner: januschung
+        repository: argocd
+
+    - name: Set abbreviated sha
+      run: |
+        commit_sha="${{ inputs.commit-sha }}"
+        short="${commit_sha:0:7}"
+        echo "COMMIT_SHA=$short" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Trigger downstream workflow in Argo CD repository
+      shell: bash
+      run: |
+        echo "Triggering dispatch to Argo CD repo..."
+        http_code=$(curl -sS -o response.json -w "%{http_code}" \
+          -X POST \
+          -H "Authorization: token ${{ steps.app-token.outputs.token }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/januschung/argocd/dispatches \
+          -d '{"event_type":"update-tag","client_payload":{"tag":"${{ env.COMMIT_SHA }}","app_name":"${{ inputs.app_name }}","deployment_type":"${{ inputs.deployment_type }}"}}'
+          )
+          echo "HTTP status: $http_code"
+          if [[ "$http_code" -lt 200 || "$http_code" -ge 300 ]]; then
+            echo "Failed to trigger repository_dispatch"
+            test -f response.json && cat response.json
+            exit 1
+          fi
+          echo "Dispatch event triggered successfully"

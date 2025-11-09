@@ -1,0 +1,57 @@
+name: docker-build-or-tag
+description: Builds new docker image or re-tags existing docker image
+
+inputs:
+  token:
+    description: Github PAT used to login to ghcr.io
+    required: true
+  image-repo:
+    description: org/repo associated with image
+    required: false
+    default: ${{ github.repository }}
+  image-name:
+    description: Name used for image
+    required: true
+  dockerfile-dir:
+    description: Directory to Dockerfile
+    required: true
+  commit-sha:
+    description: commit sha associated with image
+    required: false
+    default: ${{ github.sha }}
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Log in to ghcr.io
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: januschung
+        password: ${{ inputs.token }}
+
+    - name: Set abbreviated sha
+      run: |
+        commit_sha="${{ inputs.commit-sha }}"
+        short="${commit_sha:0:7}"
+        echo "COMMIT_SHA=$short" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        platforms: linux/amd64,linux/arm64
+        context: ${{ inputs.dockerfile-dir }}
+        tags: |
+          ghcr.io/januschung/${{ inputs.image-name }}:${{ env.COMMIT_SHA }}
+          ghcr.io/januschung/${{ inputs.image-name }}:latest

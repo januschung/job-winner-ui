@@ -1,4 +1,4 @@
-name: Deploy to Demo Server
+name: aal-deploy-frontend
 
 on:
   pull_request:
@@ -8,35 +8,31 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  docker-publish:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout source code
         uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Build image
+        uses: ./.github/actions/docker-build-or-tag
         with:
-          node-version: '20.x'
-          cache: 'npm'
+          image-name: job-winner-ui
+          dockerfile-dir: .
+          app-id: ${{ secrets.GH_APP_ID }}
+          private_key: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Create Custom config.js File
-        run: echo '${{ secrets.DEMO_CONFIG_JS }}' > public/config.js
-
-      - name: Build Project
-        run: npm run build
-
-      - name: Setup SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Upload artifact via SCP
-        run: |
-          scp -i ~/.ssh/deploy_key -r ./dist/* ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/home/opc/build
+  update-deploy-repo-tag:
+    needs:
+      - docker-publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+      - name: Generate GitHub App token
+        id: app-token
+        uses: ./.github/actions/update-deployment-repo
+        with:
+          app_name: job-winner
+          deployment_type: frontend
+          app_id: ${{ secrets.GH_APP_ID }}
+          private_key: ${{ secrets.GH_APP_PRIVATE_KEY }}
