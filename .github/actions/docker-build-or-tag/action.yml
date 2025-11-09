@@ -52,6 +52,8 @@ runs:
         push: true
         platforms: linux/amd64,linux/arm64
         context: ${{ inputs.dockerfile-dir }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
         tags: |
           ghcr.io/januschung/${{ inputs.image-name }}:${{ env.COMMIT_SHA }}
           ghcr.io/januschung/${{ inputs.image-name }}:latest
