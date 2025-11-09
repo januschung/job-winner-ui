@@ -1,4 +1,4 @@
-name: aal-deploy-frontend
+name: deploy-frontend
 
 on:
   pull_request:
