@@ -15,7 +15,7 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GET_ALL_INTERVIEWS, GET_ALL_OFFERS, GET_PROFILE } from '../graphql/query';
 import useDialog from '../hooks/useDialog';
 import useJobApplicationDialog from '../hooks/useJobApplicationDialog';
@@ -33,14 +33,18 @@ import { useColorMode } from "./ThemeContext";
 import { useTranslation } from 'react-i18next';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { useTheme, useMediaQuery } from '@mui/material';
 
 export default function AppHeader() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const [profile, setProfile] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const { mode, toggleColorMode } = useColorMode();
   const { t, i18n } = useTranslation();
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
   const { data: offersData, loading: offersLoading, error: offersError, refetch: refetchOffers } = useQuery(GET_ALL_OFFERS, {
     fetchPolicy: 'network-only',
@@ -100,9 +104,19 @@ export default function AppHeader() {
     setSearchTerm(text);
   };
 
+  const handleSearchToggle = () => {
+    setIsSearchExpanded(!isSearchExpanded);
+  };
+
   const handleLanguageChange = (event) => {
     i18n.changeLanguage(event.target.value);
   };
+
+  useEffect(() => {
+    if (isDesktop && mobileMoreAnchorEl) {
+      setMobileMoreAnchorEl(null);
+    }
+  }, [isDesktop, mobileMoreAnchorEl]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -139,8 +153,9 @@ export default function AppHeader() {
         setOpen={handleOfferListDialogOpen}
       />
       <AppBar position="static">
-        <Toolbar>
-        <EmojiEventsIcon sx={{ color: '#FFD700', mr: 2 }} />
+        <Toolbar sx={{ position: 'relative' }}>
+        <Box sx={{ display: { xs: isSearchExpanded ? 'none' : 'flex', md: 'flex' }, alignItems: 'center' }}>
+          <EmojiEventsIcon sx={{ color: '#FFD700', mr: 2 }} />
           <Typography
             variant="h6"
             noWrap
@@ -148,7 +163,7 @@ export default function AppHeader() {
             href="/"
             sx={{
               mr: 2,
-              display: { xs: 'none', md: 'flex' },
+              display: 'flex',
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
@@ -158,9 +173,12 @@ export default function AppHeader() {
           >
             {t('appHeader.appTitle')}
           </Typography>
-          <SearchBar onSearch={handleSearch} />
+        </Box>
+          <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+            <SearchBar onSearch={handleSearch} value={searchTerm} />
+          </Box>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ display: { xs: isSearchExpanded ? 'none' : 'none', md: 'flex' } }}>
             <Tooltip title={t('appHeader.newJobApplication')}>
               <IconButton size="large" aria-label="New" color="inherit" onClick={handleOpen}>
                 <AddCircleIcon />
@@ -226,17 +244,27 @@ export default function AppHeader() {
               </IconButton>
             </Tooltip>
           </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls="primary-search-account-menu-mobile"
-              aria-haspopup="true"
-              onClick={(event) => setMobileMoreAnchorEl(event.currentTarget)}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
+          <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+            <SearchBar 
+              onSearch={handleSearch} 
+              isExpanded={isSearchExpanded}
+              onToggle={handleSearchToggle}
+              value={searchTerm}
+            />
+          </Box>
+          <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>
+            {!isSearchExpanded && (
+              <IconButton
+                size="large"
+                aria-label="show more"
+                aria-controls="primary-search-account-menu-mobile"
+                aria-haspopup="true"
+                onClick={(event) => setMobileMoreAnchorEl(event.currentTarget)}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            )}
           </Box>
         </Toolbar>
         <MobileMenu
