@@ -9,7 +9,6 @@ vi.mock('../CopyButton', () => ({
   },
 }));
 
-
 describe('ProfileTextField', () => {
   const mockOnChange = vi.fn();
 

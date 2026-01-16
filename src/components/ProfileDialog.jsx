@@ -25,10 +25,13 @@ export default function ProfileDialog({ profile, handleClose, open }) {
     { id: 'telephone', label: t('dialogs.profile.fields.telephone') },
     { id: 'linkedin', label: t('dialogs.profile.fields.linkedin') },
     { id: 'github', label: t('dialogs.profile.fields.github') },
-    { id: 'personalWebsite', label: t('dialogs.profile.fields.personalWebsite') },
+    {
+      id: 'personalWebsite',
+      label: t('dialogs.profile.fields.personalWebsite'),
+    },
   ];
 
-  const initialFormData = () => 
+  const initialFormData = () =>
     fields.reduce((acc, field) => {
       acc[field.id] = '';
       return acc;
@@ -41,7 +44,7 @@ export default function ProfileDialog({ profile, handleClose, open }) {
   useEffect(() => {
     if (profile) {
       setFormData({
-        ...profile
+        ...profile,
       });
     }
   }, [profile, open]);
@@ -50,15 +53,15 @@ export default function ProfileDialog({ profile, handleClose, open }) {
     refetchQueries: [{ query: GET_PROFILE, variables: { id } }],
   });
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleUpdateProfile = (event) => {
+  const handleUpdateProfile = event => {
     event.preventDefault();
     updateProfile({
       variables: {
@@ -66,13 +69,13 @@ export default function ProfileDialog({ profile, handleClose, open }) {
         ...formData,
       },
     });
-    showSnackbar(t('dialogs.profile.success'), "success");
+    showSnackbar(t('dialogs.profile.success'), 'success');
   };
 
   return (
-    <CustomDialog 
-      open={open} 
-      maxWidth='sm'
+    <CustomDialog
+      open={open}
+      maxWidth="sm"
       onClose={handleClose}
       onCancel={handleClose}
       onSave={handleUpdateProfile}
@@ -80,7 +83,7 @@ export default function ProfileDialog({ profile, handleClose, open }) {
     >
       <DialogContent dividers>
         <Grid container spacing={2} alignItems="center">
-          {fields.map((field) => (
+          {fields.map(field => (
             <ProfileTextField
               key={field.id}
               id={field.id}

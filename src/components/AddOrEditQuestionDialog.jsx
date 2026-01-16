@@ -8,7 +8,12 @@ import { GET_QUESTIONS } from '../graphql/query';
 import CustomDialog from './common/CustomDialog';
 import { useTranslation } from 'react-i18next';
 
-export default function AddOrEditQuestionDialog({ handleClose, open, setOpen, question }) {
+export default function AddOrEditQuestionDialog({
+  handleClose,
+  open,
+  setOpen,
+  question,
+}) {
   const [formData, setFormData] = useState({
     question: '',
     answer: '',
@@ -18,22 +23,22 @@ export default function AddOrEditQuestionDialog({ handleClose, open, setOpen, qu
   const { t } = useTranslation();
 
   const [addQuestion] = useMutation(ADD_QUESTION, {
-    refetchQueries: [
-      { query: GET_QUESTIONS },
-    ],
+    refetchQueries: [{ query: GET_QUESTIONS }],
   });
 
   const [updateQuestion] = useMutation(UPDATE_QUESTION);
 
   const validateFields = () => {
     const newErrors = {};
-    if (!formData.question) newErrors.question = t('dialogs.addQuestion.errors.questionRequired');
-    if (!formData.answer) newErrors.answer = t('dialogs.addQuestion.errors.answerRequired');
+    if (!formData.question)
+      newErrors.question = t('dialogs.addQuestion.errors.questionRequired');
+    if (!formData.answer)
+      newErrors.answer = t('dialogs.addQuestion.errors.answerRequired');
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleFormChange = (e) => {
+  const handleFormChange = e => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -41,7 +46,7 @@ export default function AddOrEditQuestionDialog({ handleClose, open, setOpen, qu
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     if (!validateFields()) return;
     try {
       event.preventDefault();
@@ -79,7 +84,9 @@ export default function AddOrEditQuestionDialog({ handleClose, open, setOpen, qu
       onClose={handleClose}
       onCancel={handleClose}
       onSave={handleSubmit}
-      title={t(question ? 'dialogs.addQuestion.editTitle' : 'dialogs.addQuestion.title')}
+      title={t(
+        question ? 'dialogs.addQuestion.editTitle' : 'dialogs.addQuestion.title'
+      )}
     >
       <DialogContent dividers>
         <Grid container spacing={2} alignItems="center">

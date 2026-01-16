@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Brightness4, Brightness7, GitHub } from "@mui/icons-material";
+import { Brightness4, Brightness7, GitHub } from '@mui/icons-material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
@@ -16,7 +16,11 @@ import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import React, { useState, useEffect } from 'react';
-import { GET_ALL_INTERVIEWS, GET_ALL_OFFERS, GET_PROFILE } from '../graphql/query';
+import {
+  GET_ALL_INTERVIEWS,
+  GET_ALL_OFFERS,
+  GET_PROFILE,
+} from '../graphql/query';
 import useDialog from '../hooks/useDialog';
 import useJobApplicationDialog from '../hooks/useJobApplicationDialog';
 import { getFilteredInterviews } from '../utils/interviewUtil';
@@ -29,7 +33,7 @@ import OfferListDialog from './OfferListDialog';
 import ProfileDialog from './ProfileDialog';
 import QuestionDialog from './QuestionDialog';
 import SearchBar from './SearchBar';
-import { useColorMode } from "./ThemeContext";
+import { useColorMode } from './ThemeContext';
 import { useTranslation } from 'react-i18next';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -46,13 +50,24 @@ export default function AppHeader() {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
-  const { data: offersData, loading: offersLoading, error: offersError, refetch: refetchOffers } = useQuery(GET_ALL_OFFERS, {
+  const {
+    data: offersData,
+    loading: offersLoading,
+    error: offersError,
+    refetch: refetchOffers,
+  } = useQuery(GET_ALL_OFFERS, {
     fetchPolicy: 'network-only',
   });
-  const { data: interviewsData, loading: interviewsLoading, error: interviewsError, refetch: refetchInterviews } = useQuery(GET_ALL_INTERVIEWS, {
+  const {
+    data: interviewsData,
+    loading: interviewsLoading,
+    error: interviewsError,
+    refetch: refetchInterviews,
+  } = useQuery(GET_ALL_INTERVIEWS, {
     fetchPolicy: 'network-only',
   });
-  const { open, handleOpen, handleClose } = useJobApplicationDialog(refetchOffers);
+  const { open, handleOpen, handleClose } =
+    useJobApplicationDialog(refetchOffers);
 
   const {
     dialogOpen: offerListingDialogOpen,
@@ -88,8 +103,10 @@ export default function AppHeader() {
 
   const offerCount = offersData?.allOffer?.length || 0;
 
-  const filteredInterviews = getFilteredInterviews(interviewsData?.allInterview);
-  
+  const filteredInterviews = getFilteredInterviews(
+    interviewsData?.allInterview
+  );
+
   const interviewCount = filteredInterviews?.length || 0;
 
   const handleProfileMenuOpen = () => {
@@ -100,7 +117,7 @@ export default function AppHeader() {
   const handleProfileClose = () => setProfileOpen(false);
   const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
 
-  const handleSearch = (text) => {
+  const handleSearch = text => {
     setSearchTerm(text);
   };
 
@@ -108,7 +125,7 @@ export default function AppHeader() {
     setIsSearchExpanded(!isSearchExpanded);
   };
 
-  const handleLanguageChange = (event) => {
+  const handleLanguageChange = event => {
     i18n.changeLanguage(event.target.value);
   };
 
@@ -154,56 +171,94 @@ export default function AppHeader() {
       />
       <AppBar position="static">
         <Toolbar sx={{ position: 'relative' }}>
-        <Box sx={{ display: { xs: isSearchExpanded ? 'none' : 'flex', md: 'flex' }, alignItems: 'center' }}>
-          <EmojiEventsIcon sx={{ color: '#FFD700', mr: 2 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
+          <Box
             sx={{
-              mr: 2,
-              display: 'flex',
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+              display: { xs: isSearchExpanded ? 'none' : 'flex', md: 'flex' },
+              alignItems: 'center',
             }}
           >
-            {t('appHeader.appTitle')}
-          </Typography>
-        </Box>
+            <EmojiEventsIcon sx={{ color: '#FFD700', mr: 2 }} />
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href="/"
+              sx={{
+                mr: 2,
+                display: 'flex',
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              {t('appHeader.appTitle')}
+            </Typography>
+          </Box>
           <Box sx={{ display: { xs: 'none', md: 'block' } }}>
             <SearchBar onSearch={handleSearch} value={searchTerm} />
           </Box>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: isSearchExpanded ? 'none' : 'none', md: 'flex' } }}>
+          <Box
+            sx={{
+              display: { xs: isSearchExpanded ? 'none' : 'none', md: 'flex' },
+            }}
+          >
             <Tooltip title={t('appHeader.newJobApplication')}>
-              <IconButton size="large" aria-label="New" color="inherit" onClick={handleOpen}>
+              <IconButton
+                size="large"
+                aria-label="New"
+                color="inherit"
+                onClick={handleOpen}
+              >
                 <AddCircleIcon />
               </IconButton>
             </Tooltip>
             <Tooltip title={t('appHeader.bookmarks')}>
-              <IconButton size="large" aria-label="Bookmarks" color="inherit" onClick={handleFrequentUrlsDialogOpen}>
+              <IconButton
+                size="large"
+                aria-label="Bookmarks"
+                color="inherit"
+                onClick={handleFrequentUrlsDialogOpen}
+              >
                 <BookmarksIcon />
               </IconButton>
             </Tooltip>
             <Tooltip title={t('appHeader.qa')}>
-              <IconButton size="large" aria-label="Q&A" color="inherit" onClick={handleQuestionDialogOpen}>
+              <IconButton
+                size="large"
+                aria-label="Q&A"
+                color="inherit"
+                onClick={handleQuestionDialogOpen}
+              >
                 <QuestionAnswerIcon />
               </IconButton>
             </Tooltip>
             <Tooltip title={t('appHeader.interviewList')}>
-              <IconButton size="large" color="inherit" onClick={handleInterviewListDialogOpen}>
-                <Badge badgeContent={interviewsLoading ? '...' : interviewCount} color="error">
+              <IconButton
+                size="large"
+                color="inherit"
+                onClick={handleInterviewListDialogOpen}
+              >
+                <Badge
+                  badgeContent={interviewsLoading ? '...' : interviewCount}
+                  color="error"
+                >
                   <EventAvailableIcon />
                 </Badge>
               </IconButton>
             </Tooltip>
             <Tooltip title={t('appHeader.offerList')}>
-              <IconButton size="large" color="inherit" onClick={handleOfferListDialogOpen}>
-                <Badge badgeContent={offersLoading ? '...' : offerCount} color="error">
+              <IconButton
+                size="large"
+                color="inherit"
+                onClick={handleOfferListDialogOpen}
+              >
+                <Badge
+                  badgeContent={offersLoading ? '...' : offerCount}
+                  color="error"
+                >
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
@@ -220,13 +275,23 @@ export default function AppHeader() {
               <MenuItem value="en">EN</MenuItem>
               <MenuItem value="es">ES</MenuItem>
             </Select>
-            <Tooltip title={mode === 'dark' ? t('appHeader.lightMode') : t('appHeader.darkMode')}>
+            <Tooltip
+              title={
+                mode === 'dark'
+                  ? t('appHeader.lightMode')
+                  : t('appHeader.darkMode')
+              }
+            >
               <IconButton onClick={toggleColorMode} color="inherit">
                 {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
               </IconButton>
             </Tooltip>
             <Tooltip title={t('appHeader.githubStar')}>
-              <IconButton href="https://github.com/januschung/job-winner-ui" target="_blank" color="inherit">
+              <IconButton
+                href="https://github.com/januschung/job-winner-ui"
+                target="_blank"
+                color="inherit"
+              >
                 <GitHub />
               </IconButton>
             </Tooltip>
@@ -245,21 +310,23 @@ export default function AppHeader() {
             </Tooltip>
           </Box>
           <Box sx={{ display: { xs: 'block', md: 'none' } }}>
-            <SearchBar 
-              onSearch={handleSearch} 
+            <SearchBar
+              onSearch={handleSearch}
               isExpanded={isSearchExpanded}
               onToggle={handleSearchToggle}
               value={searchTerm}
             />
           </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>
+          <Box
+            sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}
+          >
             {!isSearchExpanded && (
               <IconButton
                 size="large"
                 aria-label="show more"
                 aria-controls="primary-search-account-menu-mobile"
                 aria-haspopup="true"
-                onClick={(event) => setMobileMoreAnchorEl(event.currentTarget)}
+                onClick={event => setMobileMoreAnchorEl(event.currentTarget)}
                 color="inherit"
               >
                 <MoreIcon />
@@ -271,7 +338,7 @@ export default function AppHeader() {
           mobileMoreAnchorEl={mobileMoreAnchorEl}
           isMobileMenuOpen={isMobileMenuOpen}
           handleMobileMenuClose={handleMobileMenuClose}
-          handleProfileMenuOpen={handleProfileMenuOpen} 
+          handleProfileMenuOpen={handleProfileMenuOpen}
           handleJobApplicationOpen={handleOpen}
           handleFrequentUrlsDialogOpen={handleFrequentUrlsDialogOpen}
           handleQuestionDialogOpen={handleQuestionDialogOpen}

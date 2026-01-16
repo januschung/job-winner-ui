@@ -1,6 +1,6 @@
-import React from "react";
-import DialogTitle from "@mui/material/DialogTitle";
-import { useTheme } from "@mui/material/styles";
+import React from 'react';
+import DialogTitle from '@mui/material/DialogTitle';
+import { useTheme } from '@mui/material/styles';
 
 const DialogTitleBar = ({ title }) => {
   const theme = useTheme();

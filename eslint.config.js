@@ -4,6 +4,7 @@
 const pluginJs = require("@eslint/js");
 const reactPlugin = require('eslint-plugin-react');
 const globals = require('globals');
+const prettierConfig = require('eslint-config-prettier');
 
 module.exports = [
   pluginJs.configs.recommended,
@@ -30,4 +31,5 @@ module.exports = [
       },
     },
   },
+  prettierConfig, // Must be last to override other configs
 ];

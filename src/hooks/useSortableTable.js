@@ -1,10 +1,11 @@
 import { useState } from 'react';
 
-const useSortableTable = (data, columns) => {
+const useSortableTable = data => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
-  const handleSort = (key) => {
-    const direction = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
+  const handleSort = key => {
+    const direction =
+      sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
     setSortConfig({ key, direction });
   };
 
@@ -25,7 +26,7 @@ const useSortableTable = (data, columns) => {
       })
     : data;
 
-  const getSortIndicator = (key) => {
+  const getSortIndicator = key => {
     if (sortConfig.key !== key) return '';
     return sortConfig.direction === 'asc' ? '↑' : '↓';
   };

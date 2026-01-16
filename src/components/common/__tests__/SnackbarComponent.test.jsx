@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { vi } from "vitest";
+import { vi } from 'vitest';
 import SnackbarComponent from '../SnackbarComponent';
 
 describe('SnackbarComponent', () => {
