@@ -29,6 +29,7 @@
     "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.37.4",
     "globals": "^15.15.0",
+    "jsdom": "^24.0.0",
     "vite": "^6.4.1",
     "vitest": "^3.0.7"
   },
@@ -36,7 +37,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "test": "vitest --run"
   },
   "eslintConfig": {
     "extends": [
