@@ -19,14 +19,14 @@ export default function OfferListDialog({ handleClose, open }) {
 
   const { loading, error, data, refetch } = useQuery(GET_ALL_OFFERS, {
     fetchPolicy: 'network-only',
-    onCompleted: (data) => setOffers(data.allOffer),
+    onCompleted: data => setOffers(data.allOffer),
   });
 
-  const { 
-    open: jobDialogOpen, 
-    jobApplication, 
-    handleOpen: handleJobDialogOpen, 
-    handleClose: handleJobDialogClose 
+  const {
+    open: jobDialogOpen,
+    jobApplication,
+    handleOpen: handleJobDialogOpen,
+    handleClose: handleJobDialogClose,
   } = useJobApplicationDialog(() => {
     refetch().then(({ data }) => setOffers(data.allOffer));
   });
@@ -36,19 +36,28 @@ export default function OfferListDialog({ handleClose, open }) {
       key: 'jobApplication.companyName',
       label: t('dialogs.offerList.columns.companyName'),
       sortable: true,
-      render: (value, row) => value || row.jobApplication?.companyName || t('common.na'),
+      render: (value, row) =>
+        value || row.jobApplication?.companyName || t('common.na'),
     },
-    { key: 'offerDate', label: t('dialogs.offerList.columns.offerDate'), sortable: true },
-    { key: 'salaryOffered', label: t('dialogs.offerList.columns.salaryOffered'), sortable: true },
+    {
+      key: 'offerDate',
+      label: t('dialogs.offerList.columns.offerDate'),
+      sortable: true,
+    },
+    {
+      key: 'salaryOffered',
+      label: t('dialogs.offerList.columns.salaryOffered'),
+      sortable: true,
+    },
     { key: 'description', label: t('dialogs.offerList.columns.note') },
     {
       key: 'actions',
       label: t('dialogs.offerList.columns.jobApplication'),
       render: (value, row) => (
-        <Button 
-          size="small" 
-          color="info" 
-          variant="outlined" 
+        <Button
+          size="small"
+          color="info"
+          variant="outlined"
           onClick={() => handleJobDialogOpen(row.jobApplication)}
         >
           {t('dialogs.offerList.jobDetails')}
@@ -58,7 +67,10 @@ export default function OfferListDialog({ handleClose, open }) {
     },
   ];
 
-  const { sortedData, handleSort, getSortIndicator } = useSortableTable(offers, columns);
+  const { sortedData, handleSort, getSortIndicator } = useSortableTable(
+    offers,
+    columns
+  );
 
   useEffect(() => {
     if (open) {
@@ -66,7 +78,7 @@ export default function OfferListDialog({ handleClose, open }) {
         .then(({ data }) => {
           if (data) setOffers(data.allOffer);
         })
-        .catch((err) => console.error('Refetch error:', err));
+        .catch(err => console.error('Refetch error:', err));
     }
   }, [open, refetch]);
 
@@ -79,7 +91,12 @@ export default function OfferListDialog({ handleClose, open }) {
     >
       <DialogContent dividers>
         {loading ? (
-          <Box display="flex" justifyContent="center" alignItems="center" height="200px">
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="200px"
+          >
             <CircularProgress />
           </Box>
         ) : error ? (

@@ -13,7 +13,7 @@ function stringToColor(string) {
 }
 
 export function stringAvatar(name) {
-  const nameParts = name.split(' ');  
+  const nameParts = name.split(' ');
   const initials = nameParts[0][0] + (nameParts[1]?.[0] || ''); // Handle single-word names
 
   return {

@@ -20,16 +20,19 @@ export default function InterviewListDialog({ handleClose, open }) {
 
   const { loading, error, data, refetch } = useQuery(GET_ALL_INTERVIEWS, {
     fetchPolicy: 'network-only',
-    onCompleted: (data) => setInterviews(getFilteredInterviews(data.allInterview)),
+    onCompleted: data =>
+      setInterviews(getFilteredInterviews(data.allInterview)),
   });
 
-  const { 
-    open: jobDialogOpen, 
-    jobApplication, 
-    handleOpen: handleJobDialogOpen, 
-    handleClose: handleJobDialogClose 
+  const {
+    open: jobDialogOpen,
+    jobApplication,
+    handleOpen: handleJobDialogOpen,
+    handleClose: handleJobDialogClose,
   } = useJobApplicationDialog(() => {
-    refetch().then(({ data }) => setInterviews(getFilteredInterviews(data.allInterview)));
+    refetch().then(({ data }) =>
+      setInterviews(getFilteredInterviews(data.allInterview))
+    );
   });
 
   const columns = [
@@ -37,20 +40,33 @@ export default function InterviewListDialog({ handleClose, open }) {
       key: 'jobApplication.companyName',
       label: t('dialogs.interviewList.columns.companyName'),
       sortable: true,
-      render: (value, row) => value || row.jobApplication?.companyName || t('common.na'),
+      render: (value, row) =>
+        value || row.jobApplication?.companyName || t('common.na'),
     },
-    { key: 'interviewDate', label: t('dialogs.interviewList.columns.interviewDate'), sortable: true },
-    { key: 'interviewer', label: t('dialogs.interviewList.columns.interviewer'), sortable: true },
+    {
+      key: 'interviewDate',
+      label: t('dialogs.interviewList.columns.interviewDate'),
+      sortable: true,
+    },
+    {
+      key: 'interviewer',
+      label: t('dialogs.interviewList.columns.interviewer'),
+      sortable: true,
+    },
     { key: 'description', label: t('dialogs.interviewList.columns.note') },
-    { key: 'status', label: t('dialogs.interviewList.columns.status'), sortable: true },
+    {
+      key: 'status',
+      label: t('dialogs.interviewList.columns.status'),
+      sortable: true,
+    },
     {
       key: 'actions',
       label: t('dialogs.interviewList.columns.jobApplication'),
       render: (value, row) => (
-        <Button 
-          size="small" 
-          color="info" 
-          variant="outlined" 
+        <Button
+          size="small"
+          color="info"
+          variant="outlined"
           onClick={() => handleJobDialogOpen(row.jobApplication)}
         >
           {t('dialogs.interviewList.jobDetails')}
@@ -60,7 +76,10 @@ export default function InterviewListDialog({ handleClose, open }) {
     },
   ];
 
-  const { sortedData, handleSort, getSortIndicator } = useSortableTable(interviews, columns);
+  const { sortedData, handleSort, getSortIndicator } = useSortableTable(
+    interviews,
+    columns
+  );
 
   useEffect(() => {
     if (open) {
@@ -68,7 +87,7 @@ export default function InterviewListDialog({ handleClose, open }) {
         .then(({ data }) => {
           if (data) setInterviews(getFilteredInterviews(data.allInterview));
         })
-        .catch((err) => console.error('Refetch error:', err));
+        .catch(err => console.error('Refetch error:', err));
     }
   }, [open, refetch]);
 
@@ -81,7 +100,12 @@ export default function InterviewListDialog({ handleClose, open }) {
     >
       <DialogContent dividers>
         {loading ? (
-          <Box display="flex" justifyContent="center" alignItems="center" height="200px">
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="200px"
+          >
             <CircularProgress />
           </Box>
         ) : error ? (

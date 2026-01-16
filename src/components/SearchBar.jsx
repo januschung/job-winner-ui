@@ -48,12 +48,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchBar({ onSearch, isExpanded, onToggle, value = '' }) {
+export default function SearchBar({
+  onSearch,
+  isExpanded,
+  onToggle,
+  value = '',
+}) {
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  const handleInputChange = (event) => {
+  const handleInputChange = event => {
     const inputText = event.target.value;
     onSearch(inputText);
   };
@@ -77,18 +82,20 @@ export default function SearchBar({ onSearch, isExpanded, onToggle, value = '' }
           </IconButton>
         )}
         <Slide direction="down" in={isExpanded} mountOnEnter unmountOnExit>
-          <Box sx={{ 
-            position: 'absolute', 
-            top: 0, 
-            left: 0, 
-            right: 0, 
-            bottom: 0,
-            display: 'flex', 
-            alignItems: 'center',
-            px: 2,
-            zIndex: 1,
-            backgroundColor: 'inherit'
-          }}>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              display: 'flex',
+              alignItems: 'center',
+              px: 2,
+              zIndex: 1,
+              backgroundColor: 'inherit',
+            }}
+          >
             <Search sx={{ width: '100%', pr: 5, m: 0 }}>
               <SearchIconWrapper>
                 <SearchIcon />

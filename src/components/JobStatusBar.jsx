@@ -14,7 +14,7 @@ export default function JobStatusBar({ data, handleStatusClick }) {
     }
   }, [data]);
 
-  const countApplicationsByStatus = (jobApplications) => {
+  const countApplicationsByStatus = jobApplications => {
     return jobApplications.reduce((acc, jobApplication) => {
       const { status } = jobApplication;
       acc[status] = acc[status] ? acc[status] + 1 : 1;
@@ -23,7 +23,14 @@ export default function JobStatusBar({ data, handleStatusClick }) {
   };
 
   return (
-    <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pb: 3 }}>
+    <Container
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        pb: 3,
+      }}
+    >
       <div>
         <Chip
           label={`${t('jobStatusBar.all')} ${data.allJobApplication.length || 0}`}

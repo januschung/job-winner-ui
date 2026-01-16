@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from "@mui/material/styles";
+import { useTheme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -17,9 +17,9 @@ const SortableTable = ({ data, columns, handleSort, getSortIndicator }) => {
       <Table>
         <TableHead>
           <TableRow>
-            {columns.map((column) => (
-              <TableCell 
-                key={column.key} 
+            {columns.map(column => (
+              <TableCell
+                key={column.key}
                 align={column.align || 'left'}
                 style={{
                   cursor: 'pointer',
@@ -31,7 +31,9 @@ const SortableTable = ({ data, columns, handleSort, getSortIndicator }) => {
                 {column.sortable ? (
                   <TableSortLabel
                     active={getSortIndicator(column.key) === 'true'}
-                    direction={getSortIndicator(column.key) === '↑' ? 'asc' : 'desc'}
+                    direction={
+                      getSortIndicator(column.key) === '↑' ? 'asc' : 'desc'
+                    }
                     onClick={() => handleSort(column.key)}
                   >
                     {column.label}
@@ -46,9 +48,11 @@ const SortableTable = ({ data, columns, handleSort, getSortIndicator }) => {
         <TableBody>
           {data.map((row, index) => (
             <TableRow key={index}>
-              {columns.map((column) => (
+              {columns.map(column => (
                 <TableCell key={column.key} align={column.align || 'left'}>
-                  {column.render ? column.render(row[column.key], row) : row[column.key]}
+                  {column.render
+                    ? column.render(row[column.key], row)
+                    : row[column.key]}
                 </TableCell>
               ))}
             </TableRow>

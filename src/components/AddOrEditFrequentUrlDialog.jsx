@@ -8,7 +8,12 @@ import { GET_FREQUENT_URLS } from '../graphql/query';
 import CustomDialog from './common/CustomDialog';
 import { useTranslation } from 'react-i18next';
 
-export default function AddOrEditFrequentUrlDialog({ handleClose, open, setOpen, frequentUrl }) {
+export default function AddOrEditFrequentUrlDialog({
+  handleClose,
+  open,
+  setOpen,
+  frequentUrl,
+}) {
   const [formData, setFormData] = useState({
     title: '',
     url: '',
@@ -18,11 +23,9 @@ export default function AddOrEditFrequentUrlDialog({ handleClose, open, setOpen,
   const { t } = useTranslation();
 
   const [addFrequentUrl] = useMutation(ADD_FREQUENT_URL, {
-    refetchQueries: [
-      { query: GET_FREQUENT_URLS },
-    ],
+    refetchQueries: [{ query: GET_FREQUENT_URLS }],
   });
-  
+
   const [updateFrequentUrl] = useMutation(UPDATE_FREQUENT_URL);
 
   const validateFields = () => {
@@ -33,7 +36,7 @@ export default function AddOrEditFrequentUrlDialog({ handleClose, open, setOpen,
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleFormChange = (e) => {
+  const handleFormChange = e => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -41,14 +44,14 @@ export default function AddOrEditFrequentUrlDialog({ handleClose, open, setOpen,
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     if (!validateFields()) return;
     try {
       event.preventDefault();
       const mutationFn = frequentUrl ? updateFrequentUrl : addFrequentUrl;
       const variables = {
-          ...formData,
-          ...(frequentUrl && { id: frequentUrl.id }),
+        ...formData,
+        ...(frequentUrl && { id: frequentUrl.id }),
       };
       mutationFn({ variables });
 
@@ -60,16 +63,16 @@ export default function AddOrEditFrequentUrlDialog({ handleClose, open, setOpen,
   };
 
   useEffect(() => {
-      if (!frequentUrl) {
-          setFormData({
-              ...formData,
-          });
-      } else {
-          setFormData({
-              title: frequentUrl.title || '',
-              url: frequentUrl.url || '',
-          });
-      }
+    if (!frequentUrl) {
+      setFormData({
+        ...formData,
+      });
+    } else {
+      setFormData({
+        title: frequentUrl.title || '',
+        url: frequentUrl.url || '',
+      });
+    }
   }, [frequentUrl]);
 
   return (
@@ -92,7 +95,9 @@ export default function AddOrEditFrequentUrlDialog({ handleClose, open, setOpen,
               onChange={handleFormChange}
               value={formData.title}
               error={!!errors.title}
-              helperText={errors.title && t('dialogs.addBookmark.errors.titleRequired')}
+              helperText={
+                errors.title && t('dialogs.addBookmark.errors.titleRequired')
+              }
             />
           </Grid>
           <Grid item xs={12}>
@@ -105,7 +110,9 @@ export default function AddOrEditFrequentUrlDialog({ handleClose, open, setOpen,
               onChange={handleFormChange}
               value={formData.url}
               error={!!errors.url}
-              helperText={errors.url && t('dialogs.addBookmark.errors.urlRequired')}
+              helperText={
+                errors.url && t('dialogs.addBookmark.errors.urlRequired')
+              }
             />
           </Grid>
         </Grid>

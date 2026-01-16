@@ -8,33 +8,33 @@ import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { Brightness4, Brightness7, GitHub } from "@mui/icons-material";
+import { Brightness4, Brightness7, GitHub } from '@mui/icons-material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useTranslation } from 'react-i18next';
 
-export default function MobileMenu({ 
-  mobileMoreAnchorEl, 
-  isMobileMenuOpen, 
-  handleMobileMenuClose, 
-  handleProfileMenuOpen, 
+export default function MobileMenu({
+  mobileMoreAnchorEl,
+  isMobileMenuOpen,
+  handleMobileMenuClose,
+  handleProfileMenuOpen,
   handleJobApplicationOpen,
   handleFrequentUrlsDialogOpen,
   handleQuestionDialogOpen,
-  handleInterviewListDialogOpen, 
-  handleOfferListDialogOpen, 
+  handleInterviewListDialogOpen,
+  handleOfferListDialogOpen,
   interviewCount,
   offerCount,
   colorMode,
   toggleColorMode,
-  i18n
+  i18n,
 }) {
   const { t } = useTranslation();
   const mobileMenuId = 'primary-search-account-menu-mobile';
 
   const [languageMenuAnchorEl, setLanguageMenuAnchorEl] = useState(null);
 
-  const handleLanguageMenuOpen = (event) => {
+  const handleLanguageMenuOpen = event => {
     setLanguageMenuAnchorEl(event.currentTarget); // Set the anchor to the "Select Language" menu item
   };
 
@@ -42,7 +42,7 @@ export default function MobileMenu({
     setLanguageMenuAnchorEl(null);
   };
 
-  const handleLanguageChange = (language) => {
+  const handleLanguageChange = language => {
     i18n.changeLanguage(language);
     handleLanguageMenuClose();
   };
@@ -65,19 +65,31 @@ export default function MobileMenu({
         onClose={handleMobileMenuClose}
       >
         <MenuItem onClick={handleJobApplicationOpen}>
-          <IconButton size="large" aria-label={t('appHeader.newJobApplication')} color="inherit">
+          <IconButton
+            size="large"
+            aria-label={t('appHeader.newJobApplication')}
+            color="inherit"
+          >
             <AddCircleIcon />
           </IconButton>
           <p>{t('appHeader.newJobApplication')}</p>
         </MenuItem>
         <MenuItem onClick={handleFrequentUrlsDialogOpen}>
-          <IconButton size="large" aria-label={t('appHeader.bookmarks')} color="inherit">
+          <IconButton
+            size="large"
+            aria-label={t('appHeader.bookmarks')}
+            color="inherit"
+          >
             <BookmarksIcon />
           </IconButton>
           <p>{t('appHeader.bookmarks')}</p>
         </MenuItem>
         <MenuItem onClick={handleQuestionDialogOpen}>
-          <IconButton size="large" aria-label={t('appHeader.qa')} color="inherit">
+          <IconButton
+            size="large"
+            aria-label={t('appHeader.qa')}
+            color="inherit"
+          >
             <QuestionAnswerIcon />
           </IconButton>
           <p>{t('appHeader.qa')}</p>
@@ -100,9 +112,13 @@ export default function MobileMenu({
         </MenuItem>
         <MenuItem onClick={toggleColorMode}>
           <IconButton size="large" color="inherit">
-            {colorMode === "dark" ? <Brightness7 /> : <Brightness4 />}
+            {colorMode === 'dark' ? <Brightness7 /> : <Brightness4 />}
           </IconButton>
-          <p>{colorMode === "dark" ? t('appHeader.lightMode') : t('appHeader.darkMode')}</p>
+          <p>
+            {colorMode === 'dark'
+              ? t('appHeader.lightMode')
+              : t('appHeader.darkMode')}
+          </p>
         </MenuItem>
         <MenuItem
           component="a"

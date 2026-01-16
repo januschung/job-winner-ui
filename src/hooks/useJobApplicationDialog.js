@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
-const useJobApplicationDialog = (refetch) => {
+const useJobApplicationDialog = refetch => {
   const [open, setOpen] = useState(false);
   const [jobApplication, setJobApplication] = useState(null);
 
-  const handleOpen = (jobApplication) => {
+  const handleOpen = jobApplication => {
     if (refetch) {
       refetch();
     }

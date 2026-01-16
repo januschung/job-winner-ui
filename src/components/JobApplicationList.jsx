@@ -37,14 +37,15 @@ export default function JobApplicationList({ searchTerm }) {
     handleOpen: handleConfirmDialogOpen,
     handleClose: handleConfirmDialogClose,
   } = useDialog();
-  const { open, jobApplication, handleOpen, handleClose } = useJobApplicationDialog();
+  const { open, jobApplication, handleOpen, handleClose } =
+    useJobApplicationDialog();
   const { t } = useTranslation();
 
   const [deleteJobApplication] = useMutation(DELETE_JOB_APPLICATION, {
     refetchQueries: [{ query: GET_JOB_APPLICATIONS }],
   });
 
-  const sortJobApplications = (jobApplications) => {
+  const sortJobApplications = jobApplications => {
     const statusOrder = { active: 1, open: 2, ghosted: 3, rejected: 4 };
 
     return [...jobApplications].sort((a, b) => {
@@ -65,7 +66,9 @@ export default function JobApplicationList({ searchTerm }) {
         sortJobApplications(
           selectedStatus === 'all'
             ? data.allJobApplication
-            : data.allJobApplication.filter((job) => job.status === selectedStatus)
+            : data.allJobApplication.filter(
+                job => job.status === selectedStatus
+              )
         )
       );
     }
@@ -77,8 +80,13 @@ export default function JobApplicationList({ searchTerm }) {
         variables: { id: jobApplicationToDelete.id },
       })
         .then(() => {
-          setLocalData(localData.filter((jobApp) => jobApp.id !== jobApplicationToDelete.id));
-          showSnackbar(t('jobApplicationList.messages.deleteSuccess'), 'success');
+          setLocalData(
+            localData.filter(jobApp => jobApp.id !== jobApplicationToDelete.id)
+          );
+          showSnackbar(
+            t('jobApplicationList.messages.deleteSuccess'),
+            'success'
+          );
         })
         .catch(() => {
           showSnackbar(t('jobApplicationList.messages.deleteError'), 'error');
@@ -88,7 +96,7 @@ export default function JobApplicationList({ searchTerm }) {
     setJobApplicationToDelete(null);
   };
 
-  const handleDeleteJobApplication = (jobApplication) => {
+  const handleDeleteJobApplication = jobApplication => {
     setJobApplicationToDelete(jobApplication);
     handleConfirmDialogOpen();
   };
@@ -97,13 +105,13 @@ export default function JobApplicationList({ searchTerm }) {
     str.toLowerCase().includes(searchTerm?.toLowerCase() || '');
 
   const filteredData = localData.filter(
-    (jobApp) =>
+    jobApp =>
       containsIgnoreCase(jobApp.companyName, searchTerm) ||
       containsIgnoreCase(jobApp.description, searchTerm) ||
       containsIgnoreCase(jobApp.jobTitle, searchTerm)
   );
 
-  const handleStatusClick = (status) => {
+  const handleStatusClick = status => {
     setSelectedStatus(status);
   };
 
@@ -118,19 +126,25 @@ export default function JobApplicationList({ searchTerm }) {
         <Container sx={{ py: 4 }} maxWidth="lg">
           {loading && <Loading />}
           {error && (
-            <Alert severity="error" icon={<ErrorIcon fontSize="inherit" />} sx={{ mt: 2 }}>
+            <Alert
+              severity="error"
+              icon={<ErrorIcon fontSize="inherit" />}
+              sx={{ mt: 2 }}
+            >
               <AlertTitle>{t('common.error')}</AlertTitle>
               {t('jobApplicationList.messages.fetchError')}
             </Alert>
           )}
           {!loading && !error && filteredData.length === 0 && (
-            <Typography variant="body1">{t('jobApplicationList.messages.noResults')}</Typography>
+            <Typography variant="body1">
+              {t('jobApplicationList.messages.noResults')}
+            </Typography>
           )}
           {!loading && !error && filteredData.length > 0 && (
             <>
               <JobStatusBar data={data} handleStatusClick={handleStatusClick} />
               <Grid container spacing={4}>
-                {filteredData.map((jobApplication) => (
+                {filteredData.map(jobApplication => (
                   <Grid item key={jobApplication.id} xs={12} sm={6} md={4}>
                     <Card
                       sx={{
@@ -138,7 +152,8 @@ export default function JobApplicationList({ searchTerm }) {
                         display: 'flex',
                         flexDirection: 'column',
                         borderTop: 4,
-                        borderColor: STATUS_COLORS[jobApplication.status] || 'grey',
+                        borderColor:
+                          STATUS_COLORS[jobApplication.status] || 'grey',
                         transition: 'transform 0.2s ease-in-out',
                         '&:hover': {
                           transform: 'scale(1.05)',
@@ -147,11 +162,20 @@ export default function JobApplicationList({ searchTerm }) {
                       }}
                     >
                       <CardContent sx={{ flexGrow: 1 }}>
-                        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                          <CalendarMonthRoundedIcon fontSize="inherit" /> {jobApplication.appliedDate}
+                        <Typography
+                          sx={{ fontSize: 12 }}
+                          color="text.secondary"
+                          gutterBottom
+                        >
+                          <CalendarMonthRoundedIcon fontSize="inherit" />{' '}
+                          {jobApplication.appliedDate}
                         </Typography>
                         <Typography
-                          sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }}
+                          sx={{
+                            mb: 1.5,
+                            display: 'flex',
+                            alignItems: 'center',
+                          }}
                           color="text.secondary"
                         >
                           <Link
@@ -169,10 +193,17 @@ export default function JobApplicationList({ searchTerm }) {
                           {jobApplication.jobTitle}
                         </Typography>
                         <Typography
-                          sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }}
+                          sx={{
+                            mb: 1.5,
+                            display: 'flex',
+                            alignItems: 'center',
+                          }}
                           color="text.secondary"
                         >
-                          <MonetizationOnIcon fontSize="inherit" sx={{ marginRight: 0.5 }} />
+                          <MonetizationOnIcon
+                            fontSize="inherit"
+                            sx={{ marginRight: 0.5 }}
+                          />
                           {jobApplication.salaryRange}
                         </Typography>
                         <Typography
@@ -190,7 +221,9 @@ export default function JobApplicationList({ searchTerm }) {
                       <CardActions sx={{ justifyContent: 'flex-end' }}>
                         <ActionIcons
                           onEdit={() => handleOpen(jobApplication)}
-                          onDelete={() => handleDeleteJobApplication(jobApplication)}
+                          onDelete={() =>
+                            handleDeleteJobApplication(jobApplication)
+                          }
                         />
                       </CardActions>
                     </Card>
