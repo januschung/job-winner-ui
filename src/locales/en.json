@@ -204,6 +204,7 @@
     }
   },
   "jobStatusBar": {
+    "label": "Filter by status",
     "all": "All",
     "open": "Open",
     "active": "Active",

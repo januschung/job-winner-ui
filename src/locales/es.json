@@ -204,6 +204,7 @@
     }
   },
   "jobStatusBar": {
+    "label": "Filtrar por estado",
     "all": "Todos",
     "open": "Abierto",
     "active": "Activo",

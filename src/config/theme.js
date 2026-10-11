@@ -34,6 +34,45 @@ const colorSchemes = {
       custom: {
         table: { header: '#EEF2FF', headerHover: '#E0E7FF' },
       },
+      // Job status tones: main for accents, soft/text for tinted chips,
+      // solid/solidText for the selected filter. All text pairs pass WCAG AA.
+      status: {
+        all: {
+          main: '#475569',
+          soft: '#F1F5F9',
+          text: '#334155',
+          solid: '#334155',
+          solidText: '#FFFFFF',
+        },
+        open: {
+          main: '#0284C7',
+          soft: '#E0F2FE',
+          text: '#075985',
+          solid: '#075985',
+          solidText: '#FFFFFF',
+        },
+        active: {
+          main: '#059669',
+          soft: '#D1FAE5',
+          text: '#065F46',
+          solid: '#065F46',
+          solidText: '#FFFFFF',
+        },
+        ghosted: {
+          main: '#D97706',
+          soft: '#FEF3C7',
+          text: '#92400E',
+          solid: '#92400E',
+          solidText: '#FFFFFF',
+        },
+        rejected: {
+          main: '#E11D48',
+          soft: '#FFE4E6',
+          text: '#9F1239',
+          solid: '#9F1239',
+          solidText: '#FFFFFF',
+        },
+      },
     },
   },
   dark: {
@@ -55,6 +94,43 @@ const colorSchemes = {
       divider: '#1F2937',
       custom: {
         table: { header: '#1E1B4B', headerHover: '#312E81' },
+      },
+      status: {
+        all: {
+          main: '#94A3B8',
+          soft: '#1E293B',
+          text: '#CBD5E1',
+          solid: '#94A3B8',
+          solidText: '#0B1020',
+        },
+        open: {
+          main: '#38BDF8',
+          soft: '#082F49',
+          text: '#7DD3FC',
+          solid: '#38BDF8',
+          solidText: '#0B1020',
+        },
+        active: {
+          main: '#34D399',
+          soft: '#022C22',
+          text: '#6EE7B7',
+          solid: '#34D399',
+          solidText: '#0B1020',
+        },
+        ghosted: {
+          main: '#FBBF24',
+          soft: '#451A03',
+          text: '#FCD34D',
+          solid: '#FBBF24',
+          solidText: '#0B1020',
+        },
+        rejected: {
+          main: '#FB7185',
+          soft: '#4C0519',
+          text: '#FDA4AF',
+          solid: '#FB7185',
+          solidText: '#0B1020',
+        },
       },
     },
   },
