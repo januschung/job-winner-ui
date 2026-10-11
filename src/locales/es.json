@@ -203,6 +203,13 @@
       }
     }
   },
+  "stats": {
+    "label": "Resumen",
+    "applications": "Solicitudes",
+    "inProgress": "En curso",
+    "upcomingInterviews": "Entrevistas próximas",
+    "offers": "Ofertas"
+  },
   "jobStatusBar": {
     "label": "Filtrar por estado",
     "all": "Todos",

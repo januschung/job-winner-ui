@@ -3,12 +3,17 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { SnackbarProvider } from '../common/SnackbarContext';
 import JobApplicationList from '../JobApplicationList';
-import { GET_JOB_APPLICATIONS } from '../../graphql/query';
+import {
+  GET_ALL_INTERVIEWS,
+  GET_ALL_OFFERS,
+  GET_JOB_APPLICATIONS,
+} from '../../graphql/query';
 import { DELETE_JOB_APPLICATION } from '../../graphql/mutation';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import useDialog from '../../hooks/useDialog';
 import i18n from '../../i18n';
+import { ThemeContextProvider } from '../ThemeContext';
 
 // Mock data
 const mockApplications = [
@@ -36,8 +41,18 @@ const mockApplications = [
   },
 ];
 
+// Queries StatsSummary runs alongside the list.
+const statsMocks = [
+  {
+    request: { query: GET_ALL_INTERVIEWS },
+    result: { data: { allInterview: [] } },
+  },
+  { request: { query: GET_ALL_OFFERS }, result: { data: { allOffer: [] } } },
+];
+
 // Mock query
 const mocks = [
+  ...statsMocks,
   {
     request: {
       query: GET_JOB_APPLICATIONS,
@@ -52,6 +67,7 @@ const mocks = [
 
 // Mock query with error
 const errorMocks = [
+  ...statsMocks,
   {
     request: {
       query: GET_JOB_APPLICATIONS,
@@ -100,15 +116,20 @@ beforeEach(() => {
   });
 });
 
-describe('JobApplicationList', () => {
-  test('renders error message on error', async () => {
-    render(
-      <MockedProvider mocks={errorMocks} addTypename={false}>
+const renderList = (apolloMocks, searchTerm = '') =>
+  render(
+    <ThemeContextProvider>
+      <MockedProvider mocks={apolloMocks} addTypename={false}>
         <SnackbarProvider>
-          <JobApplicationList searchTerm="" />
+          <JobApplicationList searchTerm={searchTerm} />
         </SnackbarProvider>
       </MockedProvider>
-    );
+    </ThemeContextProvider>
+  );
+
+describe('JobApplicationList', () => {
+  test('renders error message on error', async () => {
+    renderList(errorMocks);
 
     await waitFor(() => {
       expect(screen.getByText(/failed to fetch data/i)).not.toBeNull();
@@ -116,13 +137,7 @@ describe('JobApplicationList', () => {
   });
 
   test('renders job applications when data is fetched', async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <SnackbarProvider>
-          <JobApplicationList searchTerm="" />
-        </SnackbarProvider>
-      </MockedProvider>
-    );
+    renderList(mocks);
 
     // Wait for the data to be fetched
     await waitFor(() => {
@@ -134,13 +149,7 @@ describe('JobApplicationList', () => {
   });
 
   test('filters job applications based on search term', async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <SnackbarProvider>
-          <JobApplicationList searchTerm="Backend" />
-        </SnackbarProvider>
-      </MockedProvider>
-    );
+    renderList(mocks, 'Backend');
 
     await waitFor(() => {
       expect(screen.queryByText('Company A')).toBeNull();
@@ -149,13 +158,7 @@ describe('JobApplicationList', () => {
   });
 
   test('deletes a job application', async () => {
-    render(
-      <MockedProvider mocks={deleteMocks} addTypename={false}>
-        <SnackbarProvider>
-          <JobApplicationList searchTerm="" />
-        </SnackbarProvider>
-      </MockedProvider>
-    );
+    renderList(deleteMocks);
 
     // Wait for the job applications to be rendered
     await waitFor(() => {
