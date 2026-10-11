@@ -24,6 +24,7 @@ import ConfirmDialog from './common/ConfirmDialog';
 import Loading from './common/Loading';
 import { useSnackbar } from './common/SnackbarContext';
 import JobStatusBar from './JobStatusBar';
+import StatsSummary from './StatsSummary';
 import { useTranslation } from 'react-i18next';
 
 export default function JobApplicationList({ searchTerm }) {
@@ -135,6 +136,20 @@ export default function JobApplicationList({ searchTerm }) {
               {t('jobApplicationList.messages.fetchError')}
             </Alert>
           )}
+          {!loading && !error && data && (
+            <>
+              <StatsSummary
+                applications={data.allJobApplication}
+                selectedStatus={selectedStatus}
+                onSelectStatus={handleStatusClick}
+              />
+              <JobStatusBar
+                data={data}
+                selectedStatus={selectedStatus}
+                handleStatusClick={handleStatusClick}
+              />
+            </>
+          )}
           {!loading && !error && filteredData.length === 0 && (
             <Typography variant="body1">
               {t('jobApplicationList.messages.noResults')}
@@ -142,11 +157,6 @@ export default function JobApplicationList({ searchTerm }) {
           )}
           {!loading && !error && filteredData.length > 0 && (
             <>
-              <JobStatusBar
-                data={data}
-                selectedStatus={selectedStatus}
-                handleStatusClick={handleStatusClick}
-              />
               <Grid container spacing={4}>
                 {filteredData.map(jobApplication => (
                   <Grid
