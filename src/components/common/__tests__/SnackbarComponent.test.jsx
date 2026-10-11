@@ -20,7 +20,8 @@ describe('SnackbarComponent', () => {
 
     // Assert that the Snackbar has the correct severity
     const alert = screen.getByRole('alert');
-    expect(alert.classList.contains('MuiAlert-filledError')).toBe(true); // Check MUI class for "error"
+    expect(alert.classList.contains('MuiAlert-filled')).toBe(true);
+    expect(alert.classList.contains('MuiAlert-colorError')).toBe(true); // Check MUI class for "error"
   });
 
   it('does not render the Snackbar when open is false', () => {

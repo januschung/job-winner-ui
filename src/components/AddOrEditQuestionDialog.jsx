@@ -89,8 +89,14 @@ export default function AddOrEditQuestionDialog({
       )}
     >
       <DialogContent dividers>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12}>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            alignItems: 'center',
+          }}
+        >
+          <Grid size={12}>
             <TextField
               id="question"
               name="question"
@@ -103,7 +109,7 @@ export default function AddOrEditQuestionDialog({
               helperText={errors.question}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               id="answer"
               name="answer"

@@ -43,7 +43,14 @@ export default function Loading() {
 
   for (let i = 0; i < numberOfCards; i++) {
     cards.push(
-      <Grid item xs={12} sm={6} md={4} key={i}>
+      <Grid
+        key={i}
+        size={{
+          xs: 12,
+          sm: 6,
+          md: 4,
+        }}
+      >
         <LoadingCard />
       </Grid>
     );

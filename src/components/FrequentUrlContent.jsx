@@ -70,10 +70,23 @@ export default function FrequentUrlContent({}) {
         handleClose={handleClose}
         frequentUrl={frequentUrl}
       />
-      <Grid container spacing={2} alignItems="center">
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          alignItems: 'center',
+        }}
+      >
         {loading &&
           Array.from(new Array(6)).map((_, index) => (
-            <Grid item key={index} xs={12} sm={6} md={4}>
+            <Grid
+              key={index}
+              size={{
+                xs: 12,
+                sm: 6,
+                md: 4,
+              }}
+            >
               <Card
                 sx={{
                   height: '100%',
@@ -108,7 +121,14 @@ export default function FrequentUrlContent({}) {
         {!loading && !error && data?.allFrequentUrl?.length > 0 && (
           <>
             {data.allFrequentUrl.map(frequentUrl => (
-              <Grid item key={frequentUrl.id} xs={12} sm={6} md={4}>
+              <Grid
+                key={frequentUrl.id}
+                size={{
+                  xs: 12,
+                  sm: 6,
+                  md: 4,
+                }}
+              >
                 <Card
                   sx={{
                     height: '100%',
@@ -129,15 +149,14 @@ export default function FrequentUrlContent({}) {
                     }}
                   >
                     <Grid
-                      item
                       sx={{
+                        color: 'text.secondary',
                         mb: 1.5,
                         display: 'flex',
                         alignItems: 'center',
                         gap: 1,
                         width: '100%',
                       }}
-                      color="text.secondary"
                     >
                       <Box
                         sx={{

@@ -92,10 +92,12 @@ export default function OfferListDialog({ handleClose, open }) {
       <DialogContent dividers>
         {loading ? (
           <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            height="200px"
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '200px',
+            }}
           >
             <CircularProgress />
           </Box>

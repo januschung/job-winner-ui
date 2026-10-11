@@ -145,7 +145,14 @@ export default function JobApplicationList({ searchTerm }) {
               <JobStatusBar data={data} handleStatusClick={handleStatusClick} />
               <Grid container spacing={4}>
                 {filteredData.map(jobApplication => (
-                  <Grid item key={jobApplication.id} xs={12} sm={6} md={4}>
+                  <Grid
+                    key={jobApplication.id}
+                    size={{
+                      xs: 12,
+                      sm: 6,
+                      md: 4,
+                    }}
+                  >
                     <Card
                       sx={{
                         height: '100%',
@@ -163,20 +170,22 @@ export default function JobApplicationList({ searchTerm }) {
                     >
                       <CardContent sx={{ flexGrow: 1 }}>
                         <Typography
-                          sx={{ fontSize: 12 }}
-                          color="text.secondary"
                           gutterBottom
+                          sx={{
+                            color: 'text.secondary',
+                            fontSize: 12,
+                          }}
                         >
                           <CalendarMonthRoundedIcon fontSize="inherit" />{' '}
                           {jobApplication.appliedDate}
                         </Typography>
                         <Typography
                           sx={{
+                            color: 'text.secondary',
                             mb: 1.5,
                             display: 'flex',
                             alignItems: 'center',
                           }}
-                          color="text.secondary"
                         >
                           <Link
                             href={jobApplication.jobUrl || '#'}
@@ -189,16 +198,21 @@ export default function JobApplicationList({ searchTerm }) {
                             {jobApplication.companyName}
                           </Link>
                         </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                        <Typography
+                          sx={{
+                            color: 'text.secondary',
+                            mb: 1.5,
+                          }}
+                        >
                           {jobApplication.jobTitle}
                         </Typography>
                         <Typography
                           sx={{
+                            color: 'text.secondary',
                             mb: 1.5,
                             display: 'flex',
                             alignItems: 'center',
                           }}
-                          color="text.secondary"
                         >
                           <MonetizationOnIcon
                             fontSize="inherit"
@@ -207,8 +221,8 @@ export default function JobApplicationList({ searchTerm }) {
                           {jobApplication.salaryRange}
                         </Typography>
                         <Typography
-                          color="text.secondary"
                           sx={{
+                            color: 'text.secondary',
                             display: '-webkit-box',
                             WebkitBoxOrient: 'vertical',
                             overflow: 'hidden',

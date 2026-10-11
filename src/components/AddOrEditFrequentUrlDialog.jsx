@@ -84,8 +84,14 @@ export default function AddOrEditFrequentUrlDialog({
       title={(frequentUrl ? 'Edit ' : 'Add ') + 'Bookmark'}
     >
       <DialogContent dividers>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12}>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            alignItems: 'center',
+          }}
+        >
+          <Grid size={12}>
             <TextField
               id="title"
               name="title"
@@ -100,7 +106,7 @@ export default function AddOrEditFrequentUrlDialog({
               }
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               id="url"
               name="url"
