@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client';
 import { Brightness4, Brightness7, GitHub } from '@mui/icons-material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -16,22 +15,8 @@ import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import React, { useState, useEffect } from 'react';
-import {
-  GET_ALL_INTERVIEWS,
-  GET_ALL_OFFERS,
-  GET_PROFILE,
-} from '../graphql/query';
-import useDialog from '../hooks/useDialog';
-import useJobApplicationDialog from '../hooks/useJobApplicationDialog';
-import { getFilteredInterviews } from '../utils/interviewUtil';
-import FrequentUrlDialog from './FrequentUrlDialog';
-import InterviewListDialog from './InterviewListDialog';
-import JobApplicationDialog from './JobApplicationDialog';
-import JobApplicationList from './JobApplicationList';
+import { useAppDialogs } from './AppDialogsContext';
 import MobileMenu from './MobileMenu';
-import OfferListDialog from './OfferListDialog';
-import ProfileDialog from './ProfileDialog';
-import QuestionDialog from './QuestionDialog';
 import SearchBar from './SearchBar';
 import { useColorMode } from './ThemeContext';
 import { useTranslation } from 'react-i18next';
@@ -39,86 +24,32 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { useTheme, useMediaQuery } from '@mui/material';
 
-export default function AppHeader() {
+export default function AppHeader({ searchTerm, onSearch }) {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-  const [profileOpen, setProfileOpen] = useState(false);
-  const [profile, setProfile] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const { mode, toggleColorMode } = useColorMode();
   const { t, i18n } = useTranslation();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
-
   const {
-    data: offersData,
-    loading: offersLoading,
-    error: offersError,
-    refetch: refetchOffers,
-  } = useQuery(GET_ALL_OFFERS, {
-    fetchPolicy: 'network-only',
-  });
-  const {
-    data: interviewsData,
-    loading: interviewsLoading,
-    error: interviewsError,
-    refetch: refetchInterviews,
-  } = useQuery(GET_ALL_INTERVIEWS, {
-    fetchPolicy: 'network-only',
-  });
-  const { open, handleOpen, handleClose } =
-    useJobApplicationDialog(refetchOffers);
-
-  const {
-    dialogOpen: offerListingDialogOpen,
-    handleOpen: handleOfferListDialogOpen,
-    handleClose: handleOfferListDialogClose,
-  } = useDialog(refetchOffers);
-
-  const {
-    dialogOpen: interviewListingDialogOpen,
-    handleOpen: handleInterviewListDialogOpen,
-    handleClose: handleInterviewListDialogClose,
-  } = useDialog(refetchInterviews);
-
-  const {
-    dialogOpen: frequentUrlsDialogOpen,
-    handleOpen: handleFrequentUrlsDialogOpen,
-    handleClose: handleFrequentUrlsDialogClose,
-  } = useDialog();
-
-  const {
-    dialogOpen: questionDialogOpen,
-    handleOpen: handleQuestionDialogOpen,
-    handleClose: handleQuestionDialogClose,
-  } = useDialog();
+    openNewJobApplication: handleOpen,
+    openFrequentUrls: handleFrequentUrlsDialogOpen,
+    openQuestions: handleQuestionDialogOpen,
+    openInterviewList: handleInterviewListDialogOpen,
+    openOfferList: handleOfferListDialogOpen,
+    openProfile: handleProfileMenuOpen,
+    interviewCount,
+    offerCount,
+    interviewsLoading,
+    offersLoading,
+  } = useAppDialogs();
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const id = 1;
-
-  const { error, data, loading } = useQuery(GET_PROFILE, {
-    variables: { id },
-  });
-
-  const offerCount = offersData?.allOffer?.length || 0;
-
-  const filteredInterviews = getFilteredInterviews(
-    interviewsData?.allInterview
-  );
-
-  const interviewCount = filteredInterviews?.length || 0;
-
-  const handleProfileMenuOpen = () => {
-    setProfileOpen(true);
-    setProfile(data.profileById);
-  };
-
-  const handleProfileClose = () => setProfileOpen(false);
   const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
 
   const handleSearch = text => {
-    setSearchTerm(text);
+    onSearch(text);
   };
 
   const handleSearchToggle = () => {
@@ -137,38 +68,6 @@ export default function AppHeader() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <JobApplicationDialog
-        jobApplication={{ status: 'open' }}
-        open={open}
-        handleClose={handleClose}
-        setOpen={handleOpen}
-        isNew
-      />
-      <FrequentUrlDialog
-        open={frequentUrlsDialogOpen}
-        handleClose={handleFrequentUrlsDialogClose}
-        setOpen={handleFrequentUrlsDialogOpen}
-      />
-      <QuestionDialog
-        open={questionDialogOpen}
-        handleClose={handleQuestionDialogClose}
-        setOpen={handleQuestionDialogOpen}
-      />
-      <ProfileDialog
-        profile={profile}
-        open={profileOpen}
-        handleClose={handleProfileClose}
-      />
-      <InterviewListDialog
-        open={interviewListingDialogOpen}
-        handleClose={handleInterviewListDialogClose}
-        setOpen={handleInterviewListDialogOpen}
-      />
-      <OfferListDialog
-        open={offerListingDialogOpen}
-        handleClose={handleOfferListDialogClose}
-        setOpen={handleOfferListDialogOpen}
-      />
       <AppBar position="static">
         <Toolbar sx={{ position: 'relative' }}>
           <Box
@@ -351,7 +250,6 @@ export default function AppHeader() {
           i18n={i18n}
         />
       </AppBar>
-      <JobApplicationList searchTerm={searchTerm} />
     </Box>
   );
 }
