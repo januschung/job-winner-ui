@@ -65,7 +65,6 @@ export default function InterviewListDialog({ handleClose, open }) {
       render: (value, row) => (
         <Button
           size="small"
-          color="info"
           variant="outlined"
           onClick={() => handleJobDialogOpen(row.jobApplication)}
         >

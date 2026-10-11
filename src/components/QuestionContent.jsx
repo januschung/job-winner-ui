@@ -15,11 +15,9 @@ import useQuestion from '../hooks/useQuestion';
 import { DELETE_QUESTION } from '../graphql/mutation';
 import { GET_QUESTIONS } from '../graphql/query';
 import AddOrEditQuestionDialog from './AddOrEditQuestionDialog';
-import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 
 export default function QuestionContent() {
-  const theme = useTheme();
   const { t } = useTranslation();
 
   const [question, setQuestion] = useState(null);
@@ -72,7 +70,7 @@ export default function QuestionContent() {
           <Accordion key={index}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
-              sx={{ backgroundColor: theme.palette.custom.table.header }}
+              sx={{ backgroundColor: 'custom.table.header' }}
             >
               <Skeleton variant="text" width="80%" height={24} />
             </AccordionSummary>
@@ -99,9 +97,9 @@ export default function QuestionContent() {
                   display: 'flex',
                   alignItems: 'center',
                   width: '100%',
-                  backgroundColor: theme.palette.custom.table.header,
+                  backgroundColor: 'custom.table.header',
                   '&:hover': {
-                    backgroundColor: theme.palette.custom.table.headerHover,
+                    backgroundColor: 'custom.table.headerHover',
                   },
                 }}
               >

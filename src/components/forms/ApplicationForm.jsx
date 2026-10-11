@@ -285,7 +285,6 @@ export default function ApplicationForm({
       </DialogContent>
       <DialogActions>
         <Button
-          color="info"
           variant="outlined"
           startIcon={<CancelIcon />}
           onClick={handleClose}
@@ -293,7 +292,6 @@ export default function ApplicationForm({
           {t('common.cancel')}
         </Button>
         <Button
-          color="info"
           variant="contained"
           startIcon={<SaveIcon />}
           onClick={handleSubmit}

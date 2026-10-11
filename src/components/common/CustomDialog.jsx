@@ -35,7 +35,6 @@ export default function CustomDialog({
       <DialogActions>
         {onCancel && (
           <Button
-            color="info"
             variant="outlined"
             startIcon={<CancelIcon />}
             onClick={onClose}
@@ -45,7 +44,6 @@ export default function CustomDialog({
         )}
         {onAdd && (
           <Button
-            color="info"
             variant="contained"
             startIcon={<AddCircleIcon />}
             onClick={onAdd}
@@ -54,12 +52,7 @@ export default function CustomDialog({
           </Button>
         )}
         {onSave && (
-          <Button
-            color="info"
-            variant="contained"
-            startIcon={<SaveIcon />}
-            onClick={onSave}
-          >
+          <Button variant="contained" startIcon={<SaveIcon />} onClick={onSave}>
             {t('common.save')}
           </Button>
         )}

@@ -13,7 +13,7 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import JobApplicationDialog from '../components/JobApplicationDialog';
-import { STATUS_COLORS } from '../config/statusColor';
+import { statusColor } from '../config/status';
 import { DELETE_JOB_APPLICATION } from '../graphql/mutation';
 import { GET_JOB_APPLICATIONS } from '../graphql/query';
 import useDialog from '../hooks/useDialog';
@@ -142,7 +142,11 @@ export default function JobApplicationList({ searchTerm }) {
           )}
           {!loading && !error && filteredData.length > 0 && (
             <>
-              <JobStatusBar data={data} handleStatusClick={handleStatusClick} />
+              <JobStatusBar
+                data={data}
+                selectedStatus={selectedStatus}
+                handleStatusClick={handleStatusClick}
+              />
               <Grid container spacing={4}>
                 {filteredData.map(jobApplication => (
                   <Grid
@@ -158,9 +162,8 @@ export default function JobApplicationList({ searchTerm }) {
                         height: '100%',
                         display: 'flex',
                         flexDirection: 'column',
-                        borderTop: 4,
-                        borderColor:
-                          STATUS_COLORS[jobApplication.status] || 'grey',
+                        borderTopWidth: 4,
+                        borderTopColor: statusColor(jobApplication.status),
                         transition: 'transform 0.2s ease-in-out',
                         '&:hover': {
                           transform: 'scale(1.05)',

@@ -299,7 +299,6 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
       </DialogContent>
       <DialogActions>
         <Button
-          color="info"
           variant="outlined"
           startIcon={<CancelIcon />}
           onClick={handleClose}
@@ -308,7 +307,6 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
           {t('common.cancel')}
         </Button>
         <Button
-          color="info"
           variant="contained"
           startIcon={<SaveIcon />}
           onClick={handleSave}
