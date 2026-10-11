@@ -53,10 +53,10 @@ export default function ApplicationForm({
 
   useEffect(() => {
     if (isNew) {
-      setFormData({
-        ...formData,
+      setFormData(prev => ({
+        ...prev,
         appliedDate: dayjs().format('YYYY-MM-DD'),
-      });
+      }));
     } else if (jobApplication) {
       setFormData({
         companyName: jobApplication.companyName || '',

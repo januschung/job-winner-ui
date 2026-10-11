@@ -116,7 +116,7 @@
       },
       "jobDetails": "Job Details"
     },
-    "confirmDeletion": {
+    "confirmInterviewDeletion": {
       "title": "Confirm Deletion",
       "content": "Are you sure you want to delete this interview? This action cannot be undone."
     }
@@ -144,7 +144,9 @@
         "jobTitleRequired": "Job Title is required.",
         "salaryRangeRequired": "Salary Range is required.",
         "appliedDateRequired": "Valid Applied Date is required."
-      }
+      },
+      "success": "Job application saved successfully!",
+      "error": "Failed to save the job application."
     },
     "offerForm": {
       "fields": {

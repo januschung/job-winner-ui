@@ -322,8 +322,8 @@ export default function InterviewsForm({ jobApplicationId }) {
         open={confirmDeleteOpen}
         onCancel={cancelDeleteInterview}
         onConfirm={confirmDeleteInterview}
-        title={t('dialogs.confirmDeletion.title')}
-        content={t('dialogs.confirmDeletion.content')}
+        title={t('dialogs.confirmInterviewDeletion.title')}
+        content={t('dialogs.confirmInterviewDeletion.content')}
       />
     </>
   );

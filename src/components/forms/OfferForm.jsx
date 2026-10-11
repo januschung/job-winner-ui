@@ -98,11 +98,11 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
 
   const handleFormChange = e => {
     const { name, value } = e.target;
-    setOfferData({
-      ...offerData,
+    setOfferData(prev => ({
+      ...prev,
       [name]: value,
-    });
-    setErrors({ ...errors, [name]: '' }); // Clear error when user types
+    }));
+    setErrors(prev => ({ ...prev, [name]: '' })); // Clear error when user types
   };
 
   const handleSave = async () => {
@@ -218,10 +218,10 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                       offerData.offerDate ? dayjs(offerData.offerDate) : null
                     }
                     onChange={date =>
-                      setOfferData({
-                        ...offerData,
+                      setOfferData(prev => ({
+                        ...prev,
                         offerDate: date ? dayjs(date).format('YYYY-MM-DD') : '',
-                      })
+                      }))
                     }
                     slotProps={{
                       textField: {
