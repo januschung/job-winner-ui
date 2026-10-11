@@ -101,10 +101,12 @@ export default function InterviewListDialog({ handleClose, open }) {
       <DialogContent dividers>
         {loading ? (
           <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            height="200px"
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '200px',
+            }}
           >
             <CircularProgress />
           </Box>

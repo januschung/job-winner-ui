@@ -170,23 +170,35 @@ export default function InterviewsForm({ jobApplicationId }) {
         <Grid container spacing={2}>
           {interviews.map((interview, index) => (
             <Grid
-              item
-              xs={12}
               key={interview.id}
               sx={{ marginBottom: index < interviews.length - 1 ? 2 : 0 }}
+              size={12}
             >
               <Grid
                 container
                 spacing={2}
-                alignItems="center"
-                sx={{ border: '1px solid #ddd', padding: 2, borderRadius: 2 }}
+                sx={{
+                  alignItems: 'center',
+                  border: '1px solid #ddd',
+                  padding: 2,
+                  borderRadius: 2,
+                }}
               >
-                <Grid item xs={12} sm={4}>
+                <Grid
+                  size={{
+                    xs: 12,
+                    sm: 4,
+                  }}
+                >
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DesktopDatePicker
                       label={t('interviews.date')}
-                      inputFormat="MM/DD/YYYY"
-                      value={interview.interviewDate}
+                      format="MM/DD/YYYY"
+                      value={
+                        interview.interviewDate
+                          ? dayjs(interview.interviewDate)
+                          : null
+                      }
                       onChange={date =>
                         handleEdit(
                           interview.id,
@@ -194,13 +206,16 @@ export default function InterviewsForm({ jobApplicationId }) {
                           dayjs(date).format('YYYY-MM-DD')
                         )
                       }
-                      renderInput={params => (
-                        <TextField fullWidth {...params} />
-                      )}
+                      slotProps={{ textField: { fullWidth: true } }}
                     />
                   </LocalizationProvider>
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid
+                  size={{
+                    xs: 12,
+                    sm: 4,
+                  }}
+                >
                   <TextField
                     label={t('interviews.interviewer')}
                     value={interview.interviewer}
@@ -211,7 +226,12 @@ export default function InterviewsForm({ jobApplicationId }) {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid
+                  size={{
+                    xs: 12,
+                    sm: 4,
+                  }}
+                >
                   <FormControl fullWidth>
                     <InputLabel>{t('interviews.status')}</InputLabel>
                     <Select
@@ -240,7 +260,12 @@ export default function InterviewsForm({ jobApplicationId }) {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={8}>
+                <Grid
+                  size={{
+                    xs: 12,
+                    sm: 8,
+                  }}
+                >
                   <TextField
                     label={t('interviews.description')}
                     value={interview.description}
@@ -253,12 +278,15 @@ export default function InterviewsForm({ jobApplicationId }) {
                   />
                 </Grid>
                 <Grid
-                  item
-                  xs={12}
-                  sm={4}
                   container
-                  justifyContent="flex-end"
-                  alignItems="center"
+                  size={{
+                    xs: 12,
+                    sm: 4,
+                  }}
+                  sx={{
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                  }}
                 >
                   <Button
                     variant="outlined"
@@ -273,7 +301,13 @@ export default function InterviewsForm({ jobApplicationId }) {
           ))}
         </Grid>
 
-        <Grid container justifyContent="center" sx={{ marginTop: 3 }}>
+        <Grid
+          container
+          sx={{
+            justifyContent: 'center',
+            marginTop: 3,
+          }}
+        >
           <Button
             variant="contained"
             onClick={handleAddInterview}

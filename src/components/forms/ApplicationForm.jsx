@@ -94,10 +94,10 @@ export default function ApplicationForm({
 
   const handleFormChange = e => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData(prev => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   };
 
   const handleSubmit = event => {
@@ -121,7 +121,12 @@ export default function ApplicationForm({
     <>
       <DialogContent>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
+          <Grid
+            size={{
+              xs: 12,
+              sm: 6,
+            }}
+          >
             <TextField
               required
               id="companyName"
@@ -135,7 +140,12 @@ export default function ApplicationForm({
               helperText={errors.companyName}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid
+            size={{
+              xs: 12,
+              sm: 6,
+            }}
+          >
             <TextField
               required
               id="jobTitle"
@@ -149,7 +159,12 @@ export default function ApplicationForm({
               helperText={errors.jobTitle}
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid
+            size={{
+              xs: 12,
+              sm: 4,
+            }}
+          >
             <TextField
               required
               id="salaryRange"
@@ -163,33 +178,44 @@ export default function ApplicationForm({
               helperText={errors.salaryRange}
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid
+            size={{
+              xs: 12,
+              sm: 4,
+            }}
+          >
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DesktopDatePicker
-                id="appliedDate"
                 label={t('forms.applicationForm.fields.appliedDate')}
-                inputFormat="MM/DD/YYYY"
+                format="MM/DD/YYYY"
                 disablePast
-                value={formData.appliedDate}
-                onChange={date =>
-                  setFormData({
-                    ...formData,
-                    appliedDate: dayjs(date).format('YYYY-MM-DD'),
-                  })
+                value={
+                  formData.appliedDate ? dayjs(formData.appliedDate) : null
                 }
-                renderInput={params => (
-                  <TextField
-                    {...params}
-                    fullWidth
-                    error={!!errors.appliedDate}
-                    helperText={errors.appliedDate}
-                  />
-                )}
+                onChange={date =>
+                  setFormData(prev => ({
+                    ...prev,
+                    appliedDate: dayjs(date).format('YYYY-MM-DD'),
+                  }))
+                }
+                slotProps={{
+                  textField: {
+                    id: 'appliedDate',
+                    fullWidth: true,
+                    error: !!errors.appliedDate,
+                    helperText: errors.appliedDate,
+                  },
+                }}
               />
             </LocalizationProvider>
           </Grid>
           {!isNew && (
-            <Grid item xs={12} sm={4}>
+            <Grid
+              size={{
+                xs: 12,
+                sm: 4,
+              }}
+            >
               <FormControl fullWidth variant="outlined">
                 <InputLabel>
                   {t('forms.applicationForm.fields.status')}
@@ -216,7 +242,7 @@ export default function ApplicationForm({
               </FormControl>
             </Grid>
           )}
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               id="description"
               name="description"
@@ -229,7 +255,7 @@ export default function ApplicationForm({
               value={formData.description}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               id="jobUrl"
               name="jobUrl"
@@ -242,7 +268,7 @@ export default function ApplicationForm({
               value={formData.jobUrl}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               id="note"
               name="note"

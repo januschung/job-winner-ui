@@ -4,7 +4,7 @@ import CopyButton from './CopyButton';
 
 const ProfileTextField = ({ id, label, value, onChange }) => (
   <>
-    <Grid item xs={11}>
+    <Grid size={11}>
       <TextField
         id={id}
         name={id}
@@ -15,7 +15,7 @@ const ProfileTextField = ({ id, label, value, onChange }) => (
         onChange={onChange}
       />
     </Grid>
-    <Grid item xs={1}>
+    <Grid size={1}>
       <CopyButton text={value} />
     </Grid>
   </>

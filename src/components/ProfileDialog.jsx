@@ -82,7 +82,13 @@ export default function ProfileDialog({ profile, handleClose, open }) {
       title={t('dialogs.profile.title')}
     >
       <DialogContent dividers>
-        <Grid container spacing={2} alignItems="center">
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            alignItems: 'center',
+          }}
+        >
           {fields.map(field => (
             <ProfileTextField
               key={field.id}

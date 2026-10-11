@@ -186,7 +186,13 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
       <DialogContent>
         <Grid container spacing={2}>
           {!isFormVisible && (
-            <Grid container justifyContent="center" sx={{ marginTop: 3 }}>
+            <Grid
+              container
+              sx={{
+                justifyContent: 'center',
+                marginTop: 3,
+              }}
+            >
               <Button
                 variant="contained"
                 onClick={() => setIsFormVisible(true)}
@@ -197,32 +203,43 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
           )}
           {isFormVisible && (
             <>
-              <Grid item xs={12} sm={6}>
+              <Grid
+                size={{
+                  xs: 12,
+                  sm: 6,
+                }}
+              >
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DesktopDatePicker
-                    id="offerDate"
                     label={t('forms.offerForm.fields.offerDate')}
-                    inputFormat="MM/DD/YYYY"
+                    format="MM/DD/YYYY"
                     disablePast
-                    value={offerData.offerDate}
+                    value={
+                      offerData.offerDate ? dayjs(offerData.offerDate) : null
+                    }
                     onChange={date =>
                       setOfferData({
                         ...offerData,
                         offerDate: date ? dayjs(date).format('YYYY-MM-DD') : '',
                       })
                     }
-                    renderInput={params => (
-                      <TextField
-                        sx={{ width: '100%' }}
-                        {...params}
-                        error={!!errors.offerDate}
-                        helperText={errors.offerDate}
-                      />
-                    )}
+                    slotProps={{
+                      textField: {
+                        id: 'offerDate',
+                        fullWidth: true,
+                        error: !!errors.offerDate,
+                        helperText: errors.offerDate,
+                      },
+                    }}
                   />
                 </LocalizationProvider>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid
+                size={{
+                  xs: 12,
+                  sm: 6,
+                }}
+              >
                 <TextField
                   required
                   id="salaryOffered"
@@ -236,7 +253,12 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={10}>
+              <Grid
+                size={{
+                  xs: 12,
+                  sm: 10,
+                }}
+              >
                 <TextField
                   required
                   id="description"
@@ -252,12 +274,15 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
                 />
               </Grid>
               <Grid
-                item
-                xs={12}
-                sm={2}
                 container
-                justifyContent="flex-end"
-                alignItems="center"
+                size={{
+                  xs: 12,
+                  sm: 2,
+                }}
+                sx={{
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                }}
               >
                 <Button
                   variant="outlined"
