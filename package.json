@@ -18,14 +18,11 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^15.5.2",
-    "react-loading": "^2.0.3",
-    "react-router-dom": "^7.18.3",
-    "web-vitals": "^4.2.3"
+    "react-router-dom": "^7.18.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
     "@vitejs/plugin-react": "^6.0.4",
-    "@vitejs/plugin-vue": "^6.0.8",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.4",
@@ -47,37 +44,6 @@
     "format:check": "prettier --check \"src/**/*.{js,jsx,json,css,md}\"",
     "test": "vitest --run",
     "prepare": "husky"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ],
-    "rules": {
-      "no-unused-vars": "warn"
-    },
-    "overrides": [
-      {
-        "files": [
-          "**/*.ts?(x)"
-        ],
-        "rules": {
-          "max-len": "warn"
-        }
-      }
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   },
   "lint-staged": {
     "src/**/*.{js,jsx}": [

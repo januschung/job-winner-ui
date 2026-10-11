@@ -116,7 +116,7 @@
       },
       "jobDetails": "Detalles del Trabajo"
     },
-    "confirmDeletion": {
+    "confirmInterviewDeletion": {
       "title": "Confirmar Eliminación",
       "content": "¿Está seguro de que desea eliminar esta entrevista? Esta acción no se puede deshacer."
     }
@@ -144,7 +144,9 @@
         "jobTitleRequired": "El título del trabajo es obligatorio.",
         "salaryRangeRequired": "El rango salarial es obligatorio.",
         "appliedDateRequired": "Se requiere una fecha de aplicación válida."
-      }
+      },
+      "success": "¡Solicitud de empleo guardada con éxito!",
+      "error": "No se pudo guardar la solicitud de empleo."
     },
     "offerForm": {
       "fields": {

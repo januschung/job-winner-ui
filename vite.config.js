@@ -10,10 +10,6 @@ export default defineConfig({
       overlay: false,
     },
   },
-  esbuild: {
-    loader: "jsx",
-    include: /src\/.*\.[jt]sx?$/,
-  },
   resolve: {
     extensions: [".js", ".jsx"],
   },
