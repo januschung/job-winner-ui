@@ -179,7 +179,8 @@ export default function InterviewsForm({ jobApplicationId }) {
                 spacing={2}
                 sx={{
                   alignItems: 'center',
-                  border: '1px solid #ddd',
+                  border: 1,
+                  borderColor: 'divider',
                   padding: 2,
                   borderRadius: 2,
                 }}

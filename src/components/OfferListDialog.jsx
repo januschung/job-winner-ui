@@ -56,7 +56,6 @@ export default function OfferListDialog({ handleClose, open }) {
       render: (value, row) => (
         <Button
           size="small"
-          color="info"
           variant="outlined"
           onClick={() => handleJobDialogOpen(row.jobApplication)}
         >

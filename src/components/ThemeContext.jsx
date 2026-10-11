@@ -1,31 +1,28 @@
-import React, { createContext, useState, useMemo, useContext } from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import React from 'react';
+import { ThemeProvider, useColorScheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { createAppTheme } from '../config/theme';
+import { appTheme } from '../config/theme';
 
-const ColorModeContext = createContext();
+// Same storage key the app used before, so saved light/dark choices carry over.
+export const COLOR_MODE_STORAGE_KEY = 'theme';
 
-export const useColorMode = () => useContext(ColorModeContext);
+export const useColorMode = () => {
+  const { mode, systemMode, setMode } = useColorScheme();
+  const resolvedMode = (mode === 'system' ? systemMode : mode) || 'light';
 
-export const ThemeContextProvider = ({ children }) => {
-  const [mode, setMode] = useState(localStorage.getItem('theme') || 'light');
+  const toggleColorMode = () =>
+    setMode(resolvedMode === 'dark' ? 'light' : 'dark');
 
-  const toggleColorMode = () => {
-    setMode(prevMode => {
-      const newMode = prevMode === 'light' ? 'dark' : 'light';
-      localStorage.setItem('theme', newMode);
-      return newMode;
-    });
-  };
-
-  const theme = useMemo(() => createAppTheme(mode), [mode]);
-
-  return (
-    <ColorModeContext.Provider value={{ mode, toggleColorMode }}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        {children}
-      </ThemeProvider>
-    </ColorModeContext.Provider>
-  );
+  return { mode: resolvedMode, toggleColorMode };
 };
+
+export const ThemeContextProvider = ({ children }) => (
+  <ThemeProvider
+    theme={appTheme}
+    defaultMode="system"
+    modeStorageKey={COLOR_MODE_STORAGE_KEY}
+  >
+    <CssBaseline />
+    {children}
+  </ThemeProvider>
+);

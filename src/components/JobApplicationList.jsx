@@ -158,8 +158,8 @@ export default function JobApplicationList({ searchTerm }) {
                         height: '100%',
                         display: 'flex',
                         flexDirection: 'column',
-                        borderTop: 4,
-                        borderColor:
+                        borderTopWidth: 4,
+                        borderTopColor:
                           STATUS_COLORS[jobApplication.status] || 'grey',
                         transition: 'transform 0.2s ease-in-out',
                         '&:hover': {
