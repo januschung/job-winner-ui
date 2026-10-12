@@ -1,30 +1,18 @@
-import QuestionContent from './QuestionContent';
-import useDialog from '../hooks/useDialog';
-import AddOrEditQuestionDialog from './AddOrEditQuestionDialog';
-import CustomDialog from './common/CustomDialog';
 import { useTranslation } from 'react-i18next';
+import AddOrEditQuestionDialog from './AddOrEditQuestionDialog';
+import CollectionDialog from './common/CollectionDialog';
+import QuestionContent from './QuestionContent';
 
 export default function QuestionDialog({ handleClose, open }) {
-  const {
-    dialogOpen,
-    handleOpen,
-    handleClose: handleAddQuestionClose,
-  } = useDialog();
   const { t } = useTranslation();
-
   return (
-    <CustomDialog
+    <CollectionDialog
       open={open}
-      onClose={handleClose}
-      onCancel={handleClose}
+      handleClose={handleClose}
       title={t('dialogs.question.title')}
-      onAdd={handleOpen}
+      FormDialog={AddOrEditQuestionDialog}
     >
-      <AddOrEditQuestionDialog
-        open={dialogOpen}
-        handleClose={handleAddQuestionClose}
-      />
       <QuestionContent />
-    </CustomDialog>
+    </CollectionDialog>
   );
 }

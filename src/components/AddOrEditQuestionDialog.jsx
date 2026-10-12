@@ -1,133 +1,40 @@
-import { useEffect, useState } from 'react';
-import { useMutation } from '@apollo/client';
-import { Grid, TextField } from '@mui/material';
-import DialogContent from '@mui/material/DialogContent';
-import { useSnackbar } from './common/SnackbarContext';
+import { useTranslation } from 'react-i18next';
 import { ADD_QUESTION, UPDATE_QUESTION } from '../graphql/mutation';
 import { GET_QUESTIONS } from '../graphql/query';
-import CustomDialog from './common/CustomDialog';
-import { useTranslation } from 'react-i18next';
+import RecordFormDialog from './common/RecordFormDialog';
 
 export default function AddOrEditQuestionDialog({
   handleClose,
   open,
   question,
 }) {
-  const [formData, setFormData] = useState({
-    question: '',
-    answer: '',
-  });
-  const [errors, setErrors] = useState({});
-  const [saving, setSaving] = useState(false);
-  const { showSnackbar } = useSnackbar();
   const { t } = useTranslation();
-
-  const [addQuestion] = useMutation(ADD_QUESTION, {
-    refetchQueries: [{ query: GET_QUESTIONS }],
-  });
-
-  const [updateQuestion] = useMutation(UPDATE_QUESTION);
-
-  const validateFields = () => {
-    const newErrors = {};
-    if (!formData.question)
-      newErrors.question = t('dialogs.addQuestion.errors.questionRequired');
-    if (!formData.answer)
-      newErrors.answer = t('dialogs.addQuestion.errors.answerRequired');
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleFormChange = e => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = async event => {
-    event?.preventDefault();
-    if (!validateFields()) return;
-    const mutationFn = question ? updateQuestion : addQuestion;
-    const variables = {
-      ...formData,
-      ...(question && { id: question.id }),
-    };
-    setSaving(true);
-    try {
-      await mutationFn({ variables });
-      showSnackbar(t('dialogs.addQuestion.success'), 'success');
-      handleClose();
-    } catch (err) {
-      showSnackbar(t('dialogs.addQuestion.error'), 'error');
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!question) {
-      setFormData({
-        question: '',
-        answer: '',
-      });
-    } else {
-      setFormData({
-        question: question.question || '',
-        answer: question.answer || '',
-      });
-    }
-  }, [question]);
+  const key = suffix => `dialogs.addQuestion.${suffix}`;
 
   return (
-    <CustomDialog
+    <RecordFormDialog
       open={open}
-      onClose={handleClose}
-      onCancel={handleClose}
-      onSave={handleSubmit}
-      saving={saving}
-      title={t(
-        question ? 'dialogs.addQuestion.editTitle' : 'dialogs.addQuestion.title'
-      )}
-    >
-      <DialogContent dividers>
-        <Grid
-          container
-          spacing={2}
-          sx={{
-            alignItems: 'center',
-          }}
-        >
-          <Grid size={12}>
-            <TextField
-              id="question"
-              name="question"
-              label={t('dialogs.addQuestion.fields.question')}
-              fullWidth
-              variant="outlined"
-              onChange={handleFormChange}
-              value={formData.question}
-              error={!!errors.question}
-              helperText={errors.question}
-            />
-          </Grid>
-          <Grid size={12}>
-            <TextField
-              id="answer"
-              name="answer"
-              label={t('dialogs.addQuestion.fields.answer')}
-              fullWidth
-              multiline
-              variant="outlined"
-              onChange={handleFormChange}
-              value={formData.answer}
-              error={!!errors.answer}
-              helperText={errors.answer}
-            />
-          </Grid>
-        </Grid>
-      </DialogContent>
-    </CustomDialog>
+      handleClose={handleClose}
+      record={question}
+      fields={[
+        {
+          name: 'question',
+          label: t(key('fields.question')),
+          requiredMessage: t(key('errors.questionRequired')),
+        },
+        {
+          name: 'answer',
+          label: t(key('fields.answer')),
+          requiredMessage: t(key('errors.answerRequired')),
+          multiline: true,
+        },
+      ]}
+      addMutation={ADD_QUESTION}
+      updateMutation={UPDATE_QUESTION}
+      refetchQueries={[{ query: GET_QUESTIONS }]}
+      title={t(key(question ? 'editTitle' : 'title'))}
+      successMessage={t(key('success'))}
+      errorMessage={t(key('error'))}
+    />
   );
 }

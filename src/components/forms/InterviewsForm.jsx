@@ -11,7 +11,8 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useQuery, useMutation } from '@apollo/client';
 import ConfirmDialog from '../common/ConfirmDialog';
-import { useSnackbar } from '../common/SnackbarContext';
+import useAsyncAction from '../../hooks/useAsyncAction';
+import useConfirmedAction from '../../hooks/useConfirmedAction';
 import {
   ADD_INTERVIEW,
   UPDATE_INTERVIEW,
@@ -27,9 +28,7 @@ import { useTranslation } from 'react-i18next';
 
 export default function InterviewsForm({ jobApplicationId }) {
   const [interviews, setInterviews] = useState([]);
-  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-  const [interviewToDelete, setInterviewToDelete] = useState(null);
-  const { showSnackbar } = useSnackbar();
+  const { run } = useAsyncAction();
   const { t } = useTranslation();
 
   // Last values the server confirmed, per interview id, so leaving a field
@@ -48,61 +47,51 @@ export default function InterviewsForm({ jobApplicationId }) {
     },
   });
 
-  const [addInterview] = useMutation(ADD_INTERVIEW, {
-    refetchQueries: [
-      {
-        query: GET_INTERVIEWS_BY_JOB_APPLICATION_ID,
-        variables: { jobApplicationId },
-      },
-      { query: GET_ALL_INTERVIEWS },
-    ],
+  // Every interview change refreshes this application's list and the global
+  // upcoming-interviews list.
+  const refetchQueries = [
+    {
+      query: GET_INTERVIEWS_BY_JOB_APPLICATION_ID,
+      variables: { jobApplicationId },
+    },
+    { query: GET_ALL_INTERVIEWS },
+  ];
+  const [addInterview] = useMutation(ADD_INTERVIEW, { refetchQueries });
+  const [updateInterview] = useMutation(UPDATE_INTERVIEW, { refetchQueries });
+  const [deleteInterview] = useMutation(DELETE_INTERVIEW, { refetchQueries });
+
+  const remove = useConfirmedAction({
+    action: id => deleteInterview({ variables: { id } }),
+    successMessage: t('interviews.messages.deleteSuccess'),
+    errorMessage: t('interviews.messages.deleteError'),
+    onSuccess: id =>
+      setInterviews(prev => prev.filter(interview => interview.id !== id)),
   });
 
-  const [updateInterview] = useMutation(UPDATE_INTERVIEW, {
-    refetchQueries: [
-      {
-        query: GET_INTERVIEWS_BY_JOB_APPLICATION_ID,
-        variables: { jobApplicationId },
-      },
-      { query: GET_ALL_INTERVIEWS },
-    ],
-  });
-
-  const [deleteInterview] = useMutation(DELETE_INTERVIEW, {
-    refetchQueries: [
-      {
-        query: GET_INTERVIEWS_BY_JOB_APPLICATION_ID,
-        variables: { jobApplicationId },
-      },
-      { query: GET_ALL_INTERVIEWS },
-    ],
-  });
-
-  const handleAddInterview = async () => {
-    try {
-      const { data } = await addInterview({
-        variables: {
-          interviewInput: {
-            jobApplicationId,
-            interviewDate: dayjs().format('YYYY-MM-DD'),
-            interviewer: '',
-            description: '',
-            status: 'open',
+  const handleAddInterview = () =>
+    run(
+      () =>
+        addInterview({
+          variables: {
+            interviewInput: {
+              jobApplicationId,
+              interviewDate: dayjs().format('YYYY-MM-DD'),
+              interviewer: '',
+              description: '',
+              status: 'open',
+            },
           },
+        }),
+      {
+        successMessage: t('interviews.messages.addSuccess'),
+        errorMessage: t('interviews.messages.addError'),
+        onSuccess: ({ data }) => {
+          if (!data?.addInterview) return;
+          remember([data.addInterview]);
+          setInterviews(prev => [...prev, data.addInterview]);
         },
-      });
-      if (data?.addInterview?.id) {
-        remember([data.addInterview]);
-        setInterviews([...interviews, data.addInterview]);
-        showSnackbar(t('interviews.messages.addSuccess'), 'success');
-      } else {
-        console.warn(t('interviews.messages.addError'));
       }
-    } catch (err) {
-      console.error(t('interviews.messages.addError'), err.message);
-      showSnackbar(t('interviews.messages.addError'), 'error');
-    }
-  };
+    );
 
   const handleEdit = (id, field, value) => {
     setInterviews(prev =>
@@ -114,63 +103,34 @@ export default function InterviewsForm({ jobApplicationId }) {
 
   // Saves one interview. `changes` carries values set in the same event,
   // which are not in `interviews` state yet.
-  const handleSaveInline = async (id, changes = {}) => {
-    try {
-      const current = interviews.find(item => item.id === id);
-      if (!current) return;
-      const interview = { ...current, ...changes };
-      // Skip half-typed dates; the field saves again once it is valid.
-      if (!dayjs(interview.interviewDate, 'YYYY-MM-DD').isValid()) return;
-      const saved = savedRef.current[id];
-      const fields = ['interviewDate', 'interviewer', 'description', 'status'];
-      if (saved && fields.every(f => saved[f] === interview[f])) return;
+  const handleSaveInline = (id, changes = {}) => {
+    const current = interviews.find(item => item.id === id);
+    if (!current) return;
+    const interview = { ...current, ...changes };
+    // Skip half-typed dates; the field saves again once it is valid.
+    if (!dayjs(interview.interviewDate, 'YYYY-MM-DD').isValid()) return;
+    const saved = savedRef.current[id];
+    const fields = ['interviewDate', 'interviewer', 'description', 'status'];
+    if (saved && fields.every(f => saved[f] === interview[f])) return;
 
-      await updateInterview({
-        variables: {
-          id,
-          interview: {
-            id: interview.id,
-            jobApplicationId,
-            interviewDate: interview.interviewDate,
-            interviewer: interview.interviewer,
-            description: interview.description,
-            status: interview.status,
+    run(
+      () =>
+        updateInterview({
+          variables: {
+            id,
+            interview: {
+              id: interview.id,
+              jobApplicationId,
+              ...Object.fromEntries(fields.map(f => [f, interview[f]])),
+            },
           },
-        },
-      });
-
-      remember([interview]);
-      showSnackbar(t('interviews.messages.saveSuccess'), 'success');
-    } catch (err) {
-      console.error(t('interviews.messages.saveError'), err.message);
-      showSnackbar(t('interviews.messages.saveError'), 'error');
-    }
-  };
-
-  const handleDelete = id => {
-    setInterviewToDelete(id);
-    setConfirmDeleteOpen(true);
-  };
-
-  const confirmDeleteInterview = async () => {
-    try {
-      await deleteInterview({ variables: { id: interviewToDelete } });
-      setInterviews(prev =>
-        prev.filter(interview => interview.id !== interviewToDelete)
-      );
-      showSnackbar(t('interviews.messages.deleteSuccess'), 'success');
-    } catch (err) {
-      console.error(t('interviews.messages.deleteError'), err.message);
-      showSnackbar(t('interviews.messages.deleteError'), 'error');
-    } finally {
-      setInterviewToDelete(null);
-      setConfirmDeleteOpen(false);
-    }
-  };
-
-  const cancelDeleteInterview = () => {
-    setConfirmDeleteOpen(false);
-    setInterviewToDelete(null);
+        }),
+      {
+        successMessage: t('interviews.messages.saveSuccess'),
+        errorMessage: t('interviews.messages.saveError'),
+        onSuccess: () => remember([interview]),
+      }
+    );
   };
 
   if (loading) return <p>{t('common.loading')}</p>;
@@ -327,7 +287,7 @@ export default function InterviewsForm({ jobApplicationId }) {
                   <Button
                     variant="outlined"
                     color="warning"
-                    onClick={() => handleDelete(interview.id)}
+                    onClick={() => remove.request(interview.id)}
                   >
                     {t('common.delete')}
                   </Button>
@@ -355,9 +315,7 @@ export default function InterviewsForm({ jobApplicationId }) {
       </DialogContent>
 
       <ConfirmDialog
-        open={confirmDeleteOpen}
-        onCancel={cancelDeleteInterview}
-        onConfirm={confirmDeleteInterview}
+        {...remove.dialogProps}
         title={t('dialogs.confirmInterviewDeletion.title')}
         content={t('dialogs.confirmInterviewDeletion.content')}
       />

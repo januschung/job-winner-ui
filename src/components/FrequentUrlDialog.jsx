@@ -1,30 +1,18 @@
-import FrequentUrlContent from './FrequentUrlContent';
-import useDialog from '../hooks/useDialog';
-import AddOrEditFrequentUrlDialog from './AddOrEditFrequentUrlDialog';
-import CustomDialog from './common/CustomDialog';
 import { useTranslation } from 'react-i18next';
+import AddOrEditFrequentUrlDialog from './AddOrEditFrequentUrlDialog';
+import CollectionDialog from './common/CollectionDialog';
+import FrequentUrlContent from './FrequentUrlContent';
 
 export default function FrequentUrlDialog({ handleClose, open }) {
-  const {
-    dialogOpen,
-    handleOpen,
-    handleClose: handleAddFrequentUrlClose,
-  } = useDialog();
   const { t } = useTranslation();
-
   return (
-    <CustomDialog
+    <CollectionDialog
       open={open}
-      onClose={handleClose}
-      onCancel={handleClose}
+      handleClose={handleClose}
       title={t('dialogs.addBookmark.title')}
-      onAdd={handleOpen}
+      FormDialog={AddOrEditFrequentUrlDialog}
     >
-      <AddOrEditFrequentUrlDialog
-        open={dialogOpen}
-        handleClose={handleAddFrequentUrlClose}
-      />
       <FrequentUrlContent />
-    </CustomDialog>
+    </CollectionDialog>
   );
 }

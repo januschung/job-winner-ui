@@ -4,7 +4,7 @@ import DialogContent from '@mui/material/DialogContent';
 import { Grid } from '@mui/material';
 import { UPDATE_PROFILE } from '../graphql/mutation';
 import { GET_PROFILE } from '../graphql/query';
-import { useSnackbar } from './common/SnackbarContext';
+import useAsyncAction from '../hooks/useAsyncAction';
 import ProfileTextField from './ProfileTextField';
 import CustomDialog from './common/CustomDialog';
 import { useTranslation } from 'react-i18next';
@@ -38,9 +38,7 @@ export default function ProfileDialog({ profile, handleClose, open }) {
     }, {});
 
   const [formData, setFormData] = useState(initialFormData);
-  const [saving, setSaving] = useState(false);
-
-  const { showSnackbar } = useSnackbar();
+  const { run, pending: saving } = useAsyncAction();
 
   useEffect(() => {
     if (profile) {
@@ -62,22 +60,12 @@ export default function ProfileDialog({ profile, handleClose, open }) {
     }));
   };
 
-  const handleUpdateProfile = async event => {
+  const handleUpdateProfile = event => {
     event?.preventDefault();
-    setSaving(true);
-    try {
-      await updateProfile({
-        variables: {
-          id: 1,
-          ...formData,
-        },
-      });
-      showSnackbar(t('dialogs.profile.success'), 'success');
-    } catch (err) {
-      showSnackbar(t('dialogs.profile.error'), 'error');
-    } finally {
-      setSaving(false);
-    }
+    run(() => updateProfile({ variables: { id: 1, ...formData } }), {
+      successMessage: t('dialogs.profile.success'),
+      errorMessage: t('dialogs.profile.error'),
+    });
   };
 
   return (

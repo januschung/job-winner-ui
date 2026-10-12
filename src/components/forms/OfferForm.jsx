@@ -8,7 +8,8 @@ import Button from '@mui/material/Button';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
 import ConfirmDialog from '../common/ConfirmDialog';
-import { useSnackbar } from '../common/SnackbarContext';
+import useAsyncAction from '../../hooks/useAsyncAction';
+import useConfirmedAction from '../../hooks/useConfirmedAction';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -26,9 +27,7 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
   });
   const [errors, setErrors] = useState({});
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-
-  const { showSnackbar } = useSnackbar();
+  const { run, pending: saving } = useAsyncAction();
   const { t } = useTranslation();
 
   const {
@@ -40,32 +39,14 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
     fetchPolicy: 'network-only',
   });
 
-  const [addOffer, { loading: addOfferLoading }] = useMutation(ADD_OFFER, {
-    refetchQueries: [
-      { query: GET_OFFER, variables: { jobApplicationId } },
-      { query: GET_ALL_OFFERS },
-    ],
-  });
-
-  const [updateOffer, { loading: updateOfferLoading }] = useMutation(
-    UPDATE_OFFER,
-    {
-      refetchQueries: [
-        { query: GET_OFFER, variables: { jobApplicationId } },
-        { query: GET_ALL_OFFERS },
-      ],
-    }
-  );
-
-  const [deleteOffer, { loading: deleteOfferLoading }] = useMutation(
-    DELETE_OFFER,
-    {
-      refetchQueries: [
-        { query: GET_OFFER, variables: { jobApplicationId } },
-        { query: GET_ALL_OFFERS },
-      ],
-    }
-  );
+  // Every offer change refreshes this application's offer and the offer list.
+  const refetchQueries = [
+    { query: GET_OFFER, variables: { jobApplicationId } },
+    { query: GET_ALL_OFFERS },
+  ];
+  const [addOffer] = useMutation(ADD_OFFER, { refetchQueries });
+  const [updateOffer] = useMutation(UPDATE_OFFER, { refetchQueries });
+  const [deleteOffer] = useMutation(DELETE_OFFER, { refetchQueries });
 
   useEffect(() => {
     if (data && data.offerByJobApplicationId) {
@@ -106,47 +87,31 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
     setErrors(prev => ({ ...prev, [name]: '' })); // Clear error when user types
   };
 
-  const handleSave = async () => {
+  const savedOffer = data?.offerByJobApplicationId;
+
+  const handleSave = () => {
     if (!validateFields()) return;
-
-    try {
-      if (data && data.offerByJobApplicationId) {
-        await updateOffer({
-          variables: {
-            id: data.offerByJobApplicationId.id,
-            jobApplicationId,
-            salaryOffered: offerData.salaryOffered,
-            description: offerData.description,
-            offerDate: offerData.offerDate,
-          },
-        });
-        showSnackbar(t('forms.offerForm.messages.updateSuccess'), 'success');
-      } else {
-        await addOffer({
-          variables: {
-            jobApplicationId,
-            salaryOffered: offerData.salaryOffered,
-            description: offerData.description,
-            offerDate: offerData.offerDate,
-          },
-          refetchQueries: [{ query: GET_ALL_OFFERS }],
-        });
-        showSnackbar(t('forms.offerForm.messages.addSuccess'), 'success');
+    const fields = {
+      jobApplicationId,
+      salaryOffered: offerData.salaryOffered,
+      description: offerData.description,
+      offerDate: offerData.offerDate,
+    };
+    run(
+      () =>
+        savedOffer
+          ? updateOffer({ variables: { id: savedOffer.id, ...fields } })
+          : addOffer({ variables: fields }),
+      {
+        successMessage: t(
+          savedOffer
+            ? 'forms.offerForm.messages.updateSuccess'
+            : 'forms.offerForm.messages.addSuccess'
+        ),
+        errorMessage: t('forms.offerForm.messages.error'),
+        onSuccess: handleClose,
       }
-      setTimeout(() => handleClose(), 500);
-    } catch (err) {
-      showSnackbar(t('forms.offerForm.messages.error'), 'error');
-    }
-  };
-
-  const handleDelete = () => {
-    if (data && data.offerByJobApplicationId) {
-      // If an existing offer is saved, show the confirmation dialog
-      setConfirmDeleteOpen(true);
-    } else {
-      // If no saved offer exists, reset the form and hide it
-      resetForm();
-    }
+    );
   };
 
   const resetForm = () => {
@@ -159,28 +124,22 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
     setIsFormVisible(false);
   };
 
-  const confirmDeleteOffer = async () => {
-    try {
-      if (data && data.offerByJobApplicationId) {
-        const { id } = data.offerByJobApplicationId;
-        await deleteOffer({ variables: { id } });
-        resetForm();
-        showSnackbar(t('forms.offerForm.messages.deleteSuccess'), 'success');
-      }
-    } catch (err) {
-      console.error('Error deleting offer:', err.message);
-      showSnackbar(t('forms.offerForm.messages.deleteError'), 'error');
-    } finally {
-      setConfirmDeleteOpen(false);
-    }
-  };
+  const remove = useConfirmedAction({
+    action: id => deleteOffer({ variables: { id } }),
+    successMessage: t('forms.offerForm.messages.deleteSuccess'),
+    errorMessage: t('forms.offerForm.messages.deleteError'),
+    onSuccess: resetForm,
+  });
 
-  const cancelDeleteOffer = () => {
-    setConfirmDeleteOpen(false);
-  };
+  // A saved offer needs confirming; an unsaved draft is just discarded.
+  const handleDelete = () =>
+    savedOffer ? remove.request(savedOffer.id) : resetForm();
 
-  const isLoading =
-    queryLoading || addOfferLoading || updateOfferLoading || deleteOfferLoading;
+  const isLoading = queryLoading || saving || remove.pending;
+
+  // Until the saved offer has loaded, "Add Offer" would race the query: the
+  // form opens, then the arriving result hides it again.
+  if (queryLoading && !data) return <p>{t('common.loading')}</p>;
 
   // Without the saved offer we cannot tell "none yet" from "failed to load",
   // so do not offer to add one (it could create a duplicate).
@@ -327,9 +286,7 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
         </Button>
       </DialogActions>
       <ConfirmDialog
-        open={confirmDeleteOpen}
-        onCancel={cancelDeleteOffer}
-        onConfirm={confirmDeleteOffer}
+        {...remove.dialogProps}
         confirmText={t('forms.offerForm.buttons.confirmDelete')}
         confirmColor="error"
         title={t('forms.offerForm.dialogs.confirmDelete.title')}

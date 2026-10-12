@@ -16,7 +16,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { useSnackbar } from '../common/SnackbarContext';
+import { JOB_STATUSES } from '../../config/status';
+import useAsyncAction from '../../hooks/useAsyncAction';
 import {
   ADD_JOB_APPLICATION,
   UPDATE_JOB_APPLICATION,
@@ -41,8 +42,7 @@ export default function ApplicationForm({
     appliedDate: dayjs().format('YYYY-MM-DD'),
   });
   const [errors, setErrors] = useState({});
-  const [saving, setSaving] = useState(false);
-  const { showSnackbar } = useSnackbar();
+  const { run, pending: saving } = useAsyncAction();
   const { t } = useTranslation();
 
   const [newJobApplication] = useMutation(ADD_JOB_APPLICATION, {
@@ -101,7 +101,7 @@ export default function ApplicationForm({
     }));
   };
 
-  const handleSubmit = async event => {
+  const handleSubmit = event => {
     event?.preventDefault();
     if (!validateFields()) return;
     const mutationFn = isNew ? newJobApplication : updateJobApplication;
@@ -109,17 +109,12 @@ export default function ApplicationForm({
       ...formData,
       ...(jobApplication && { id: jobApplication.id }),
     };
-    setSaving(true);
-    try {
-      await mutationFn({ variables });
-      showSnackbar(t('forms.applicationForm.success'), 'success');
-      handleClose();
-    } catch (err) {
-      // Keep the dialog open so nothing typed is lost.
-      showSnackbar(t('forms.applicationForm.error'), 'error');
-    } finally {
-      setSaving(false);
-    }
+    // On failure the dialog stays open so nothing typed is lost.
+    run(() => mutationFn({ variables }), {
+      successMessage: t('forms.applicationForm.success'),
+      errorMessage: t('forms.applicationForm.error'),
+      onSuccess: handleClose,
+    });
   };
 
   return (
@@ -231,18 +226,11 @@ export default function ApplicationForm({
                   value={formData.status}
                   onChange={handleFormChange}
                 >
-                  <MenuItem value="open">
-                    {t('forms.applicationForm.status.open')}
-                  </MenuItem>
-                  <MenuItem value="active">
-                    {t('forms.applicationForm.status.active')}
-                  </MenuItem>
-                  <MenuItem value="ghosted">
-                    {t('forms.applicationForm.status.ghosted')}
-                  </MenuItem>
-                  <MenuItem value="rejected">
-                    {t('forms.applicationForm.status.rejected')}
-                  </MenuItem>
+                  {JOB_STATUSES.map(status => (
+                    <MenuItem key={status} value={status}>
+                      {t(`forms.applicationForm.status.${status}`)}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>

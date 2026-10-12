@@ -164,5 +164,32 @@ describe('Q&A save', () => {
   });
 });
 
+describe('record form dialog', () => {
+  test('"Add" starts blank even after editing a record', () => {
+    const { rerender } = renderWith(
+      <AddOrEditFrequentUrlDialog
+        open
+        handleClose={vi.fn()}
+        frequentUrl={{ id: '5', title: 'Board', url: 'https://example.com' }}
+      />,
+      []
+    );
+    expect(screen.getByLabelText('Title').value).toBe('Board');
+
+    rerender(
+      <ThemeContextProvider>
+        <MockedProvider mocks={[]} addTypename={false}>
+          <SnackbarProvider>
+            <AddOrEditFrequentUrlDialog open handleClose={vi.fn()} />
+          </SnackbarProvider>
+        </MockedProvider>
+      </ThemeContextProvider>
+    );
+    expect(screen.getByText('Add Bookmark')).not.toBeNull();
+    expect(screen.getByLabelText('Title').value).toBe('');
+    expect(screen.getByLabelText('URL').value).toBe('');
+  });
+});
+
 // InterviewsForm (immediate status/date saves, failed delete) is covered by
 // browser checks: jsdom cannot render its date picker's generated selectors.

@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { SnackbarProvider } from '../common/SnackbarContext';
 import JobApplicationList from '../JobApplicationList';
@@ -6,7 +6,6 @@ import { GET_JOB_APPLICATIONS } from '../../graphql/query';
 import { DELETE_JOB_APPLICATION } from '../../graphql/mutation';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
-import useDialog from '../../hooks/useDialog';
 import '../../i18n';
 import { ThemeContextProvider } from '../ThemeContext';
 import { AppDialogsContext } from '../AppDialogsContext';
@@ -64,6 +63,15 @@ const errorMocks = [
 // Mock delete mutation response
 const deleteMocks = [
   ...mocks,
+  // The list refetches after a delete; the deleted application is gone.
+  {
+    request: { query: GET_JOB_APPLICATIONS },
+    result: {
+      data: {
+        allJobApplication: mockApplications.filter(app => app.id !== '1'),
+      },
+    },
+  },
   {
     request: {
       query: DELETE_JOB_APPLICATION,
@@ -86,20 +94,6 @@ const deleteMocks = [
     },
   },
 ];
-
-// Mock useDialog hook
-vi.mock('../../hooks/useDialog', () => ({
-  __esModule: true,
-  default: vi.fn(),
-}));
-
-beforeEach(() => {
-  useDialog.mockReturnValue({
-    dialogOpen: true,
-    handleOpen: vi.fn(),
-    handleClose: vi.fn(),
-  });
-});
 
 const renderList = (
   apolloMocks,
@@ -164,12 +158,14 @@ describe('JobApplicationList', () => {
       expect(screen.getByText('Company A')).not.toBeNull();
     });
 
-    // Simulate clicking the delete icon for the first job application
-    const deleteIcon = screen.getAllByTestId('delete-icon')[0];
-    userEvent.click(deleteIcon);
-
-    const confirmButton = screen.getByText('Delete');
-    userEvent.click(confirmButton);
+    // Delete the first application and confirm in the dialog.
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Delete Company A' })
+    );
+    const confirm = await screen.findByRole('dialog');
+    await userEvent.click(
+      within(confirm).getByRole('button', { name: 'Delete' })
+    );
 
     // Wait for the job application to be removed from the DOM
     await waitFor(() => {
@@ -184,16 +180,6 @@ describe('JobApplicationList', () => {
     });
   });
   describe('list states', () => {
-    // The file-level mock opens the confirm dialog, which hides the page
-    // from role queries; these tests need it closed.
-    beforeEach(() => {
-      useDialog.mockReturnValue({
-        dialogOpen: false,
-        handleOpen: vi.fn(),
-        handleClose: vi.fn(),
-      });
-    });
-
     test('shows a call to action when there are no applications', async () => {
       const dialogs = { openNewJobApplication: vi.fn() };
       renderList([applicationsMock([])], '', { dialogs });

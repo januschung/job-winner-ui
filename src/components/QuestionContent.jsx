@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import DialogContent from '@mui/material/DialogContent';
 import { Typography } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
@@ -9,9 +9,8 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ConfirmDialog from './common/ConfirmDialog';
-import { useSnackbar } from './common/SnackbarContext';
+import useConfirmedAction from '../hooks/useConfirmedAction';
 import useDialog from '../hooks/useDialog';
-import useQuestion from '../hooks/useQuestion';
 import { DELETE_QUESTION } from '../graphql/mutation';
 import { GET_QUESTIONS } from '../graphql/query';
 import AddOrEditQuestionDialog from './AddOrEditQuestionDialog';
@@ -21,37 +20,18 @@ export default function QuestionContent() {
   const { t } = useTranslation();
 
   const [question, setQuestion] = useState(null);
-  const {
-    dialogOpen: confirmDialogOpen,
-    handleOpen: handleConfirmDialogOpen,
-    handleClose: handleConfirmDialogClose,
-  } = useDialog();
-
   const { dialogOpen, handleOpen, handleClose } = useDialog();
-
-  const { data, loading, error } = useQuestion();
-  const { showSnackbar } = useSnackbar();
+  const { data, loading, error } = useQuery(GET_QUESTIONS, {
+    fetchPolicy: 'network-only',
+  });
   const [deleteQuestion] = useMutation(DELETE_QUESTION, {
     refetchQueries: [{ query: GET_QUESTIONS }],
   });
-
-  const confirmDeleteQuestion = () => {
-    deleteQuestion({
-      variables: { id: question.id },
-    })
-      .then(() => {
-        showSnackbar(t('questionContent.messages.deleteSuccess'), 'success');
-      })
-      .catch(() => {
-        showSnackbar(t('questionContent.messages.deleteError'), 'error');
-      });
-    handleConfirmDialogClose();
-  };
-
-  const handleDeleteQuestion = question => {
-    setQuestion(question);
-    handleConfirmDialogOpen();
-  };
+  const remove = useConfirmedAction({
+    action: item => deleteQuestion({ variables: { id: item.id } }),
+    successMessage: t('questionContent.messages.deleteSuccess'),
+    errorMessage: t('questionContent.messages.deleteError'),
+  });
 
   const handleOpenEditDialog = question => {
     setQuestion(question);
@@ -108,7 +88,7 @@ export default function QuestionContent() {
                 </Typography>
                 <ActionIcons
                   onEdit={() => handleOpenEditDialog(question)}
-                  onDelete={() => handleDeleteQuestion(question)}
+                  onDelete={() => remove.request(question)}
                   stopPropagation
                 />
               </AccordionSummary>
@@ -118,9 +98,7 @@ export default function QuestionContent() {
         </>
       )}
       <ConfirmDialog
-        open={confirmDialogOpen}
-        onCancel={handleConfirmDialogClose}
-        onConfirm={confirmDeleteQuestion}
+        {...remove.dialogProps}
         title={t('questionContent.dialogs.confirmDelete.title')}
         content={t('questionContent.dialogs.confirmDelete.content')}
       />

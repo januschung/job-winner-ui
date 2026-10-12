@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -10,105 +10,71 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import JobApplicationDialog from '../components/JobApplicationDialog';
+import { STATUS_SORT_ORDER } from '../config/status';
 import { DELETE_JOB_APPLICATION } from '../graphql/mutation';
 import { GET_JOB_APPLICATIONS } from '../graphql/query';
-import useDialog from '../hooks/useDialog';
+import useConfirmedAction from '../hooks/useConfirmedAction';
 import useJobApplicationDialog from '../hooks/useJobApplicationDialog';
 import useJobApplications from '../hooks/useJobApplications';
 import { useAppDialogs } from './AppDialogsContext';
 import ConfirmDialog from './common/ConfirmDialog';
 import EmptyState from './common/EmptyState';
 import Loading from './common/Loading';
-import { useSnackbar } from './common/SnackbarContext';
 import JobApplicationCard from './JobApplicationCard';
 import JobStatusBar from './JobStatusBar';
 import { useTranslation } from 'react-i18next';
 
+const matchesSearch = (job, searchTerm) => {
+  const term = (searchTerm || '').toLowerCase();
+  return [job.companyName, job.description, job.jobTitle].some(text =>
+    (text || '').toLowerCase().includes(term)
+  );
+};
+
+// Most actionable first (see STATUS_SORT_ORDER), newest first within a status.
+const sortByStatusThenDate = jobs =>
+  [...jobs].sort(
+    (a, b) =>
+      (STATUS_SORT_ORDER[a.status] ?? 99) -
+        (STATUS_SORT_ORDER[b.status] ?? 99) ||
+      new Date(b.appliedDate) - new Date(a.appliedDate)
+  );
+
 export default function JobApplicationList({ searchTerm, onClearSearch }) {
-  const [jobApplicationToDelete, setJobApplicationToDelete] = useState(null);
-  const [localData, setLocalData] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('all');
   const { data, loading, error, refetch } = useJobApplications();
   // Optional so the list still renders outside the app shell (e.g. tests).
   const dialogs = useAppDialogs();
-  const { showSnackbar } = useSnackbar();
-  const {
-    dialogOpen: confirmDialogOpen,
-    handleOpen: handleConfirmDialogOpen,
-    handleClose: handleConfirmDialogClose,
-  } = useDialog();
   const { open, jobApplication, handleOpen, handleClose } =
     useJobApplicationDialog();
   const { t } = useTranslation();
 
+  // Resolves once the list has refetched, so the card is already gone when
+  // the success message shows.
   const [deleteJobApplication] = useMutation(DELETE_JOB_APPLICATION, {
     refetchQueries: [{ query: GET_JOB_APPLICATIONS }],
+    awaitRefetchQueries: true,
   });
-
-  const sortJobApplications = jobApplications => {
-    const statusOrder = { active: 1, open: 2, ghosted: 3, rejected: 4 };
-
-    return [...jobApplications].sort((a, b) => {
-      const statusComparison = statusOrder[a.status] - statusOrder[b.status];
-      return statusComparison !== 0
-        ? statusComparison
-        : new Date(b.appliedDate) - new Date(a.appliedDate);
-    });
-  };
+  const remove = useConfirmedAction({
+    action: item => deleteJobApplication({ variables: { id: item.id } }),
+    successMessage: t('jobApplicationList.messages.deleteSuccess'),
+    errorMessage: t('jobApplicationList.messages.deleteError'),
+  });
 
   useEffect(() => {
     setSelectedStatus('all');
   }, [searchTerm]);
 
-  useEffect(() => {
-    if (data?.allJobApplication) {
-      setLocalData(
-        sortJobApplications(
-          selectedStatus === 'all'
-            ? data.allJobApplication
-            : data.allJobApplication.filter(
-                job => job.status === selectedStatus
-              )
+  const filteredData = useMemo(
+    () =>
+      sortByStatusThenDate(
+        (data?.allJobApplication || []).filter(
+          job =>
+            (selectedStatus === 'all' || job.status === selectedStatus) &&
+            matchesSearch(job, searchTerm)
         )
-      );
-    }
-  }, [data, selectedStatus]);
-
-  const confirmDeleteJobApplication = () => {
-    if (jobApplicationToDelete) {
-      deleteJobApplication({
-        variables: { id: jobApplicationToDelete.id },
-      })
-        .then(() => {
-          setLocalData(
-            localData.filter(jobApp => jobApp.id !== jobApplicationToDelete.id)
-          );
-          showSnackbar(
-            t('jobApplicationList.messages.deleteSuccess'),
-            'success'
-          );
-        })
-        .catch(() => {
-          showSnackbar(t('jobApplicationList.messages.deleteError'), 'error');
-        });
-    }
-    handleConfirmDialogClose();
-    setJobApplicationToDelete(null);
-  };
-
-  const handleDeleteJobApplication = jobApplication => {
-    setJobApplicationToDelete(jobApplication);
-    handleConfirmDialogOpen();
-  };
-
-  const containsIgnoreCase = (str, searchTerm) =>
-    str.toLowerCase().includes(searchTerm?.toLowerCase() || '');
-
-  const filteredData = localData.filter(
-    jobApp =>
-      containsIgnoreCase(jobApp.companyName, searchTerm) ||
-      containsIgnoreCase(jobApp.description, searchTerm) ||
-      containsIgnoreCase(jobApp.jobTitle, searchTerm)
+      ),
+    [data, selectedStatus, searchTerm]
   );
 
   const handleStatusClick = status => {
@@ -231,7 +197,7 @@ export default function JobApplicationList({ searchTerm, onClearSearch }) {
                   <JobApplicationCard
                     jobApplication={jobApplication}
                     onEdit={() => handleOpen(jobApplication)}
-                    onDelete={() => handleDeleteJobApplication(jobApplication)}
+                    onDelete={() => remove.request(jobApplication)}
                   />
                 </Grid>
               ))}
@@ -239,9 +205,7 @@ export default function JobApplicationList({ searchTerm, onClearSearch }) {
           )}
         </Container>
         <ConfirmDialog
-          open={confirmDialogOpen}
-          onCancel={handleConfirmDialogClose}
-          onConfirm={confirmDeleteJobApplication}
+          {...remove.dialogProps}
           title={t('jobApplicationList.dialogs.confirmDelete.title')}
           content={t('jobApplicationList.dialogs.confirmDelete.content')}
         />
