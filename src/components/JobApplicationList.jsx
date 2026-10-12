@@ -124,7 +124,11 @@ export default function JobApplicationList({ searchTerm }) {
           handleClose={handleClose}
           open={open}
         />
-        <Container sx={{ py: 4 }} maxWidth="lg">
+        <Container
+          // Extra bottom space on small screens for the floating "New" button.
+          sx={{ pt: 4, pb: { xs: 12, md: 4 } }}
+          maxWidth="lg"
+        >
           {loading && <Loading />}
           {error && (
             <Alert
