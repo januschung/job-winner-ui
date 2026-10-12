@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import DialogContent from '@mui/material/DialogContent';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';

@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -8,7 +8,8 @@ import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 import useJobApplicationDialog from '../../hooks/useJobApplicationDialog';
 import useSortableTable from '../../hooks/useSortableTable';
-import JobApplicationDialog from '../JobApplicationDialog';
+import { JobApplicationDialog } from '../lazyDialogs';
+import MountOnFirstOpen from './MountOnFirstOpen';
 import CustomDialog from './CustomDialog';
 import SortableTable from './SortableTable';
 
@@ -101,11 +102,13 @@ export default function RecordListDialog({
           />
         )}
       </DialogContent>
-      <JobApplicationDialog
-        jobApplication={jobApplication}
-        open={jobDialogOpen}
-        handleClose={handleJobDialogClose}
-      />
+      <MountOnFirstOpen open={jobDialogOpen}>
+        <JobApplicationDialog
+          jobApplication={jobApplication}
+          open={jobDialogOpen}
+          handleClose={handleJobDialogClose}
+        />
+      </MountOnFirstOpen>
     </CustomDialog>
   );
 }

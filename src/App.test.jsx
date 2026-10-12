@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { vi } from 'vitest';
 import App from './App';
 import AppHeader from './components/AppHeader';
@@ -15,7 +15,7 @@ it('Should render Job Application list on default route', async () => {
     <div>JobApplicationListrMock</div>
   ));
   render(
-    <MockedProvider mocks={[]} addTypename={false}>
+    <MockedProvider mocks={[]}>
       <MemoryRouter>
         <App />
       </MemoryRouter>

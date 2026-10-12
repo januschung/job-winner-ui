@@ -1,7 +1,7 @@
 // Saves must report what actually happened: success only after the server
 // confirms it, an error (with the dialog still open) when it fails.
 import { fireEvent, render, screen } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { vi } from 'vitest';
 import '../../i18n';
 import {
@@ -20,20 +20,18 @@ import { ThemeContextProvider } from '../ThemeContext';
 
 const anyVariables = () => true;
 const failing = query => ({
-  request: { query },
-  variableMatcher: anyVariables,
+  request: { query, variables: anyVariables },
   error: new Error('Server unavailable'),
 });
 const succeeding = (query, data) => ({
-  request: { query },
-  variableMatcher: anyVariables,
+  request: { query, variables: anyVariables },
   result: { data },
 });
 
 const renderWith = (ui, mocks) =>
   render(
     <ThemeContextProvider>
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <SnackbarProvider>{ui}</SnackbarProvider>
       </MockedProvider>
     </ThemeContextProvider>
@@ -178,7 +176,7 @@ describe('record form dialog', () => {
 
     rerender(
       <ThemeContextProvider>
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <SnackbarProvider>
             <AddOrEditFrequentUrlDialog open handleClose={vi.fn()} />
           </SnackbarProvider>

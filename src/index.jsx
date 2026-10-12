@@ -3,12 +3,8 @@ import ReactDOM from 'react-dom/client';
 import '@fontsource-variable/inter';
 import './index.css';
 import App from './App';
-import {
-  ApolloClient,
-  ApolloProvider,
-  HttpLink,
-  InMemoryCache,
-} from '@apollo/client';
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client/react';
 import { BrowserRouter } from 'react-router-dom';
 
 // `npm run dev:mock` swaps the backend for an in-browser stub with demo data.
@@ -21,7 +17,14 @@ const createLink = async () =>
       });
 
 createLink().then(link => {
-  const client = new ApolloClient({ link, cache: new InMemoryCache() });
+  const client = new ApolloClient({
+    link,
+    cache: new InMemoryCache(),
+    // Apollo 4 reports `loading` during every refetch by default. The UI
+    // treats `loading` as "first load" (skeletons, badges, the interviews
+    // tab), so keep refetches silent unless a query opts in.
+    defaultOptions: { watchQuery: { notifyOnNetworkStatusChange: false } },
+  });
   const root = ReactDOM.createRoot(document.getElementById('root'));
   root.render(
     <React.StrictMode>

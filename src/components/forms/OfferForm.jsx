@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import Alert from '@mui/material/Alert';
 import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';

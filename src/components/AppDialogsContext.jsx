@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import {
   GET_ALL_INTERVIEWS,
   GET_ALL_OFFERS,
@@ -8,12 +8,15 @@ import {
 import useDialog from '../hooks/useDialog';
 import useJobApplicationDialog from '../hooks/useJobApplicationDialog';
 import { getFilteredInterviews } from '../utils/interviewUtil';
-import FrequentUrlDialog from './FrequentUrlDialog';
-import InterviewListDialog from './InterviewListDialog';
-import JobApplicationDialog from './JobApplicationDialog';
-import OfferListDialog from './OfferListDialog';
-import ProfileDialog from './ProfileDialog';
-import QuestionDialog from './QuestionDialog';
+import MountOnFirstOpen from './common/MountOnFirstOpen';
+import {
+  FrequentUrlDialog,
+  InterviewListDialog,
+  JobApplicationDialog,
+  OfferListDialog,
+  ProfileDialog,
+  QuestionDialog,
+} from './lazyDialogs';
 
 export const AppDialogsContext = createContext(null);
 
@@ -77,33 +80,45 @@ export function AppDialogsProvider({ children }) {
 
   return (
     <AppDialogsContext.Provider value={value}>
-      <JobApplicationDialog
-        jobApplication={{ status: 'open' }}
-        open={newJobApplication.open}
-        handleClose={newJobApplication.handleClose}
-        isNew
-      />
-      <FrequentUrlDialog
-        open={frequentUrls.dialogOpen}
-        handleClose={frequentUrls.handleClose}
-      />
-      <QuestionDialog
-        open={questions.dialogOpen}
-        handleClose={questions.handleClose}
-      />
-      <ProfileDialog
-        profile={profile}
-        open={profileOpen}
-        handleClose={() => setProfileOpen(false)}
-      />
-      <InterviewListDialog
-        open={interviewList.dialogOpen}
-        handleClose={interviewList.handleClose}
-      />
-      <OfferListDialog
-        open={offerList.dialogOpen}
-        handleClose={offerList.handleClose}
-      />
+      <MountOnFirstOpen open={newJobApplication.open}>
+        <JobApplicationDialog
+          jobApplication={{ status: 'open' }}
+          open={newJobApplication.open}
+          handleClose={newJobApplication.handleClose}
+          isNew
+        />
+      </MountOnFirstOpen>
+      <MountOnFirstOpen open={frequentUrls.dialogOpen}>
+        <FrequentUrlDialog
+          open={frequentUrls.dialogOpen}
+          handleClose={frequentUrls.handleClose}
+        />
+      </MountOnFirstOpen>
+      <MountOnFirstOpen open={questions.dialogOpen}>
+        <QuestionDialog
+          open={questions.dialogOpen}
+          handleClose={questions.handleClose}
+        />
+      </MountOnFirstOpen>
+      <MountOnFirstOpen open={profileOpen}>
+        <ProfileDialog
+          profile={profile}
+          open={profileOpen}
+          handleClose={() => setProfileOpen(false)}
+        />
+      </MountOnFirstOpen>
+      <MountOnFirstOpen open={interviewList.dialogOpen}>
+        <InterviewListDialog
+          open={interviewList.dialogOpen}
+          handleClose={interviewList.handleClose}
+        />
+      </MountOnFirstOpen>
+      <MountOnFirstOpen open={offerList.dialogOpen}>
+        <OfferListDialog
+          open={offerList.dialogOpen}
+          handleClose={offerList.handleClose}
+        />
+      </MountOnFirstOpen>
       {children}
     </AppDialogsContext.Provider>
   );

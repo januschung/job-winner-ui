@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
@@ -9,7 +9,8 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import JobApplicationDialog from '../components/JobApplicationDialog';
+import MountOnFirstOpen from './common/MountOnFirstOpen';
+import { JobApplicationDialog } from './lazyDialogs';
 import { STATUS_SORT_ORDER } from '../config/status';
 import { DELETE_JOB_APPLICATION } from '../graphql/mutation';
 import { GET_JOB_APPLICATIONS } from '../graphql/query';
@@ -90,11 +91,13 @@ export default function JobApplicationList({ searchTerm, onClearSearch }) {
   return (
     <div>
       <main>
-        <JobApplicationDialog
-          jobApplication={jobApplication}
-          handleClose={handleClose}
-          open={open}
-        />
+        <MountOnFirstOpen open={open}>
+          <JobApplicationDialog
+            jobApplication={jobApplication}
+            handleClose={handleClose}
+            open={open}
+          />
+        </MountOnFirstOpen>
         <Container
           // Extra bottom space on small screens for the floating "New" button.
           sx={{ pt: 4, pb: { xs: 12, md: 4 } }}

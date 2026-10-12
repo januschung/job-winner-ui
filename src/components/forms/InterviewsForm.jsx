@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client/react';
 import ConfirmDialog from '../common/ConfirmDialog';
 import useAsyncAction from '../../hooks/useAsyncAction';
 import useConfirmedAction from '../../hooks/useConfirmedAction';
@@ -39,13 +39,18 @@ export default function InterviewsForm({ jobApplicationId }) {
       savedRef.current[item.id] = item;
     });
 
-  const { loading, error } = useQuery(GET_INTERVIEWS_BY_JOB_APPLICATION_ID, {
-    variables: { jobApplicationId },
-    onCompleted: data => {
-      remember(data.allInterviewByJobApplicationId);
-      setInterviews(data.allInterviewByJobApplicationId);
-    },
-  });
+  const { data, loading, error } = useQuery(
+    GET_INTERVIEWS_BY_JOB_APPLICATION_ID,
+    { variables: { jobApplicationId } }
+  );
+
+  // Copy the server list into editable local state whenever it (re)loads.
+  useEffect(() => {
+    const loaded = data?.allInterviewByJobApplicationId;
+    if (!loaded) return;
+    remember(loaded);
+    setInterviews(loaded);
+  }, [data]);
 
   // Every interview change refreshes this application's list and the global
   // upcoming-interviews list.

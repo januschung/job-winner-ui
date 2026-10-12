@@ -6,7 +6,8 @@
 // Dev knobs (URL query params):
 //   ?mock-delay=1500                 latency per request in ms (default 250)
 //   ?mock-fail=UpdateJobApplication  comma-separated operations that error
-import { ApolloLink, Observable } from '@apollo/client';
+import { ApolloLink } from '@apollo/client';
+import { Observable } from 'rxjs';
 import { buildSchema, graphql, print } from 'graphql';
 import dayjs from 'dayjs';
 import demoData from './demoData.json';

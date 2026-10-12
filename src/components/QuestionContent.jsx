@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import DialogContent from '@mui/material/DialogContent';
 import { Typography } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';

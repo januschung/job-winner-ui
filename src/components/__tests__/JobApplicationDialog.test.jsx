@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import JobApplicationDialog from '../JobApplicationDialog';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { SnackbarProvider } from '../common/SnackbarContext';
 import dayjs from 'dayjs';
 import '../../i18n';
@@ -9,7 +9,7 @@ const mocks = [];
 
 it('Should render New Job Application Dialog', async () => {
   render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <SnackbarProvider>
         <JobApplicationDialog
           jobApplication={{ status: 'open' }}
@@ -32,7 +32,7 @@ it('Should render New Job Application Dialog', async () => {
 
 it('Should render Edit Job Application Dialog', async () => {
   render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <SnackbarProvider>
         <JobApplicationDialog
           jobApplication={{

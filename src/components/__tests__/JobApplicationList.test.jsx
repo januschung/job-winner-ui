@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { SnackbarProvider } from '../common/SnackbarContext';
 import JobApplicationList from '../JobApplicationList';
 import { GET_JOB_APPLICATIONS } from '../../graphql/query';
@@ -102,7 +102,7 @@ const renderList = (
 ) =>
   render(
     <ThemeContextProvider>
-      <MockedProvider mocks={apolloMocks} addTypename={false}>
+      <MockedProvider mocks={apolloMocks}>
         <AppDialogsContext.Provider value={dialogs}>
           <SnackbarProvider>
             <JobApplicationList
