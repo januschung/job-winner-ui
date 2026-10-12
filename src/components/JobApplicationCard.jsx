@@ -1,4 +1,3 @@
-import React from 'react';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -11,43 +10,8 @@ import Link from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
-import { statusColor } from '../config/status';
 import { formatCalendarDate } from '../utils/dateUtil';
-
-function StatusBadge({ status }) {
-  const { t } = useTranslation();
-  return (
-    <Box
-      component="span"
-      sx={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 0.75,
-        height: 24,
-        px: 1.25,
-        borderRadius: 999,
-        flexShrink: 0,
-        fontSize: '0.75rem',
-        fontWeight: 600,
-        whiteSpace: 'nowrap',
-        bgcolor: statusColor(status, 'soft', 'action.hover'),
-        color: statusColor(status, 'text', 'text.secondary'),
-      }}
-    >
-      <Box
-        component="span"
-        aria-hidden
-        sx={{
-          width: 8,
-          height: 8,
-          borderRadius: '50%',
-          bgcolor: statusColor(status, 'main', 'text.disabled'),
-        }}
-      />
-      {t(`jobStatusBar.${status}`, { defaultValue: status })}
-    </Box>
-  );
-}
+import StatusBadge from './common/StatusBadge';
 
 function Meta({ icon, children, title }) {
   const content = (
@@ -136,7 +100,10 @@ export default function JobApplicationCard({
             companyName
           )}
         </Typography>
-        <StatusBadge status={status} />
+        <StatusBadge
+          tone={status}
+          label={t(`jobStatusBar.${status}`, { defaultValue: status })}
+        />
       </Box>
 
       <Typography variant="body2" color="text.secondary" sx={{ mt: -0.75 }}>

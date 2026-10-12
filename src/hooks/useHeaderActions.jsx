@@ -1,4 +1,3 @@
-import React from 'react';
 import BookmarksOutlinedIcon from '@mui/icons-material/BookmarksOutlined';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import EventAvailableOutlinedIcon from '@mui/icons-material/EventAvailableOutlined';

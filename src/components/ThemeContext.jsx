@@ -1,4 +1,3 @@
-import React from 'react';
 import { ThemeProvider, useColorScheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { appTheme } from '../config/theme';

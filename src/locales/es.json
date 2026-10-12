@@ -37,7 +37,11 @@
       },
       "success": "¡Marcador eliminado con éxito!",
       "error": "Error al eliminar el marcador.",
-      "noUrls": "No hay URLs"
+      "noUrls": "No hay URLs",
+      "addTitle": "Agregar Marcador",
+      "saveSuccess": "¡Marcador guardado con éxito!",
+      "saveError": "No se pudo guardar el marcador.",
+      "saveButton": "Guardar marcador"
     },
     "addQuestion": {
       "title": "Agregar Pregunta y Respuesta",
@@ -51,7 +55,8 @@
         "answerRequired": "La respuesta es obligatoria."
       },
       "success": "¡Pregunta y respuesta actualizadas con éxito!",
-      "error": "Error al guardar la pregunta y respuesta. Por favor, inténtelo de nuevo."
+      "error": "Error al guardar la pregunta y respuesta. Por favor, inténtelo de nuevo.",
+      "saveButton": "Guardar pregunta"
     },
     "addApplication": {
       "title": "Agregar Solicitud de Empleo",
@@ -77,13 +82,14 @@
       "jobDetails": "Detalles del Trabajo"
     },
     "jobApplication": {
-      "addTitle": "Agregar Solicitud de Empleo",
+      "addTitle": "Nueva solicitud",
       "editTitle": "Editar Solicitud de Empleo",
       "tabs": {
         "application": "Solicitud",
         "interviews": "Entrevistas",
         "offer": "Oferta"
-      }
+      },
+      "addSubtitle": "Registre un empleo al que se postuló."
     },
     "question": {
       "title": "Preguntas y Respuestas"
@@ -104,7 +110,16 @@
         "github": "GitHub",
         "personalWebsite": "Sitio Web Personal"
       },
-      "success": "¡Perfil guardado con éxito!"
+      "success": "¡Perfil guardado con éxito!",
+      "error": "No se pudo guardar el perfil.",
+      "subtitle": "Úselo para completar solicitudes rápidamente. Copie cualquier campo.",
+      "saveButton": "Guardar perfil",
+      "sections": {
+        "name": "Nombre",
+        "contact": "Contacto",
+        "address": "Dirección",
+        "links": "Enlaces"
+      }
     },
     "offerList": {
       "title": "Lista de Ofertas",
@@ -147,7 +162,8 @@
         "appliedDateRequired": "Se requiere una fecha de aplicación válida."
       },
       "success": "¡Solicitud de empleo guardada con éxito!",
-      "error": "No se pudo guardar la solicitud de empleo."
+      "error": "No se pudo guardar la solicitud de empleo.",
+      "saveButton": "Guardar solicitud"
     },
     "offerForm": {
       "fields": {
@@ -169,7 +185,8 @@
       "buttons": {
         "addOffer": "Agregar Oferta",
         "delete": "Eliminar",
-        "confirmDelete": "Confirmar Eliminación"
+        "confirmDelete": "Confirmar Eliminación",
+        "saveOffer": "Guardar oferta"
       },
       "dialogs": {
         "confirmDelete": {
@@ -244,7 +261,15 @@
     "noData": "No hay datos disponibles.",
     "na": "N/D",
     "errorMessage": "Algo salió mal. Por favor, inténtelo de nuevo más tarde.",
-    "error": "Error"
+    "error": "Error",
+    "close": "Cerrar",
+    "edit": "Editar",
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "done": "Listo",
+    "deleteNamed": "¿Eliminar {{name}}?",
+    "editItem": "Editar {{name}}",
+    "deleteItem": "Eliminar {{name}}"
   },
   "questionContent": {
     "messages": {
@@ -279,6 +304,7 @@
       "addError": "Error al agregar la entrevista.",
       "saveError": "Error al guardar la entrevista.",
       "deleteError": "Error al eliminar la entrevista."
-    }
+    },
+    "autosave": "Los cambios se guardan automáticamente"
   }
 }

@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { GET_JOB_APPLICATIONS } from '../graphql/query';
 
 function useJobApplications() {

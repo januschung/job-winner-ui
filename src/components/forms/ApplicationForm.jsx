@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useEffect, useState } from 'react';
+import { useMutation } from '@apollo/client/react';
 import {
   Grid,
   TextField,
@@ -8,15 +8,13 @@ import {
   MenuItem,
   Select,
   Button,
-  DialogActions,
   DialogContent,
 } from '@mui/material';
-import CancelIcon from '@mui/icons-material/Cancel';
-import SaveIcon from '@mui/icons-material/Save';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { useSnackbar } from '../common/SnackbarContext';
+import { JOB_STATUSES } from '../../config/status';
+import useAsyncAction from '../../hooks/useAsyncAction';
 import {
   ADD_JOB_APPLICATION,
   UPDATE_JOB_APPLICATION,
@@ -24,6 +22,7 @@ import {
 import { GET_JOB_APPLICATIONS } from '../../graphql/query';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
+import DialogFooter from '../common/DialogFooter';
 
 export default function ApplicationForm({
   jobApplication,
@@ -41,7 +40,7 @@ export default function ApplicationForm({
     appliedDate: dayjs().format('YYYY-MM-DD'),
   });
   const [errors, setErrors] = useState({});
-  const { showSnackbar } = useSnackbar();
+  const { run, pending: saving } = useAsyncAction();
   const { t } = useTranslation();
 
   const [newJobApplication] = useMutation(ADD_JOB_APPLICATION, {
@@ -101,20 +100,19 @@ export default function ApplicationForm({
   };
 
   const handleSubmit = event => {
+    event?.preventDefault();
     if (!validateFields()) return;
-    try {
-      event.preventDefault();
-      const mutationFn = isNew ? newJobApplication : updateJobApplication;
-      const variables = {
-        ...formData,
-        ...(jobApplication && { id: jobApplication.id }),
-      };
-      mutationFn({ variables });
-      showSnackbar(t('forms.applicationForm.success'), 'success');
-      setTimeout(() => handleClose(), 500);
-    } catch (err) {
-      showSnackbar(t('forms.applicationForm.error'), 'error');
-    }
+    const mutationFn = isNew ? newJobApplication : updateJobApplication;
+    const variables = {
+      ...formData,
+      ...(jobApplication && { id: jobApplication.id }),
+    };
+    // On failure the dialog stays open so nothing typed is lost.
+    run(() => mutationFn({ variables }), {
+      successMessage: t('forms.applicationForm.success'),
+      errorMessage: t('forms.applicationForm.error'),
+      onSuccess: handleClose,
+    });
   };
 
   return (
@@ -226,18 +224,11 @@ export default function ApplicationForm({
                   value={formData.status}
                   onChange={handleFormChange}
                 >
-                  <MenuItem value="open">
-                    {t('forms.applicationForm.status.open')}
-                  </MenuItem>
-                  <MenuItem value="active">
-                    {t('forms.applicationForm.status.active')}
-                  </MenuItem>
-                  <MenuItem value="ghosted">
-                    {t('forms.applicationForm.status.ghosted')}
-                  </MenuItem>
-                  <MenuItem value="rejected">
-                    {t('forms.applicationForm.status.rejected')}
-                  </MenuItem>
+                  {JOB_STATUSES.map(status => (
+                    <MenuItem key={status} value={status}>
+                      {t(`forms.applicationForm.status.${status}`)}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>
@@ -283,22 +274,14 @@ export default function ApplicationForm({
           </Grid>
         </Grid>
       </DialogContent>
-      <DialogActions>
-        <Button
-          variant="outlined"
-          startIcon={<CancelIcon />}
-          onClick={handleClose}
-        >
+      <DialogFooter>
+        <Button color="inherit" onClick={handleClose}>
           {t('common.cancel')}
         </Button>
-        <Button
-          variant="contained"
-          startIcon={<SaveIcon />}
-          onClick={handleSubmit}
-        >
-          {t('common.save')}
+        <Button variant="contained" onClick={handleSubmit} disabled={saving}>
+          {t('forms.applicationForm.saveButton')}
         </Button>
-      </DialogActions>
+      </DialogFooter>
     </>
   );
 }

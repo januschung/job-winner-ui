@@ -1,27 +1,28 @@
 import { render, screen } from '@testing-library/react';
 import JobApplicationDialog from '../JobApplicationDialog';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { SnackbarProvider } from '../common/SnackbarContext';
 import dayjs from 'dayjs';
-import i18n from '../../i18n';
+import '../../i18n';
 
 const mocks = [];
 
 it('Should render New Job Application Dialog', async () => {
   render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <SnackbarProvider>
         <JobApplicationDialog
           jobApplication={{ status: 'open' }}
           open={true}
-          setOpen={false}
           isNew={true}
         />
       </SnackbarProvider>
     </MockedProvider>
   );
 
-  expect(screen.getByText('Add Job Application')).not.toBeNull();
+  expect(
+    screen.getByRole('heading', { name: 'New application' })
+  ).not.toBeNull();
   const currentDate = dayjs(new Date()).format('MM/DD/YYYY');
   expect(screen.getByDisplayValue(currentDate)).not.toBeNull();
   expect(screen.getByLabelText('Company Name *')).not.toBeNull();
@@ -33,7 +34,7 @@ it('Should render New Job Application Dialog', async () => {
 
 it('Should render Edit Job Application Dialog', async () => {
   render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <SnackbarProvider>
         <JobApplicationDialog
           jobApplication={{
@@ -46,13 +47,13 @@ it('Should render Edit Job Application Dialog', async () => {
             status: 'active',
           }}
           open={true}
-          setOpen={false}
           isNew={false}
         />
       </SnackbarProvider>
     </MockedProvider>
   );
-  expect(screen.getByText('Edit Job Application')).not.toBeNull();
+  // The edit dialog is titled with the company name.
+  expect(screen.getByRole('heading', { name: 'a' })).not.toBeNull();
   expect(screen.getByDisplayValue('a').id).toBe('companyName');
   expect(screen.getByDisplayValue('b').id).toBe('jobTitle');
   expect(screen.getByDisplayValue('c').id).toBe('salaryRange');

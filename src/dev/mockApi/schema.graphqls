@@ -1,0 +1,187 @@
+type Query {
+  jobApplicationById(id: ID): JobApplication
+  allJobApplication: [JobApplication]
+  profileById(id: ID): Profile
+  searchJobApplications(searchTerm: String!): [JobApplication]
+  allInterview: [Interview]
+  allInterviewByJobApplicationId(jobApplicationId: Int!): [Interview]
+  interviewById(id: ID): Interview
+  allOffer: [Offer]
+  offerByJobApplicationId(jobApplicationId: Int!): Offer
+  frequentUrlById(id: ID): FrequentUrl
+  allFrequentUrl: [FrequentUrl]
+  questionById(id: ID): Question
+  allQuestion: [Question]
+}
+
+type JobApplication {
+  id: ID!
+  companyName: String
+  jobTitle: String
+  salaryRange: String
+  jobUrl: String
+  appliedDate: String
+  description: String
+  note: String
+  status: String
+}
+
+type Profile {
+  id: ID!
+  firstName: String
+  lastName: String
+  addressStreet1: String
+  addressStreet2: String
+  addressCity: String
+  addressState: String
+  addressZip: String
+  linkedin: String
+  github: String
+  personalWebsite: String
+  email: String
+  telephone: String
+}
+
+type Offer {
+  id: ID!
+  jobApplicationId: Int!
+  offerDate: String!
+  salaryOffered: String
+  description: String
+  jobApplication: JobApplication
+}
+
+type Interview {
+  id: ID!
+  jobApplicationId: Int!
+  interviewDate: String!
+  interviewer: String
+  description: String
+  status: String
+  jobApplication: JobApplication
+}
+
+type FrequentUrl {
+  id: ID!
+  title: String!
+  url: String!
+}
+
+type Question {
+  id: ID!
+  question: String!
+  answer: String!
+}
+
+type Mutation {
+  addJobApplication(jobApplicationInput: JobApplicationInput): JobApplication
+  updateJobApplication(
+    jobApplication: UpdateJobApplicationInput
+  ): JobApplication
+  deleteJobApplication(id: ID): JobApplication
+  updateProfile(profile: UpdateProfileInput): Profile
+  addInterview(interviewInput: InterviewInput): Interview
+  updateInterview(id: ID!, interview: UpdateInterviewInput): Interview
+  deleteInterview(id: ID): Interview
+  addOffer(offerInput: OfferInput): Offer
+  updateOffer(offer: UpdateOfferInput): Offer
+  deleteOffer(id: ID): Offer
+  addFrequentUrl(frequentUrlInput: FrequentUrlInput): FrequentUrl
+  updateFrequentUrl(frequentUrl: UpdateFrequentUrlInput): FrequentUrl
+  deleteFrequentUrl(id: ID): FrequentUrl
+  addQuestion(questionInput: QuestionInput): Question
+  updateQuestion(question: UpdateQuestionInput): Question
+  deleteQuestion(id: ID): Question
+}
+
+input JobApplicationInput {
+  companyName: String
+  jobTitle: String
+  salaryRange: String
+  jobUrl: String
+  appliedDate: String
+  description: String
+  note: String
+  status: String
+}
+
+input UpdateJobApplicationInput {
+  id: ID!
+  companyName: String
+  jobTitle: String
+  salaryRange: String
+  jobUrl: String
+  appliedDate: String
+  description: String
+  note: String
+  status: String
+}
+
+input UpdateProfileInput {
+  id: ID!
+  firstName: String
+  lastName: String
+  addressStreet1: String
+  addressStreet2: String
+  addressCity: String
+  addressState: String
+  addressZip: String
+  linkedin: String
+  github: String
+  personalWebsite: String
+  email: String
+  telephone: String
+}
+
+input InterviewInput {
+  jobApplicationId: Int!
+  interviewDate: String!
+  interviewer: String
+  description: String
+  status: String
+}
+
+input UpdateInterviewInput {
+  id: ID!
+  jobApplicationId: Int!
+  interviewDate: String!
+  interviewer: String
+  description: String
+  status: String
+}
+
+input OfferInput {
+  jobApplicationId: Int!
+  offerDate: String!
+  salaryOffered: String
+  description: String
+}
+
+input UpdateOfferInput {
+  id: ID!
+  jobApplicationId: Int!
+  offerDate: String!
+  salaryOffered: String
+  description: String
+}
+
+input FrequentUrlInput {
+  title: String!
+  url: String!
+}
+
+input UpdateFrequentUrlInput {
+  id: ID!
+  title: String!
+  url: String!
+}
+
+input QuestionInput {
+  question: String!
+  answer: String!
+}
+input UpdateQuestionInput {
+  id: ID!
+  question: String!
+  answer: String!
+}

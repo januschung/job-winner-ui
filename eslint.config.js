@@ -17,7 +17,7 @@ module.exports = [
     },
   },
   {
-    files: ['src/**/*.js'],
+    files: ['src/**/*.{js,jsx}'],
     settings: {
       react: {
         version: 'detect',
@@ -31,6 +31,22 @@ module.exports = [
         ...globals.browser,
       },
     },
+  },
+  {
+    // Vitest runs with `globals: true` (see vite.config.js).
+    files: [
+      'src/**/__tests__/**',
+      'src/**/*.test.{js,jsx}',
+      'src/setupTests.js',
+    ],
+    languageOptions: {
+      globals: { ...globals.vitest, ...globals.node },
+    },
+  },
+  {
+    // Plain JS project without the prop-types package; prop checking would
+    // come from TypeScript rather than runtime PropTypes.
+    rules: { 'react/prop-types': 'off' },
   },
   prettierConfig, // Must be last to override other configs
 ];

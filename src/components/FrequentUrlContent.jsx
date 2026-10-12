@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client/react';
 import DialogContent from '@mui/material/DialogContent';
 import Skeleton from '@mui/material/Skeleton';
 import {
@@ -11,52 +11,32 @@ import {
   Link,
   Box,
 } from '@mui/material';
-import useFrequentUrls from '../hooks/useFrequentUrls';
 import useDialog from '../hooks/useDialog';
 import { stringAvatar } from '../utils/avatarUtil';
 import ConfirmDialog from './common/ConfirmDialog';
-import { useSnackbar } from './common/SnackbarContext';
+import useConfirmedAction from '../hooks/useConfirmedAction';
 import ActionIcons from './common/ActionIcons';
 import { DELETE_FREQUENT_URL } from '../graphql/mutation';
 import { GET_FREQUENT_URLS } from '../graphql/query';
 import AddOrEditFrequentUrlDialog from './AddOrEditFrequentUrlDialog';
 import { useTranslation } from 'react-i18next';
 
-export default function FrequentUrlContent({}) {
+export default function FrequentUrlContent() {
   const [frequentUrl, setFrequentUrl] = useState(null);
-  const {
-    dialogOpen: confirmDialogOpen,
-    handleOpen: handleConfirmDialogOpen,
-    handleClose: handleConfirmDialogClose,
-  } = useDialog();
-
   const { dialogOpen, handleOpen, handleClose } = useDialog();
-
-  const { data, loading, error } = useFrequentUrls();
-  const { showSnackbar } = useSnackbar();
+  const { data, loading, error } = useQuery(GET_FREQUENT_URLS, {
+    fetchPolicy: 'network-only',
+  });
   const { t } = useTranslation();
 
   const [deleteFrequentUrl] = useMutation(DELETE_FREQUENT_URL, {
     refetchQueries: [{ query: GET_FREQUENT_URLS }],
   });
-
-  const confirmDeleteFrequentUrl = () => {
-    deleteFrequentUrl({
-      variables: { id: frequentUrl.id },
-    })
-      .then(() => {
-        showSnackbar(t('dialogs.addBookmark.success'), 'success');
-      })
-      .catch(() => {
-        showSnackbar(t('dialogs.addBookmark.error'), 'error');
-      });
-    handleConfirmDialogClose();
-  };
-
-  const handleDeleteFrequentUrl = frequentUrl => {
-    setFrequentUrl(frequentUrl);
-    handleConfirmDialogOpen();
-  };
+  const remove = useConfirmedAction({
+    action: item => deleteFrequentUrl({ variables: { id: item.id } }),
+    successMessage: t('dialogs.addBookmark.success'),
+    errorMessage: t('dialogs.addBookmark.error'),
+  });
 
   const handleOpenEditDialog = frequentUrl => {
     setFrequentUrl(frequentUrl);
@@ -64,7 +44,7 @@ export default function FrequentUrlContent({}) {
   };
 
   return (
-    <DialogContent dividers>
+    <DialogContent>
       <AddOrEditFrequentUrlDialog
         open={dialogOpen}
         handleClose={handleClose}
@@ -180,7 +160,8 @@ export default function FrequentUrlContent({}) {
                       </Box>
                       <ActionIcons
                         onEdit={() => handleOpenEditDialog(frequentUrl)}
-                        onDelete={() => handleDeleteFrequentUrl(frequentUrl)}
+                        onDelete={() => remove.request(frequentUrl)}
+                        name={frequentUrl.title}
                         stopPropagation
                       />
                     </Grid>
@@ -192,10 +173,12 @@ export default function FrequentUrlContent({}) {
         )}
       </Grid>
       <ConfirmDialog
-        open={confirmDialogOpen}
-        onCancel={handleConfirmDialogClose}
-        onConfirm={confirmDeleteFrequentUrl}
-        title={t('dialogs.confirmDeletion.title')}
+        {...remove.dialogProps}
+        title={
+          remove.item
+            ? t('common.deleteNamed', { name: remove.item.title })
+            : t('dialogs.confirmDeletion.title')
+        }
         content={t('dialogs.confirmDeletion.content')}
       />
     </DialogContent>

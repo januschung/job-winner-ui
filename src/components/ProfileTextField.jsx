@@ -1,24 +1,27 @@
-import React from 'react';
-import { Grid, TextField } from '@mui/material';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
 import CopyButton from './CopyButton';
 
+// Profile field with a copy button inside it.
 const ProfileTextField = ({ id, label, value, onChange }) => (
-  <>
-    <Grid size={11}>
-      <TextField
-        id={id}
-        name={id}
-        label={label}
-        fullWidth
-        variant="outlined"
-        value={value}
-        onChange={onChange}
-      />
-    </Grid>
-    <Grid size={1}>
-      <CopyButton text={value} />
-    </Grid>
-  </>
+  <TextField
+    id={id}
+    name={id}
+    label={label}
+    fullWidth
+    variant="outlined"
+    value={value}
+    onChange={onChange}
+    slotProps={{
+      input: {
+        endAdornment: (
+          <InputAdornment position="end">
+            <CopyButton text={value} />
+          </InputAdornment>
+        ),
+      },
+    }}
+  />
 );
 
 export default ProfileTextField;
