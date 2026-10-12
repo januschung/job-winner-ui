@@ -195,13 +195,34 @@
       "deleteSuccess": "¡Solicitud de empleo eliminada con éxito!",
       "deleteError": "Error al eliminar la solicitud de empleo.",
       "fetchError": "Error al obtener los datos. Por favor, verifique su conexión a la red e inténtelo de nuevo.",
-      "noResults": "No hay solicitudes de empleo que coincidan con su búsqueda."
+      "fetchErrorTitle": "No se pudieron cargar las solicitudes.",
+      "retry": "Reintentar"
     },
     "dialogs": {
       "confirmDelete": {
         "title": "Confirmar Eliminación",
         "content": "¿Está seguro de que desea eliminar esta solicitud de empleo? Esta acción no se puede deshacer."
       }
+    },
+    "card": {
+      "applied": "Solicitado el {{date}}",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "editLabel": "Editar {{company}}",
+      "deleteLabel": "Eliminar {{company}}",
+      "openPosting": "{{company}}: abrir la oferta en una pestaña nueva"
+    },
+    "empty": {
+      "title": "Registre su primera solicitud",
+      "description": "Agregue los empleos a los que se postula y siga cada uno desde la solicitud hasta la oferta."
+    },
+    "noMatches": {
+      "titleSearch": "Sin resultados para “{{query}}”",
+      "titleStatus": "No hay solicitudes en {{status}}",
+      "inStatus": "Nada coincide con su búsqueda en {{status}}.",
+      "tryAnother": "Pruebe con otra empresa, puesto o palabra clave.",
+      "clearSearch": "Borrar búsqueda",
+      "showAll": "Mostrar todos los estados"
     }
   },
   "jobStatusBar": {
@@ -210,7 +231,9 @@
     "open": "Abierto",
     "active": "Activo",
     "ghosted": "Sin Respuesta",
-    "rejected": "Rechazado"
+    "rejected": "Rechazado",
+    "clear": "Borrar",
+    "clearLabel": "Quitar filtro de estado"
   },
   "common": {
     "cancel": "Cancelar",

@@ -14,7 +14,10 @@ function App() {
       <SnackbarProvider>
         <AppDialogsProvider>
           <AppHeader searchTerm={searchTerm} onSearch={setSearchTerm} />
-          <JobApplicationList searchTerm={searchTerm} />
+          <JobApplicationList
+            searchTerm={searchTerm}
+            onClearSearch={() => setSearchTerm('')}
+          />
         </AppDialogsProvider>
       </SnackbarProvider>
     </ThemeContextProvider>

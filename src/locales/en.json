@@ -195,13 +195,34 @@
       "deleteSuccess": "Job application deleted successfully!",
       "deleteError": "Failed to delete the job application.",
       "fetchError": "Failed to fetch data. Please check your network connection and try again.",
-      "noResults": "No job applications match your search."
+      "fetchErrorTitle": "Couldn't load applications.",
+      "retry": "Retry"
     },
     "dialogs": {
       "confirmDelete": {
         "title": "Confirm Deletion",
         "content": "Are you sure you want to delete this job application? This action cannot be undone."
       }
+    },
+    "card": {
+      "applied": "Applied {{date}}",
+      "edit": "Edit",
+      "delete": "Delete",
+      "editLabel": "Edit {{company}}",
+      "deleteLabel": "Delete {{company}}",
+      "openPosting": "{{company}}: open job posting in a new tab"
+    },
+    "empty": {
+      "title": "Track your first application",
+      "description": "Add the jobs you apply to and follow each one from applied to offer."
+    },
+    "noMatches": {
+      "titleSearch": "No results for “{{query}}”",
+      "titleStatus": "No {{status}} applications",
+      "inStatus": "Nothing matches your search in {{status}} applications.",
+      "tryAnother": "Try a different company, job title, or keyword.",
+      "clearSearch": "Clear search",
+      "showAll": "Show all statuses"
     }
   },
   "jobStatusBar": {
@@ -210,7 +231,9 @@
     "open": "Open",
     "active": "Active",
     "ghosted": "Ghosted",
-    "rejected": "Rejected"
+    "rejected": "Rejected",
+    "clear": "Clear",
+    "clearLabel": "Clear status filter"
   },
   "common": {
     "cancel": "Cancel",
