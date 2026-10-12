@@ -101,6 +101,31 @@ docker build -t job-winner-ui .
 docker run -p 3000:3000 -d job-winner-ui
 ```
 
+### Run without the backend
+
+For UI work you can skip the backend: `dev:mock` serves the backend's GraphQL
+schema and demo data from inside the browser.
+
+```console
+npm run dev:mock
+```
+
+- Edits are kept in memory until you reload the page.
+- `?mock-delay=1500` slows every request (default 250 ms), to see loading states.
+- `?mock-fail=UpdateJobApplication` makes the named operations fail
+  (comma-separated), to see error handling.
+- Production builds never include the stub.
+
+The schema and data are copied from the backend repo. To refresh them after
+the backend changes (defaults to `../job-winner`):
+
+```console
+npm run mock:sync -- /path/to/job-winner
+```
+
+A test also checks every query and mutation in `src/graphql` against that
+schema, so UI/backend mismatches fail in CI.
+
 ## Contributing
 
 We welcome contributions! If you'd like to help improve Job Winner, here's how you can contribute:

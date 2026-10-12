@@ -38,6 +38,7 @@ export default function ProfileDialog({ profile, handleClose, open }) {
     }, {});
 
   const [formData, setFormData] = useState(initialFormData);
+  const [saving, setSaving] = useState(false);
 
   const { showSnackbar } = useSnackbar();
 
@@ -61,15 +62,22 @@ export default function ProfileDialog({ profile, handleClose, open }) {
     }));
   };
 
-  const handleUpdateProfile = event => {
-    event.preventDefault();
-    updateProfile({
-      variables: {
-        id: 1,
-        ...formData,
-      },
-    });
-    showSnackbar(t('dialogs.profile.success'), 'success');
+  const handleUpdateProfile = async event => {
+    event?.preventDefault();
+    setSaving(true);
+    try {
+      await updateProfile({
+        variables: {
+          id: 1,
+          ...formData,
+        },
+      });
+      showSnackbar(t('dialogs.profile.success'), 'success');
+    } catch (err) {
+      showSnackbar(t('dialogs.profile.error'), 'error');
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -79,6 +87,7 @@ export default function ProfileDialog({ profile, handleClose, open }) {
       onClose={handleClose}
       onCancel={handleClose}
       onSave={handleUpdateProfile}
+      saving={saving}
       title={t('dialogs.profile.title')}
     >
       <DialogContent dividers>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -32,9 +32,20 @@ export default function InterviewsForm({ jobApplicationId }) {
   const { showSnackbar } = useSnackbar();
   const { t } = useTranslation();
 
+  // Last values the server confirmed, per interview id, so leaving a field
+  // without changing anything does not trigger a save.
+  const savedRef = useRef({});
+  const remember = list =>
+    list.forEach(item => {
+      savedRef.current[item.id] = item;
+    });
+
   const { loading, error } = useQuery(GET_INTERVIEWS_BY_JOB_APPLICATION_ID, {
     variables: { jobApplicationId },
-    onCompleted: data => setInterviews(data.allInterviewByJobApplicationId),
+    onCompleted: data => {
+      remember(data.allInterviewByJobApplicationId);
+      setInterviews(data.allInterviewByJobApplicationId);
+    },
   });
 
   const [addInterview] = useMutation(ADD_INTERVIEW, {
@@ -65,10 +76,6 @@ export default function InterviewsForm({ jobApplicationId }) {
       },
       { query: GET_ALL_INTERVIEWS },
     ],
-    onError: err => {
-      console.error(t('interviews.messages.deleteError'), err.message);
-      showSnackbar(t('interviews.messages.deleteError'), 'error');
-    },
   });
 
   const handleAddInterview = async () => {
@@ -85,6 +92,7 @@ export default function InterviewsForm({ jobApplicationId }) {
         },
       });
       if (data?.addInterview?.id) {
+        remember([data.addInterview]);
         setInterviews([...interviews, data.addInterview]);
         showSnackbar(t('interviews.messages.addSuccess'), 'success');
       } else {
@@ -104,10 +112,18 @@ export default function InterviewsForm({ jobApplicationId }) {
     );
   };
 
-  const handleSaveInline = async id => {
+  // Saves one interview. `changes` carries values set in the same event,
+  // which are not in `interviews` state yet.
+  const handleSaveInline = async (id, changes = {}) => {
     try {
-      const interview = interviews.find(item => item.id === id);
-      if (!interview) return;
+      const current = interviews.find(item => item.id === id);
+      if (!current) return;
+      const interview = { ...current, ...changes };
+      // Skip half-typed dates; the field saves again once it is valid.
+      if (!dayjs(interview.interviewDate, 'YYYY-MM-DD').isValid()) return;
+      const saved = savedRef.current[id];
+      const fields = ['interviewDate', 'interviewer', 'description', 'status'];
+      if (saved && fields.every(f => saved[f] === interview[f])) return;
 
       await updateInterview({
         variables: {
@@ -123,6 +139,7 @@ export default function InterviewsForm({ jobApplicationId }) {
         },
       });
 
+      remember([interview]);
       showSnackbar(t('interviews.messages.saveSuccess'), 'success');
     } catch (err) {
       console.error(t('interviews.messages.saveError'), err.message);
@@ -207,7 +224,23 @@ export default function InterviewsForm({ jobApplicationId }) {
                           dayjs(date).format('YYYY-MM-DD')
                         )
                       }
-                      slotProps={{ textField: { fullWidth: true } }}
+                      // Picking from the calendar saves right away; typing
+                      // saves when the field loses focus.
+                      onAccept={(date, context) => {
+                        // Only calendar picks save here. Typing also fires
+                        // onAccept per valid keystroke (source 'unknown');
+                        // typed dates save once, on blur.
+                        if (context?.source !== 'view') return;
+                        handleSaveInline(interview.id, {
+                          interviewDate: dayjs(date).format('YYYY-MM-DD'),
+                        });
+                      }}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          onBlur: () => handleSaveInline(interview.id),
+                        },
+                      }}
                     />
                   </LocalizationProvider>
                 </Grid>
@@ -238,10 +271,12 @@ export default function InterviewsForm({ jobApplicationId }) {
                     <Select
                       label={t('interviews.status')}
                       value={interview.status}
-                      onChange={e =>
-                        handleEdit(interview.id, 'status', e.target.value)
-                      }
-                      onBlur={() => handleSaveInline(interview.id)}
+                      onChange={e => {
+                        handleEdit(interview.id, 'status', e.target.value);
+                        handleSaveInline(interview.id, {
+                          status: e.target.value,
+                        });
+                      }}
                     >
                       <MenuItem value="open">
                         {t('interviews.statuses.open')}

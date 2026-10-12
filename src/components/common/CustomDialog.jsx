@@ -17,6 +17,8 @@ export default function CustomDialog({
   onCancel = null,
   onAdd = null,
   onSave = null,
+  // Disables the primary action while a save is in flight.
+  saving = false,
 }) {
   const { t } = useTranslation();
 
@@ -47,12 +49,18 @@ export default function CustomDialog({
             variant="contained"
             startIcon={<AddCircleIcon />}
             onClick={onAdd}
+            disabled={saving}
           >
             {t('common.add')}
           </Button>
         )}
         {onSave && (
-          <Button variant="contained" startIcon={<SaveIcon />} onClick={onSave}>
+          <Button
+            variant="contained"
+            startIcon={<SaveIcon />}
+            onClick={onSave}
+            disabled={saving}
+          >
             {t('common.save')}
           </Button>
         )}

@@ -41,6 +41,7 @@ export default function ApplicationForm({
     appliedDate: dayjs().format('YYYY-MM-DD'),
   });
   const [errors, setErrors] = useState({});
+  const [saving, setSaving] = useState(false);
   const { showSnackbar } = useSnackbar();
   const { t } = useTranslation();
 
@@ -100,20 +101,24 @@ export default function ApplicationForm({
     }));
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
+    event?.preventDefault();
     if (!validateFields()) return;
+    const mutationFn = isNew ? newJobApplication : updateJobApplication;
+    const variables = {
+      ...formData,
+      ...(jobApplication && { id: jobApplication.id }),
+    };
+    setSaving(true);
     try {
-      event.preventDefault();
-      const mutationFn = isNew ? newJobApplication : updateJobApplication;
-      const variables = {
-        ...formData,
-        ...(jobApplication && { id: jobApplication.id }),
-      };
-      mutationFn({ variables });
+      await mutationFn({ variables });
       showSnackbar(t('forms.applicationForm.success'), 'success');
-      setTimeout(() => handleClose(), 500);
+      handleClose();
     } catch (err) {
+      // Keep the dialog open so nothing typed is lost.
       showSnackbar(t('forms.applicationForm.error'), 'error');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -295,6 +300,7 @@ export default function ApplicationForm({
           variant="contained"
           startIcon={<SaveIcon />}
           onClick={handleSubmit}
+          disabled={saving}
         >
           {t('common.save')}
         </Button>

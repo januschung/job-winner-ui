@@ -37,7 +37,10 @@
       },
       "success": "Bookmark deleted successfully!",
       "error": "Failed to delete the bookmark.",
-      "noUrls": "No URLs"
+      "noUrls": "No URLs",
+      "addTitle": "Add Bookmark",
+      "saveSuccess": "Bookmark saved successfully!",
+      "saveError": "Failed to save the bookmark."
     },
     "addQuestion": {
       "title": "Add Q&A",
@@ -104,7 +107,8 @@
         "github": "GitHub",
         "personalWebsite": "Personal Website"
       },
-      "success": "Profile saved successfully!"
+      "success": "Profile saved successfully!",
+      "error": "Failed to save the profile."
     },
     "offerList": {
       "title": "Offer List",

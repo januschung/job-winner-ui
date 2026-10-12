@@ -16,26 +16,6 @@ export const GET_JOB_APPLICATIONS = gql`
   }
 `;
 
-export const GET_PROFILES = gql`
-  query GetProfiles {
-    allProfile {
-      id
-      firstName
-      lastName
-      addressStreet1
-      addressStreet2
-      addressCity
-      addressState
-      addressZip
-      linkedin
-      github
-      personalWebsite
-      email
-      telephone
-    }
-  }
-`;
-
 export const GET_PROFILE = gql`
   query GetProfile($id: ID!) {
     profileById(id: $id) {

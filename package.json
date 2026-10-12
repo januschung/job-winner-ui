@@ -37,6 +37,8 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:mock": "vite --mode mock",
+    "mock:sync": "node scripts/sync-mock-data.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint src",

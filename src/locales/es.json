@@ -37,7 +37,10 @@
       },
       "success": "¡Marcador eliminado con éxito!",
       "error": "Error al eliminar el marcador.",
-      "noUrls": "No hay URLs"
+      "noUrls": "No hay URLs",
+      "addTitle": "Agregar Marcador",
+      "saveSuccess": "¡Marcador guardado con éxito!",
+      "saveError": "No se pudo guardar el marcador."
     },
     "addQuestion": {
       "title": "Agregar Pregunta y Respuesta",
@@ -104,7 +107,8 @@
         "github": "GitHub",
         "personalWebsite": "Sitio Web Personal"
       },
-      "success": "¡Perfil guardado con éxito!"
+      "success": "¡Perfil guardado con éxito!",
+      "error": "No se pudo guardar el perfil."
     },
     "offerList": {
       "title": "Lista de Ofertas",

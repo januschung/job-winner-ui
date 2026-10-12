@@ -1,0 +1,569 @@
+{
+  "profile": {
+    "id": 1,
+    "firstName": "Janus",
+    "lastName": "Chung",
+    "addressStreet1": "123 Main St",
+    "addressStreet2": "Apt 4",
+    "addressCity": "City",
+    "addressState": "State",
+    "addressZip": "12345",
+    "linkedin": "https://linkedin.com/in/janus",
+    "github": "https://github.com/januschung",
+    "personalWebsite": "https://januschung.github.io",
+    "email": "test@test.com",
+    "telephone": "123-456-7890"
+  },
+  "jobApplications": [
+    {
+      "id": 1,
+      "companyName": "Anthropic",
+      "jobTitle": "Software Engineer",
+      "salaryRange": "200k-280k",
+      "jobUrl": "https://www.anthropic.com/careers",
+      "appliedDate": {
+        "dayOffset": -28
+      },
+      "description": "Build reliable AI product surfaces",
+      "note": "Recruiter screen booked",
+      "status": "open"
+    },
+    {
+      "id": 2,
+      "companyName": "OpenAI",
+      "jobTitle": "Full Stack Engineer",
+      "salaryRange": "210k-290k",
+      "jobUrl": "https://openai.com/careers",
+      "appliedDate": {
+        "dayOffset": -26
+      },
+      "description": "Ship features across web and APIs",
+      "note": "Waiting on take-home",
+      "status": "open"
+    },
+    {
+      "id": 3,
+      "companyName": "Cursor",
+      "jobTitle": "Backend Engineer",
+      "salaryRange": "180k-250k",
+      "jobUrl": "https://cursor.com/careers",
+      "appliedDate": {
+        "dayOffset": -24
+      },
+      "description": "Scale collaborative editing services",
+      "note": "Strong culture fit so far",
+      "status": "open"
+    },
+    {
+      "id": 4,
+      "companyName": "Vercel",
+      "jobTitle": "Platform Engineer",
+      "salaryRange": "170k-230k",
+      "jobUrl": "https://vercel.com/careers",
+      "appliedDate": {
+        "dayOffset": -22
+      },
+      "description": "Improve deploy and edge tooling",
+      "note": "Shared portfolio projects",
+      "status": "open"
+    },
+    {
+      "id": 5,
+      "companyName": "Cloudflare",
+      "jobTitle": "Systems Engineer",
+      "salaryRange": "175k-240k",
+      "jobUrl": "https://www.cloudflare.com/careers",
+      "appliedDate": {
+        "dayOffset": -20
+      },
+      "description": "Work on global edge networking",
+      "note": "Phone screen next week",
+      "status": "open"
+    },
+    {
+      "id": 6,
+      "companyName": "Datadog",
+      "jobTitle": "Software Engineer",
+      "salaryRange": "165k-220k",
+      "jobUrl": "https://careers.datadoghq.com",
+      "appliedDate": {
+        "dayOffset": -18
+      },
+      "description": "Observability product development",
+      "note": "Liked their on-call model",
+      "status": "open"
+    },
+    {
+      "id": 7,
+      "companyName": "Notion",
+      "jobTitle": "Fullstack Engineer",
+      "salaryRange": "160k-220k",
+      "jobUrl": "https://www.notion.so/careers",
+      "appliedDate": {
+        "dayOffset": -16
+      },
+      "description": "Editor performance and sync",
+      "note": "Applied via referral",
+      "status": "open"
+    },
+    {
+      "id": 8,
+      "companyName": "Figma",
+      "jobTitle": "Infrastructure Eng",
+      "salaryRange": "175k-235k",
+      "jobUrl": "https://www.figma.com/careers",
+      "appliedDate": {
+        "dayOffset": -14
+      },
+      "description": "Realtime collab infrastructure",
+      "note": "Waiting on recruiter",
+      "status": "open"
+    },
+    {
+      "id": 9,
+      "companyName": "Linear",
+      "jobTitle": "Product Engineer",
+      "salaryRange": "155k-210k",
+      "jobUrl": "https://linear.app/careers",
+      "appliedDate": {
+        "dayOffset": -12
+      },
+      "description": "Craft fast issue-tracking UX",
+      "note": "Small team, high ownership",
+      "status": "open"
+    },
+    {
+      "id": 10,
+      "companyName": "Stripe",
+      "jobTitle": "API Engineer",
+      "salaryRange": "185k-250k",
+      "jobUrl": "https://stripe.com/jobs",
+      "appliedDate": {
+        "dayOffset": -10
+      },
+      "description": "Payments APIs and reliability",
+      "note": "Referral from ex-coworker",
+      "status": "active"
+    },
+    {
+      "id": 11,
+      "companyName": "Shopify",
+      "jobTitle": "Backend Engineer",
+      "salaryRange": "160k-210k",
+      "jobUrl": "https://www.shopify.com/careers",
+      "appliedDate": {
+        "dayOffset": -9
+      },
+      "description": "Commerce platform services",
+      "note": "Onsite loop scheduled",
+      "status": "active"
+    },
+    {
+      "id": 12,
+      "companyName": "Airbnb",
+      "jobTitle": "SRE",
+      "salaryRange": "180k-240k",
+      "jobUrl": "https://careers.airbnb.com",
+      "appliedDate": {
+        "dayOffset": -8
+      },
+      "description": "Reliability for booking systems",
+      "note": "System design went well",
+      "status": "active"
+    },
+    {
+      "id": 13,
+      "companyName": "Discord",
+      "jobTitle": "Backend Engineer",
+      "salaryRange": "170k-225k",
+      "jobUrl": "https://discord.com/careers",
+      "appliedDate": {
+        "dayOffset": -7
+      },
+      "description": "Realtime messaging scale",
+      "note": "Pairing interview done",
+      "status": "active"
+    },
+    {
+      "id": 14,
+      "companyName": "Rippling",
+      "jobTitle": "Software Engineer",
+      "salaryRange": "165k-220k",
+      "jobUrl": "https://www.rippling.com/careers",
+      "appliedDate": {
+        "dayOffset": -6
+      },
+      "description": "HR/IT platform services",
+      "note": "Final round this week",
+      "status": "active"
+    },
+    {
+      "id": 15,
+      "companyName": "Coinbase",
+      "jobTitle": "Security Engineer",
+      "salaryRange": "180k-250k",
+      "jobUrl": "https://www.coinbase.com/careers",
+      "appliedDate": {
+        "dayOffset": -5
+      },
+      "description": "Application security reviews",
+      "note": "Security challenge submitted",
+      "status": "active"
+    },
+    {
+      "id": 16,
+      "companyName": "Netflix",
+      "jobTitle": "Cloud Engineer",
+      "salaryRange": "190k-260k",
+      "jobUrl": "https://jobs.netflix.com",
+      "appliedDate": {
+        "dayOffset": -21
+      },
+      "description": "Streaming cloud infrastructure",
+      "note": "Rejected after panel",
+      "status": "rejected"
+    },
+    {
+      "id": 17,
+      "companyName": "Uber",
+      "jobTitle": "Mobile Engineer",
+      "salaryRange": "160k-210k",
+      "jobUrl": "https://www.uber.com/careers",
+      "appliedDate": {
+        "dayOffset": -19
+      },
+      "description": "Rider app feature work",
+      "note": "Quick rejection email",
+      "status": "rejected"
+    },
+    {
+      "id": 18,
+      "companyName": "Lyft",
+      "jobTitle": "Data Engineer",
+      "salaryRange": "155k-205k",
+      "jobUrl": "https://www.lyft.com/careers",
+      "appliedDate": {
+        "dayOffset": -17
+      },
+      "description": "Pipeline work for marketplace",
+      "note": "No update after screen",
+      "status": "ghosted"
+    },
+    {
+      "id": 19,
+      "companyName": "DoorDash",
+      "jobTitle": "Backend Engineer",
+      "salaryRange": "160k-215k",
+      "jobUrl": "https://careers.doordash.com",
+      "appliedDate": {
+        "dayOffset": -15
+      },
+      "description": "Logistics matching services",
+      "note": "Ghosted after take-home",
+      "status": "ghosted"
+    },
+    {
+      "id": 20,
+      "companyName": "Snap",
+      "jobTitle": "iOS Engineer",
+      "salaryRange": "170k-230k",
+      "jobUrl": "https://careers.snap.com",
+      "appliedDate": {
+        "dayOffset": -13
+      },
+      "description": "Camera and messaging features",
+      "note": "Silence after recruiter call",
+      "status": "ghosted"
+    }
+  ],
+  "interviews": [
+    {
+      "id": 1,
+      "jobApplicationId": 1,
+      "interviewDate": {
+        "dayOffset": -21
+      },
+      "interviewer": "Priya Nair",
+      "description": "Intro call and role overview",
+      "status": "expired"
+    },
+    {
+      "id": 2,
+      "jobApplicationId": 1,
+      "interviewDate": {
+        "dayOffset": -3
+      },
+      "interviewer": "Alex Morgan",
+      "description": "System design: rate limiter",
+      "status": "open"
+    },
+    {
+      "id": 3,
+      "jobApplicationId": 2,
+      "interviewDate": {
+        "dayOffset": -2
+      },
+      "interviewer": "Sam Patel",
+      "description": "Take-home review discussion",
+      "status": "open"
+    },
+    {
+      "id": 4,
+      "jobApplicationId": 3,
+      "interviewDate": {
+        "dayOffset": 2
+      },
+      "interviewer": "Jordan Lee",
+      "description": "Backend deep dive on APIs",
+      "status": "open"
+    },
+    {
+      "id": 5,
+      "jobApplicationId": 4,
+      "interviewDate": {
+        "dayOffset": 3
+      },
+      "interviewer": "Casey Brooks",
+      "description": "Platform tooling walkthrough",
+      "status": "open"
+    },
+    {
+      "id": 6,
+      "jobApplicationId": 10,
+      "interviewDate": {
+        "dayOffset": -4
+      },
+      "interviewer": "Riley Chen",
+      "description": "API design and idempotency",
+      "status": "open"
+    },
+    {
+      "id": 7,
+      "jobApplicationId": 10,
+      "interviewDate": {
+        "dayOffset": 1
+      },
+      "interviewer": "Morgan Diaz",
+      "description": "Behavioral + ownership stories",
+      "status": "open"
+    },
+    {
+      "id": 8,
+      "jobApplicationId": 11,
+      "interviewDate": {
+        "dayOffset": -1
+      },
+      "interviewer": "Taylor Kim",
+      "description": "Live coding: cart checkout",
+      "status": "open"
+    },
+    {
+      "id": 9,
+      "jobApplicationId": 12,
+      "interviewDate": {
+        "dayOffset": 4
+      },
+      "interviewer": "Chris Alvarez",
+      "description": "SRE incident response case",
+      "status": "open"
+    },
+    {
+      "id": 10,
+      "jobApplicationId": 13,
+      "interviewDate": {
+        "dayOffset": 5
+      },
+      "interviewer": "Jamie Ortiz",
+      "description": "Realtime fanout architecture",
+      "status": "open"
+    },
+    {
+      "id": 11,
+      "jobApplicationId": 14,
+      "interviewDate": {
+        "dayOffset": 2
+      },
+      "interviewer": "Avery Quinn",
+      "description": "Hiring manager conversation",
+      "status": "open"
+    },
+    {
+      "id": 12,
+      "jobApplicationId": 15,
+      "interviewDate": {
+        "dayOffset": -2
+      },
+      "interviewer": "Nina Shah",
+      "description": "Threat modeling exercise",
+      "status": "open"
+    }
+  ],
+  "offers": [
+    {
+      "id": 1,
+      "jobApplicationId": 10,
+      "offerDate": {
+        "dayOffset": -1
+      },
+      "salaryOffered": "215k + equity",
+      "description": "Stripe verbal offer pending written packet"
+    },
+    {
+      "id": 2,
+      "jobApplicationId": 12,
+      "offerDate": {
+        "dayOffset": 0
+      },
+      "salaryOffered": "205k + RSU",
+      "description": "Airbnb SRE offer, 2 weeks to decide"
+    },
+    {
+      "id": 3,
+      "jobApplicationId": 14,
+      "offerDate": {
+        "dayOffset": 1
+      },
+      "salaryOffered": "195k + bonus",
+      "description": "Rippling offer after final loop"
+    }
+  ],
+  "frequentUrls": [
+    {
+      "id": 1,
+      "title": "LinkedIn Jobs",
+      "url": "https://www.linkedin.com/jobs/"
+    },
+    {
+      "id": 2,
+      "title": "Indeed",
+      "url": "https://www.indeed.com/"
+    },
+    {
+      "id": 3,
+      "title": "Glassdoor",
+      "url": "https://www.glassdoor.com/Job/"
+    },
+    {
+      "id": 4,
+      "title": "Monster",
+      "url": "https://www.monster.com/jobs/"
+    },
+    {
+      "id": 5,
+      "title": "We Work Remotely",
+      "url": "https://weworkremotely.com/"
+    },
+    {
+      "id": 6,
+      "title": "AngelList",
+      "url": "https://angel.co/jobs"
+    },
+    {
+      "id": 7,
+      "title": "Remotive",
+      "url": "https://remotive.io/remote-jobs"
+    },
+    {
+      "id": 8,
+      "title": "HackerRank Jobs",
+      "url": "https://www.hackerrank.com/jobs"
+    },
+    {
+      "id": 9,
+      "title": "Hired",
+      "url": "https://hired.com/"
+    },
+    {
+      "id": 10,
+      "title": "Stack Overflow Jobs",
+      "url": "https://stackoverflow.com/jobs"
+    },
+    {
+      "id": 11,
+      "title": "FlexJobs",
+      "url": "https://www.flexjobs.com/"
+    },
+    {
+      "id": 12,
+      "title": "Wellfound",
+      "url": "https://angel.co/talent"
+    },
+    {
+      "id": 13,
+      "title": "Turing",
+      "url": "https://www.turing.com/jobs/"
+    },
+    {
+      "id": 14,
+      "title": "Dice",
+      "url": "https://www.dice.com/"
+    },
+    {
+      "id": 15,
+      "title": "Ladders",
+      "url": "https://www.theladders.com/"
+    },
+    {
+      "id": 16,
+      "title": "Outsourcely",
+      "url": "https://www.outsourcely.com/"
+    },
+    {
+      "id": 17,
+      "title": "Europe Remotely",
+      "url": "https://europeremotely.com/"
+    },
+    {
+      "id": 18,
+      "title": "Jobspresso",
+      "url": "https://jobspresso.co/"
+    },
+    {
+      "id": 19,
+      "title": "Remote OK",
+      "url": "https://remoteok.io/"
+    },
+    {
+      "id": 20,
+      "title": "Just Remote",
+      "url": "https://justremote.co/"
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "question": "Walk me through a system you designed end to end.",
+      "answer": "I designed a job-tracking API with WebFlux, R2DBC, and Postgres. I split reads/writes cleanly, used Flyway for schema changes, and added GraphQL for the UI so clients fetch only needed fields."
+    },
+    {
+      "id": 2,
+      "question": "How do you approach debugging a production incident?",
+      "answer": "I start with blast radius and recent deploys, check dashboards and logs, then form a hypothesis. I mitigate first (rollback or feature flag), then write a short postmortem with action items."
+    },
+    {
+      "id": 3,
+      "question": "Tell me about a time you disagreed with a teammate.",
+      "answer": "On API versioning I preferred explicit v2 endpoints over silent breaking changes. I proposed a short RFC, we aligned on deprecation windows, and shipped without customer downtime."
+    },
+    {
+      "id": 4,
+      "question": "How do you ensure code quality without slowing delivery?",
+      "answer": "I keep PRs small, require tests for critical paths, and automate lint/format in CI. For risky areas I add contract tests so reviews focus on design, not style nits."
+    },
+    {
+      "id": 5,
+      "question": "Why are you interested in this role?",
+      "answer": "I want to work on high-leverage product infrastructure where reliability and developer experience matter. This team’s stack and ownership model match how I like to build."
+    },
+    {
+      "id": 6,
+      "question": "Explain eventual consistency to a non-expert.",
+      "answer": "It means different parts of the system may briefly disagree after a write, then catch up. Like group chat: your message shows instantly for you, then appears for others a moment later."
+    },
+    {
+      "id": 7,
+      "question": "What would you improve in our interview process?",
+      "answer": "I would ask for a realistic take-home scoped to 2 hours max, then discuss tradeoffs live. That shows how candidates think without consuming a full weekend."
+    }
+  ]
+}

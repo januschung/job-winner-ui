@@ -19,6 +19,7 @@ export default function AddOrEditQuestionDialog({
     answer: '',
   });
   const [errors, setErrors] = useState({});
+  const [saving, setSaving] = useState(false);
   const { showSnackbar } = useSnackbar();
   const { t } = useTranslation();
 
@@ -46,21 +47,23 @@ export default function AddOrEditQuestionDialog({
     });
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
+    event?.preventDefault();
     if (!validateFields()) return;
+    const mutationFn = question ? updateQuestion : addQuestion;
+    const variables = {
+      ...formData,
+      ...(question && { id: question.id }),
+    };
+    setSaving(true);
     try {
-      event.preventDefault();
-      const mutationFn = question ? updateQuestion : addQuestion;
-      const variables = {
-        ...formData,
-        ...(question && { id: question.id }),
-      };
-      mutationFn({ variables });
-
+      await mutationFn({ variables });
       showSnackbar(t('dialogs.addQuestion.success'), 'success');
-      setTimeout(() => handleClose(), 500);
+      handleClose();
     } catch (err) {
       showSnackbar(t('dialogs.addQuestion.error'), 'error');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -84,6 +87,7 @@ export default function AddOrEditQuestionDialog({
       onClose={handleClose}
       onCancel={handleClose}
       onSave={handleSubmit}
+      saving={saving}
       title={t(
         question ? 'dialogs.addQuestion.editTitle' : 'dialogs.addQuestion.title'
       )}

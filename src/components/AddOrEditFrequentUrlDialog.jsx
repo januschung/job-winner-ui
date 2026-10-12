@@ -19,6 +19,7 @@ export default function AddOrEditFrequentUrlDialog({
     url: '',
   });
   const [errors, setErrors] = useState({});
+  const [saving, setSaving] = useState(false);
   const { showSnackbar } = useSnackbar();
   const { t } = useTranslation();
 
@@ -30,8 +31,10 @@ export default function AddOrEditFrequentUrlDialog({
 
   const validateFields = () => {
     const newErrors = {};
-    if (!formData.title) newErrors.title = 'Title is required.';
-    if (!formData.url) newErrors.url = 'Url is required.';
+    if (!formData.title)
+      newErrors.title = t('dialogs.addBookmark.errors.titleRequired');
+    if (!formData.url)
+      newErrors.url = t('dialogs.addBookmark.errors.urlRequired');
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -44,21 +47,23 @@ export default function AddOrEditFrequentUrlDialog({
     });
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
+    event?.preventDefault();
     if (!validateFields()) return;
+    const mutationFn = frequentUrl ? updateFrequentUrl : addFrequentUrl;
+    const variables = {
+      ...formData,
+      ...(frequentUrl && { id: frequentUrl.id }),
+    };
+    setSaving(true);
     try {
-      event.preventDefault();
-      const mutationFn = frequentUrl ? updateFrequentUrl : addFrequentUrl;
-      const variables = {
-        ...formData,
-        ...(frequentUrl && { id: frequentUrl.id }),
-      };
-      mutationFn({ variables });
-
-      showSnackbar('Bookmark updated successfully!', 'success');
-      setTimeout(() => handleClose(), 500);
+      await mutationFn({ variables });
+      showSnackbar(t('dialogs.addBookmark.saveSuccess'), 'success');
+      handleClose();
     } catch (err) {
-      showSnackbar('Error saving bookmark. Please try again.' + err, 'error');
+      showSnackbar(t('dialogs.addBookmark.saveError'), 'error');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -81,7 +86,12 @@ export default function AddOrEditFrequentUrlDialog({
       onClose={handleClose}
       onCancel={handleClose}
       onSave={handleSubmit}
-      title={(frequentUrl ? 'Edit ' : 'Add ') + 'Bookmark'}
+      saving={saving}
+      title={t(
+        frequentUrl
+          ? 'dialogs.addBookmark.editTitle'
+          : 'dialogs.addBookmark.addTitle'
+      )}
     >
       <DialogContent dividers>
         <Grid
