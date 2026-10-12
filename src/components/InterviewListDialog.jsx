@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import Button from '@mui/material/Button';
 import DialogContent from '@mui/material/DialogContent';
@@ -18,7 +18,7 @@ export default function InterviewListDialog({ handleClose, open }) {
   const [interviews, setInterviews] = useState([]);
   const { t } = useTranslation();
 
-  const { loading, error, data, refetch } = useQuery(GET_ALL_INTERVIEWS, {
+  const { loading, error, refetch } = useQuery(GET_ALL_INTERVIEWS, {
     fetchPolicy: 'network-only',
     onCompleted: data =>
       setInterviews(getFilteredInterviews(data.allInterview)),

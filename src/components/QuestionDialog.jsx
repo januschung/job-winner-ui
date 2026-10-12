@@ -1,11 +1,10 @@
-import React from 'react';
 import QuestionContent from './QuestionContent';
 import useDialog from '../hooks/useDialog';
 import AddOrEditQuestionDialog from './AddOrEditQuestionDialog';
 import CustomDialog from './common/CustomDialog';
 import { useTranslation } from 'react-i18next';
 
-export default function QuestionDialog({ handleClose, open, setOpen }) {
+export default function QuestionDialog({ handleClose, open }) {
   const {
     dialogOpen,
     handleOpen,

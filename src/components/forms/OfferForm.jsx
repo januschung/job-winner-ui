@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
+import Alert from '@mui/material/Alert';
 import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -180,6 +181,16 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
 
   const isLoading =
     queryLoading || addOfferLoading || updateOfferLoading || deleteOfferLoading;
+
+  // Without the saved offer we cannot tell "none yet" from "failed to load",
+  // so do not offer to add one (it could create a duplicate).
+  if (error) {
+    return (
+      <DialogContent>
+        <Alert severity="error">{t('common.errorMessage')}</Alert>
+      </DialogContent>
+    );
+  }
 
   return (
     <>

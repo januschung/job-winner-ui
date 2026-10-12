@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { SnackbarProvider } from '../common/SnackbarContext';
@@ -8,7 +7,7 @@ import { DELETE_JOB_APPLICATION } from '../../graphql/mutation';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import useDialog from '../../hooks/useDialog';
-import i18n from '../../i18n';
+import '../../i18n';
 import { ThemeContextProvider } from '../ThemeContext';
 import { AppDialogsContext } from '../AppDialogsContext';
 

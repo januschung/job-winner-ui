@@ -1,6 +1,5 @@
 // Saves must report what actually happened: success only after the server
 // confirms it, an error (with the dialog still open) when it fails.
-import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { vi } from 'vitest';

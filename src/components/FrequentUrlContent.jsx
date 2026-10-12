@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import DialogContent from '@mui/material/DialogContent';
 import Skeleton from '@mui/material/Skeleton';
@@ -22,7 +22,7 @@ import { GET_FREQUENT_URLS } from '../graphql/query';
 import AddOrEditFrequentUrlDialog from './AddOrEditFrequentUrlDialog';
 import { useTranslation } from 'react-i18next';
 
-export default function FrequentUrlContent({}) {
+export default function FrequentUrlContent() {
   const [frequentUrl, setFrequentUrl] = useState(null);
   const {
     dialogOpen: confirmDialogOpen,

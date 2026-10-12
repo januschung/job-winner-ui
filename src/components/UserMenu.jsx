@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import Avatar from '@mui/material/Avatar';

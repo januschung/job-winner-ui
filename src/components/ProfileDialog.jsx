@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import DialogContent from '@mui/material/DialogContent';
 import { Grid } from '@mui/material';

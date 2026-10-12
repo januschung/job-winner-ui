@@ -1,11 +1,10 @@
-import React from 'react';
 import FrequentUrlContent from './FrequentUrlContent';
 import useDialog from '../hooks/useDialog';
 import AddOrEditFrequentUrlDialog from './AddOrEditFrequentUrlDialog';
 import CustomDialog from './common/CustomDialog';
 import { useTranslation } from 'react-i18next';
 
-export default function FrequentUrlDialog({ handleClose, open, setOpen }) {
+export default function FrequentUrlDialog({ handleClose, open }) {
   const {
     dialogOpen,
     handleOpen,

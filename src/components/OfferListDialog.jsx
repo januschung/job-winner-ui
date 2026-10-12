@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import Button from '@mui/material/Button';
 import DialogContent from '@mui/material/DialogContent';
@@ -17,7 +17,7 @@ export default function OfferListDialog({ handleClose, open }) {
   const [offers, setOffers] = useState([]);
   const { t } = useTranslation();
 
-  const { loading, error, data, refetch } = useQuery(GET_ALL_OFFERS, {
+  const { loading, error, refetch } = useQuery(GET_ALL_OFFERS, {
     fetchPolicy: 'network-only',
     onCompleted: data => setOffers(data.allOffer),
   });

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import ApplicationForm from './forms/ApplicationForm';
@@ -11,7 +11,6 @@ export default function JobApplicationDialog({
   jobApplication,
   handleClose,
   open,
-  setOpen,
   isNew,
 }) {
   const [activeTab, setActiveTab] = useState(0);
@@ -49,7 +48,6 @@ export default function JobApplicationDialog({
         <ApplicationForm
           jobApplication={jobApplication}
           isNew={isNew}
-          setOpen={setOpen}
           handleClose={handleClose}
         />
       )}

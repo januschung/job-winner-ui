@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';

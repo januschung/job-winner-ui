@@ -1,5 +1,5 @@
 import './i18n';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import AppHeader from './components/AppHeader';
 import { AppDialogsProvider } from './components/AppDialogsContext';
 import JobApplicationList from './components/JobApplicationList';

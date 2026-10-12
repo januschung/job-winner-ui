@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { Grid, TextField } from '@mui/material';
 import DialogContent from '@mui/material/DialogContent';
@@ -11,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 export default function AddOrEditFrequentUrlDialog({
   handleClose,
   open,
-  setOpen,
   frequentUrl,
 }) {
   const [formData, setFormData] = useState({

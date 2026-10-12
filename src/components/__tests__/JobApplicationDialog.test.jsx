@@ -3,7 +3,7 @@ import JobApplicationDialog from '../JobApplicationDialog';
 import { MockedProvider } from '@apollo/client/testing';
 import { SnackbarProvider } from '../common/SnackbarContext';
 import dayjs from 'dayjs';
-import i18n from '../../i18n';
+import '../../i18n';
 
 const mocks = [];
 
@@ -14,7 +14,6 @@ it('Should render New Job Application Dialog', async () => {
         <JobApplicationDialog
           jobApplication={{ status: 'open' }}
           open={true}
-          setOpen={false}
           isNew={true}
         />
       </SnackbarProvider>
@@ -46,7 +45,6 @@ it('Should render Edit Job Application Dialog', async () => {
             status: 'active',
           }}
           open={true}
-          setOpen={false}
           isNew={false}
         />
       </SnackbarProvider>

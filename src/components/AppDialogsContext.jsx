@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import {
   GET_ALL_INTERVIEWS,
@@ -81,18 +81,15 @@ export function AppDialogsProvider({ children }) {
         jobApplication={{ status: 'open' }}
         open={newJobApplication.open}
         handleClose={newJobApplication.handleClose}
-        setOpen={newJobApplication.handleOpen}
         isNew
       />
       <FrequentUrlDialog
         open={frequentUrls.dialogOpen}
         handleClose={frequentUrls.handleClose}
-        setOpen={frequentUrls.handleOpen}
       />
       <QuestionDialog
         open={questions.dialogOpen}
         handleClose={questions.handleClose}
-        setOpen={questions.handleOpen}
       />
       <ProfileDialog
         profile={profile}
@@ -102,12 +99,10 @@ export function AppDialogsProvider({ children }) {
       <InterviewListDialog
         open={interviewList.dialogOpen}
         handleClose={interviewList.handleClose}
-        setOpen={interviewList.handleOpen}
       />
       <OfferListDialog
         open={offerList.dialogOpen}
         handleClose={offerList.handleClose}
-        setOpen={offerList.handleOpen}
       />
       {children}
     </AppDialogsContext.Provider>
