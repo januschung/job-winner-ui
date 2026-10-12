@@ -10,6 +10,7 @@ import { vi } from 'vitest';
 import useDialog from '../../hooks/useDialog';
 import i18n from '../../i18n';
 import { ThemeContextProvider } from '../ThemeContext';
+import { AppDialogsContext } from '../AppDialogsContext';
 
 // Mock data
 const mockApplications = [
@@ -101,16 +102,30 @@ beforeEach(() => {
   });
 });
 
-const renderList = (apolloMocks, searchTerm = '') =>
+const renderList = (
+  apolloMocks,
+  searchTerm = '',
+  { onClearSearch, dialogs = null } = {}
+) =>
   render(
     <ThemeContextProvider>
       <MockedProvider mocks={apolloMocks} addTypename={false}>
-        <SnackbarProvider>
-          <JobApplicationList searchTerm={searchTerm} />
-        </SnackbarProvider>
+        <AppDialogsContext.Provider value={dialogs}>
+          <SnackbarProvider>
+            <JobApplicationList
+              searchTerm={searchTerm}
+              onClearSearch={onClearSearch}
+            />
+          </SnackbarProvider>
+        </AppDialogsContext.Provider>
       </MockedProvider>
     </ThemeContextProvider>
   );
+
+const applicationsMock = allJobApplication => ({
+  request: { query: GET_JOB_APPLICATIONS },
+  result: { data: { allJobApplication } },
+});
 
 describe('JobApplicationList', () => {
   test('renders error message on error', async () => {
@@ -167,6 +182,62 @@ describe('JobApplicationList', () => {
       expect(
         screen.getByText('Job application deleted successfully!')
       ).not.toBeNull();
+    });
+  });
+  describe('list states', () => {
+    // The file-level mock opens the confirm dialog, which hides the page
+    // from role queries; these tests need it closed.
+    beforeEach(() => {
+      useDialog.mockReturnValue({
+        dialogOpen: false,
+        handleOpen: vi.fn(),
+        handleClose: vi.fn(),
+      });
+    });
+
+    test('shows a call to action when there are no applications', async () => {
+      const dialogs = { openNewJobApplication: vi.fn() };
+      renderList([applicationsMock([])], '', { dialogs });
+
+      await waitFor(() => {
+        expect(screen.getByText('Track your first application')).not.toBeNull();
+      });
+      await userEvent.click(
+        screen.getByRole('button', { name: 'New application' })
+      );
+      expect(dialogs.openNewJobApplication).toHaveBeenCalledTimes(1);
+    });
+
+    test('explains an empty search and offers to clear it', async () => {
+      const onClearSearch = vi.fn();
+      renderList(mocks, 'zebra', { onClearSearch });
+
+      await waitFor(() => {
+        expect(screen.getByText('No results for “zebra”')).not.toBeNull();
+      });
+      // The status filter stays available while nothing matches.
+      expect(
+        screen.getByRole('group', { name: 'Filter by status' })
+      ).not.toBeNull();
+      await userEvent.click(
+        screen.getByRole('button', { name: 'Clear search' })
+      );
+      expect(onClearSearch).toHaveBeenCalledTimes(1);
+    });
+
+    test('retries after a failed load', async () => {
+      renderList([
+        { request: { query: GET_JOB_APPLICATIONS }, error: new Error('down') },
+        applicationsMock(mockApplications),
+      ]);
+
+      await userEvent.click(
+        await screen.findByRole('button', { name: 'Retry' })
+      );
+      await waitFor(() => {
+        expect(screen.getByText('Company A')).not.toBeNull();
+      });
+      expect(screen.queryByText(/failed to fetch data/i)).toBeNull();
     });
   });
 });

@@ -1,36 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
-import ErrorIcon from '@mui/icons-material/Error';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
+import WorkOutlinedIcon from '@mui/icons-material/WorkOutlined';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
 import JobApplicationDialog from '../components/JobApplicationDialog';
-import { statusColor } from '../config/status';
 import { DELETE_JOB_APPLICATION } from '../graphql/mutation';
 import { GET_JOB_APPLICATIONS } from '../graphql/query';
 import useDialog from '../hooks/useDialog';
 import useJobApplicationDialog from '../hooks/useJobApplicationDialog';
 import useJobApplications from '../hooks/useJobApplications';
-import ActionIcons from './common/ActionIcons';
+import { useAppDialogs } from './AppDialogsContext';
 import ConfirmDialog from './common/ConfirmDialog';
+import EmptyState from './common/EmptyState';
 import Loading from './common/Loading';
 import { useSnackbar } from './common/SnackbarContext';
+import JobApplicationCard from './JobApplicationCard';
 import JobStatusBar from './JobStatusBar';
 import { useTranslation } from 'react-i18next';
 
-export default function JobApplicationList({ searchTerm }) {
+export default function JobApplicationList({ searchTerm, onClearSearch }) {
   const [jobApplicationToDelete, setJobApplicationToDelete] = useState(null);
   const [localData, setLocalData] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('all');
-  const { data, loading, error } = useJobApplications();
+  const { data, loading, error, refetch } = useJobApplications();
+  // Optional so the list still renders outside the app shell (e.g. tests).
+  const dialogs = useAppDialogs();
   const { showSnackbar } = useSnackbar();
   const {
     dialogOpen: confirmDialogOpen,
@@ -115,6 +115,12 @@ export default function JobApplicationList({ searchTerm }) {
     setSelectedStatus(status);
   };
 
+  // Skeleton only before there is data: first load, or a retry after an
+  // error. Background refetches (after save/delete) keep the list on screen.
+  const showSkeleton = loading && !data;
+  const totalCount = data?.allJobApplication?.length || 0;
+  const statusLabel = t(`jobStatusBar.${selectedStatus}`);
+
   return (
     <div>
       <main>
@@ -128,132 +134,108 @@ export default function JobApplicationList({ searchTerm }) {
           sx={{ pt: 4, pb: { xs: 12, md: 4 } }}
           maxWidth="lg"
         >
-          {loading && <Loading />}
-          {error && (
+          {showSkeleton && <Loading />}
+          {error && !showSkeleton && (
             <Alert
               severity="error"
-              icon={<ErrorIcon fontSize="inherit" />}
-              sx={{ mt: 2 }}
+              sx={{ alignItems: 'center' }}
+              action={
+                <Button
+                  color="inherit"
+                  size="small"
+                  startIcon={<RefreshIcon />}
+                  onClick={() => refetch()}
+                >
+                  {t('jobApplicationList.messages.retry')}
+                </Button>
+              }
             >
-              <AlertTitle>{t('common.error')}</AlertTitle>
+              <AlertTitle sx={{ mb: 0 }}>
+                {t('jobApplicationList.messages.fetchErrorTitle')}
+              </AlertTitle>
               {t('jobApplicationList.messages.fetchError')}
             </Alert>
           )}
-          {!loading && !error && data && (
+          {!showSkeleton && !error && totalCount > 0 && (
             <JobStatusBar
               data={data}
               selectedStatus={selectedStatus}
               handleStatusClick={handleStatusClick}
             />
           )}
-          {!loading && !error && filteredData.length === 0 && (
-            <Typography variant="body1">
-              {t('jobApplicationList.messages.noResults')}
-            </Typography>
-          )}
-          {!loading && !error && filteredData.length > 0 && (
-            <>
-              <Grid container spacing={4}>
-                {filteredData.map(jobApplication => (
-                  <Grid
-                    key={jobApplication.id}
-                    size={{
-                      xs: 12,
-                      sm: 6,
-                      md: 4,
-                    }}
+          {!showSkeleton && !error && data && totalCount === 0 && (
+            <EmptyState
+              icon={<WorkOutlinedIcon />}
+              title={t('jobApplicationList.empty.title')}
+              description={t('jobApplicationList.empty.description')}
+              actions={
+                dialogs && (
+                  <Button
+                    variant="contained"
+                    startIcon={<AddRoundedIcon />}
+                    onClick={dialogs.openNewJobApplication}
                   >
-                    <Card
-                      sx={{
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        borderTopWidth: 4,
-                        borderTopColor: statusColor(jobApplication.status),
-                        transition: 'transform 0.2s ease-in-out',
-                        '&:hover': {
-                          transform: 'scale(1.05)',
-                          boxShadow: 6,
-                        },
-                      }}
-                    >
-                      <CardContent sx={{ flexGrow: 1 }}>
-                        <Typography
-                          gutterBottom
-                          sx={{
-                            color: 'text.secondary',
-                            fontSize: 12,
-                          }}
-                        >
-                          <CalendarMonthRoundedIcon fontSize="inherit" />{' '}
-                          {jobApplication.appliedDate}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            color: 'text.secondary',
-                            mb: 1.5,
-                            display: 'flex',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Link
-                            href={jobApplication.jobUrl || '#'}
-                            variant="h5"
-                            underline="hover"
-                            color="inherit"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {jobApplication.companyName}
-                          </Link>
-                        </Typography>
-                        <Typography
-                          sx={{
-                            color: 'text.secondary',
-                            mb: 1.5,
-                          }}
-                        >
-                          {jobApplication.jobTitle}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            color: 'text.secondary',
-                            mb: 1.5,
-                            display: 'flex',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <MonetizationOnIcon
-                            fontSize="inherit"
-                            sx={{ marginRight: 0.5 }}
-                          />
-                          {jobApplication.salaryRange}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            color: 'text.secondary',
-                            display: '-webkit-box',
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                            WebkitLineClamp: 3,
-                          }}
-                        >
-                          {jobApplication.description}
-                        </Typography>
-                      </CardContent>
-                      <CardActions sx={{ justifyContent: 'flex-end' }}>
-                        <ActionIcons
-                          onEdit={() => handleOpen(jobApplication)}
-                          onDelete={() =>
-                            handleDeleteJobApplication(jobApplication)
-                          }
-                        />
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            </>
+                    {t('appHeader.newApplication')}
+                  </Button>
+                )
+              }
+            />
+          )}
+          {!showSkeleton &&
+            !error &&
+            totalCount > 0 &&
+            filteredData.length === 0 && (
+              <EmptyState
+                icon={<SearchOffIcon />}
+                title={
+                  searchTerm
+                    ? t('jobApplicationList.noMatches.titleSearch', {
+                        query: searchTerm,
+                      })
+                    : t('jobApplicationList.noMatches.titleStatus', {
+                        status: statusLabel,
+                      })
+                }
+                description={
+                  searchTerm && selectedStatus !== 'all'
+                    ? t('jobApplicationList.noMatches.inStatus', {
+                        status: statusLabel,
+                      })
+                    : searchTerm
+                      ? t('jobApplicationList.noMatches.tryAnother')
+                      : undefined
+                }
+                actions={
+                  <>
+                    {searchTerm && onClearSearch && (
+                      <Button variant="outlined" onClick={onClearSearch}>
+                        {t('jobApplicationList.noMatches.clearSearch')}
+                      </Button>
+                    )}
+                    {selectedStatus !== 'all' && (
+                      <Button
+                        variant="outlined"
+                        onClick={() => handleStatusClick('all')}
+                      >
+                        {t('jobApplicationList.noMatches.showAll')}
+                      </Button>
+                    )}
+                  </>
+                }
+              />
+            )}
+          {!showSkeleton && !error && filteredData.length > 0 && (
+            <Grid container spacing={2.5}>
+              {filteredData.map(jobApplication => (
+                <Grid key={jobApplication.id} size={{ xs: 12, sm: 6, md: 4 }}>
+                  <JobApplicationCard
+                    jobApplication={jobApplication}
+                    onEdit={() => handleOpen(jobApplication)}
+                    onDelete={() => handleDeleteJobApplication(jobApplication)}
+                  />
+                </Grid>
+              ))}
+            </Grid>
           )}
         </Container>
         <ConfirmDialog

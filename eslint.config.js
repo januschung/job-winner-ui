@@ -1,7 +1,7 @@
 // eslint.config.js
 'use strict';
 
-const pluginJs = require("@eslint/js");
+const pluginJs = require('@eslint/js');
 const reactPlugin = require('eslint-plugin-react');
 const globals = require('globals');
 const prettierConfig = require('eslint-config-prettier');
@@ -14,18 +14,19 @@ module.exports = [
     plugins: {
       js: pluginJs,
       react: reactPlugin,
-    }
+    },
   },
   {
-    files: ["src/**/*.js"],
+    files: ['src/**/*.js'],
     settings: {
       react: {
-        version: "detect",
+        version: 'detect',
       },
     },
     languageOptions: {
       ...reactPlugin.configs.flat.recommended.languageOptions,
       globals: {
+        ...globals.builtin,
         ...globals.serviceworker,
         ...globals.browser,
       },
