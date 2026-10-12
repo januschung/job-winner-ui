@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client/react';
 import DialogContent from '@mui/material/DialogContent';
-import { Grid } from '@mui/material';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import { UPDATE_PROFILE } from '../graphql/mutation';
 import { GET_PROFILE } from '../graphql/query';
 import useAsyncAction from '../hooks/useAsyncAction';
@@ -9,33 +11,50 @@ import ProfileTextField from './ProfileTextField';
 import CustomDialog from './common/CustomDialog';
 import { useTranslation } from 'react-i18next';
 
+// Profile form layout. Each section lists [field, grid width on sm+].
+const sections = [
+  {
+    key: 'name',
+    fields: [
+      ['firstName', 6],
+      ['lastName', 6],
+    ],
+  },
+  {
+    key: 'contact',
+    fields: [
+      ['email', 6],
+      ['telephone', 6],
+    ],
+  },
+  {
+    key: 'address',
+    fields: [
+      ['addressStreet1', 12],
+      ['addressStreet2', 12],
+      ['addressCity', 6],
+      ['addressState', 3],
+      ['addressZip', 3],
+    ],
+  },
+  {
+    key: 'links',
+    fields: [
+      ['linkedin', 6],
+      ['github', 6],
+      ['personalWebsite', 12],
+    ],
+  },
+];
+
 export default function ProfileDialog({ profile, handleClose, open }) {
   const id = 1;
   const { t } = useTranslation();
 
-  const fields = [
-    { id: 'firstName', label: t('dialogs.profile.fields.firstName') },
-    { id: 'lastName', label: t('dialogs.profile.fields.lastName') },
-    { id: 'addressStreet1', label: t('dialogs.profile.fields.addressStreet1') },
-    { id: 'addressStreet2', label: t('dialogs.profile.fields.addressStreet2') },
-    { id: 'addressCity', label: t('dialogs.profile.fields.addressCity') },
-    { id: 'addressState', label: t('dialogs.profile.fields.addressState') },
-    { id: 'addressZip', label: t('dialogs.profile.fields.addressZip') },
-    { id: 'email', label: t('dialogs.profile.fields.email') },
-    { id: 'telephone', label: t('dialogs.profile.fields.telephone') },
-    { id: 'linkedin', label: t('dialogs.profile.fields.linkedin') },
-    { id: 'github', label: t('dialogs.profile.fields.github') },
-    {
-      id: 'personalWebsite',
-      label: t('dialogs.profile.fields.personalWebsite'),
-    },
-  ];
-
   const initialFormData = () =>
-    fields.reduce((acc, field) => {
-      acc[field.id] = '';
-      return acc;
-    }, {});
+    Object.fromEntries(
+      sections.flatMap(section => section.fields.map(([id]) => [id, '']))
+    );
 
   const [formData, setFormData] = useState(initialFormData);
   const { run, pending: saving } = useAsyncAction();
@@ -75,28 +94,41 @@ export default function ProfileDialog({ profile, handleClose, open }) {
       onClose={handleClose}
       onCancel={handleClose}
       onSave={handleUpdateProfile}
+      saveLabel={t('dialogs.profile.saveButton')}
+      subtitle={t('dialogs.profile.subtitle')}
       saving={saving}
       title={t('dialogs.profile.title')}
     >
-      <DialogContent dividers>
-        <Grid
-          container
-          spacing={2}
-          sx={{
-            alignItems: 'center',
-          }}
-        >
-          {fields.map(field => (
-            <ProfileTextField
-              key={field.id}
-              id={field.id}
-              label={field.label}
-              value={formData[field.id]}
-              onChange={handleChange}
-              name={field.id}
-            />
-          ))}
-        </Grid>
+      <DialogContent>
+        {sections.map(section => (
+          <Box key={section.key} sx={{ '& + &': { mt: 3 } }}>
+            <Typography
+              component="h3"
+              sx={{
+                mb: 1.5,
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                color: 'text.secondary',
+              }}
+            >
+              {t(`dialogs.profile.sections.${section.key}`)}
+            </Typography>
+            <Grid container spacing={2}>
+              {section.fields.map(([fieldId, width]) => (
+                <Grid key={fieldId} size={{ xs: 12, sm: width }}>
+                  <ProfileTextField
+                    id={fieldId}
+                    label={t(`dialogs.profile.fields.${fieldId}`)}
+                    value={formData[fieldId] ?? ''}
+                    onChange={handleChange}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        ))}
       </DialogContent>
     </CustomDialog>
   );

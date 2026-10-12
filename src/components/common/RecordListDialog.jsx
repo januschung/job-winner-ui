@@ -77,7 +77,7 @@ export default function RecordListDialog({
       onCancel={handleClose}
       title={title}
     >
-      <DialogContent dividers>
+      <DialogContent>
         {loading ? (
           <Box
             sx={{

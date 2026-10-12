@@ -25,11 +25,23 @@ import {
 import dayjs from 'dayjs';
 import { Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import { INTERVIEW_STATUSES, INTERVIEW_STATUS_TONE } from '../../config/status';
+import { formatCalendarDate } from '../../utils/dateUtil';
+import DialogFooter from '../common/DialogFooter';
+import StatusBadge from '../common/StatusBadge';
 
-export default function InterviewsForm({ jobApplicationId }) {
+export default function InterviewsForm({ jobApplicationId, handleClose }) {
   const [interviews, setInterviews] = useState([]);
   const { run } = useAsyncAction();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Last values the server confirmed, per interview id, so leaving a field
   // without changing anything does not trigger a save.
@@ -138,186 +150,186 @@ export default function InterviewsForm({ jobApplicationId }) {
     );
   };
 
-  if (loading) return <p>{t('common.loading')}</p>;
+  if (loading)
+    return (
+      <DialogContent>
+        <Typography color="text.secondary">{t('common.loading')}</Typography>
+      </DialogContent>
+    );
   if (error)
     return (
-      <p>
-        {t('common.error')}: {error.message}
-      </p>
+      <DialogContent>
+        <Alert severity="error">{t('common.errorMessage')}</Alert>
+      </DialogContent>
     );
 
   return (
     <>
-      <DialogContent>
-        <Grid container spacing={2}>
-          {interviews.map((interview, index) => (
-            <Grid
-              key={interview.id}
-              sx={{ marginBottom: index < interviews.length - 1 ? 2 : 0 }}
-              size={12}
+      <DialogContent sx={{ pt: 2.5 }}>
+        {interviews.map(interview => (
+          <Box
+            key={interview.id}
+            sx={{
+              border: 1,
+              borderColor: 'divider',
+              borderRadius: 3,
+              p: 2,
+              mb: 1.5,
+              bgcolor: 'background.default',
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: 1.25,
+                mb: 1.75,
+              }}
             >
-              <Grid
-                container
-                spacing={2}
-                sx={{
-                  alignItems: 'center',
-                  border: 1,
-                  borderColor: 'divider',
-                  padding: 2,
-                  borderRadius: 2,
-                }}
-              >
-                <Grid
-                  size={{
-                    xs: 12,
-                    sm: 4,
-                  }}
-                >
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DesktopDatePicker
-                      label={t('interviews.date')}
-                      format="MM/DD/YYYY"
-                      value={
-                        interview.interviewDate
-                          ? dayjs(interview.interviewDate)
-                          : null
-                      }
-                      onChange={date =>
-                        handleEdit(
-                          interview.id,
-                          'interviewDate',
-                          dayjs(date).format('YYYY-MM-DD')
-                        )
-                      }
-                      // Picking from the calendar saves right away; typing
-                      // saves when the field loses focus.
-                      onAccept={(date, context) => {
-                        // Only calendar picks save here. Typing also fires
-                        // onAccept per valid keystroke (source 'unknown');
-                        // typed dates save once, on blur.
-                        if (context?.source !== 'view') return;
-                        handleSaveInline(interview.id, {
-                          interviewDate: dayjs(date).format('YYYY-MM-DD'),
-                        });
-                      }}
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          onBlur: () => handleSaveInline(interview.id),
-                        },
-                      }}
-                    />
-                  </LocalizationProvider>
-                </Grid>
-                <Grid
-                  size={{
-                    xs: 12,
-                    sm: 4,
-                  }}
-                >
-                  <TextField
-                    label={t('interviews.interviewer')}
-                    value={interview.interviewer}
-                    onChange={e =>
-                      handleEdit(interview.id, 'interviewer', e.target.value)
-                    }
-                    onBlur={() => handleSaveInline(interview.id)}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid
-                  size={{
-                    xs: 12,
-                    sm: 4,
-                  }}
-                >
-                  <FormControl fullWidth>
-                    <InputLabel>{t('interviews.status')}</InputLabel>
-                    <Select
-                      label={t('interviews.status')}
-                      value={interview.status}
-                      onChange={e => {
-                        handleEdit(interview.id, 'status', e.target.value);
-                        handleSaveInline(interview.id, {
-                          status: e.target.value,
-                        });
-                      }}
-                    >
-                      <MenuItem value="open">
-                        {t('interviews.statuses.open')}
-                      </MenuItem>
-                      <MenuItem value="canceled">
-                        {t('interviews.statuses.canceled')}
-                      </MenuItem>
-                      <MenuItem value="pending">
-                        {t('interviews.statuses.pending')}
-                      </MenuItem>
-                      <MenuItem value="rejected">
-                        {t('interviews.statuses.rejected')}
-                      </MenuItem>
-                      <MenuItem value="expired">
-                        {t('interviews.statuses.expired')}
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid
-                  size={{
-                    xs: 12,
-                    sm: 8,
-                  }}
-                >
-                  <TextField
-                    label={t('interviews.description')}
-                    value={interview.description}
-                    onChange={e =>
-                      handleEdit(interview.id, 'description', e.target.value)
-                    }
-                    multiline
-                    onBlur={() => handleSaveInline(interview.id)}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid
-                  container
-                  size={{
-                    xs: 12,
-                    sm: 4,
-                  }}
+              <Typography sx={{ fontWeight: 650 }}>
+                {formatCalendarDate(
+                  interview.interviewDate,
+                  i18n.resolvedLanguage
+                )?.absolute ?? interview.interviewDate}
+              </Typography>
+              {interview.interviewer && (
+                <Typography variant="body2" color="text.secondary">
+                  · {interview.interviewer}
+                </Typography>
+              )}
+              <StatusBadge
+                tone={INTERVIEW_STATUS_TONE[interview.status]}
+                label={t(`interviews.statuses.${interview.status}`, {
+                  defaultValue: interview.status,
+                })}
+              />
+              <Tooltip title={t('common.delete')}>
+                <IconButton
+                  aria-label={t('common.delete')}
+                  onClick={() => remove.request(interview.id)}
                   sx={{
-                    justifyContent: 'flex-end',
-                    alignItems: 'center',
+                    ml: 'auto',
+                    borderRadius: 2,
+                    color: 'text.secondary',
+                    '&:hover': {
+                      color: 'error.main',
+                      bgcolor: theme =>
+                        `rgba(${theme.vars.palette.error.mainChannel} / 0.1)`,
+                    },
                   }}
                 >
-                  <Button
-                    variant="outlined"
-                    color="warning"
-                    onClick={() => remove.request(interview.id)}
+                  <DeleteOutlinedIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </Box>
+            <Grid container spacing={1.5}>
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DesktopDatePicker
+                    label={t('interviews.date')}
+                    format="MM/DD/YYYY"
+                    value={
+                      interview.interviewDate
+                        ? dayjs(interview.interviewDate)
+                        : null
+                    }
+                    onChange={date =>
+                      handleEdit(
+                        interview.id,
+                        'interviewDate',
+                        dayjs(date).format('YYYY-MM-DD')
+                      )
+                    }
+                    onAccept={(date, context) => {
+                      // Only calendar picks save here. Typing also fires
+                      // onAccept per valid keystroke (source 'unknown');
+                      // typed dates save once, on blur.
+                      if (context?.source !== 'view') return;
+                      handleSaveInline(interview.id, {
+                        interviewDate: dayjs(date).format('YYYY-MM-DD'),
+                      });
+                    }}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        onBlur: () => handleSaveInline(interview.id),
+                      },
+                    }}
+                  />
+                </LocalizationProvider>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <TextField
+                  label={t('interviews.interviewer')}
+                  value={interview.interviewer}
+                  onChange={e =>
+                    handleEdit(interview.id, 'interviewer', e.target.value)
+                  }
+                  onBlur={() => handleSaveInline(interview.id)}
+                  fullWidth
+                />
+              </Grid>
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <FormControl fullWidth>
+                  <InputLabel>{t('interviews.status')}</InputLabel>
+                  <Select
+                    label={t('interviews.status')}
+                    value={interview.status}
+                    onChange={e => {
+                      handleEdit(interview.id, 'status', e.target.value);
+                      handleSaveInline(interview.id, {
+                        status: e.target.value,
+                      });
+                    }}
                   >
-                    {t('common.delete')}
-                  </Button>
-                </Grid>
+                    {INTERVIEW_STATUSES.map(status => (
+                      <MenuItem key={status} value={status}>
+                        {t(`interviews.statuses.${status}`)}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid size={12}>
+                <TextField
+                  label={t('interviews.description')}
+                  value={interview.description}
+                  onChange={e =>
+                    handleEdit(interview.id, 'description', e.target.value)
+                  }
+                  multiline
+                  onBlur={() => handleSaveInline(interview.id)}
+                  fullWidth
+                />
               </Grid>
             </Grid>
-          ))}
-        </Grid>
+          </Box>
+        ))}
 
-        <Grid
-          container
-          sx={{
-            justifyContent: 'center',
-            marginTop: 3,
-          }}
+        <Button
+          fullWidth
+          variant="outlined"
+          startIcon={<AddRoundedIcon />}
+          onClick={handleAddInterview}
+          disabled={loading}
+          sx={{ height: 44, borderStyle: 'dashed', borderWidth: 1.5 }}
         >
-          <Button
-            variant="contained"
-            onClick={handleAddInterview}
-            disabled={loading}
-          >
-            {t('interviews.add')}
-          </Button>
-        </Grid>
+          {t('interviews.add')}
+        </Button>
       </DialogContent>
+      <DialogFooter
+        note={
+          <>
+            <CheckCircleOutlineRoundedIcon sx={{ fontSize: 16 }} />
+            {t('interviews.autosave')}
+          </>
+        }
+      >
+        <Button color="inherit" onClick={handleClose}>
+          {t('common.done')}
+        </Button>
+      </DialogFooter>
 
       <ConfirmDialog
         {...remove.dialogProps}

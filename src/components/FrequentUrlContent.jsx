@@ -44,7 +44,7 @@ export default function FrequentUrlContent() {
   };
 
   return (
-    <DialogContent dividers>
+    <DialogContent>
       <AddOrEditFrequentUrlDialog
         open={dialogOpen}
         handleClose={handleClose}
@@ -161,6 +161,7 @@ export default function FrequentUrlContent() {
                       <ActionIcons
                         onEdit={() => handleOpenEditDialog(frequentUrl)}
                         onDelete={() => remove.request(frequentUrl)}
+                        name={frequentUrl.title}
                         stopPropagation
                       />
                     </Grid>
@@ -173,7 +174,11 @@ export default function FrequentUrlContent() {
       </Grid>
       <ConfirmDialog
         {...remove.dialogProps}
-        title={t('dialogs.confirmDeletion.title')}
+        title={
+          remove.item
+            ? t('common.deleteNamed', { name: remove.item.title })
+            : t('dialogs.confirmDeletion.title')
+        }
         content={t('dialogs.confirmDeletion.content')}
       />
     </DialogContent>

@@ -24,6 +24,7 @@ export default function RecordFormDialog({
   title,
   successMessage,
   errorMessage,
+  saveLabel,
 }) {
   const [formData, setFormData] = useState(() => blankForm(fields));
   const [errors, setErrors] = useState({});
@@ -77,9 +78,10 @@ export default function RecordFormDialog({
       onCancel={handleClose}
       onSave={handleSubmit}
       saving={pending}
+      saveLabel={saveLabel}
       title={title}
     >
-      <DialogContent dividers>
+      <DialogContent>
         <Grid container spacing={2} sx={{ alignItems: 'center' }}>
           {fields.map(({ name, label, multiline }) => (
             <Grid key={name} size={12}>

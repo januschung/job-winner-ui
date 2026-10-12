@@ -40,7 +40,8 @@
       "noUrls": "No URLs",
       "addTitle": "Add Bookmark",
       "saveSuccess": "Bookmark saved successfully!",
-      "saveError": "Failed to save the bookmark."
+      "saveError": "Failed to save the bookmark.",
+      "saveButton": "Save bookmark"
     },
     "addQuestion": {
       "title": "Add Q&A",
@@ -54,7 +55,8 @@
         "answerRequired": "Answer is required."
       },
       "success": "Q&A updated successfully!",
-      "error": "Error saving Q&A. Please try again."
+      "error": "Error saving Q&A. Please try again.",
+      "saveButton": "Save Q&A"
     },
     "addApplication": {
       "title": "Add Job Application",
@@ -80,13 +82,14 @@
       "jobDetails": "Job Details"
     },
     "jobApplication": {
-      "addTitle": "Add Job Application",
+      "addTitle": "New application",
       "editTitle": "Edit Job Application",
       "tabs": {
         "application": "Application",
         "interviews": "Interviews",
         "offer": "Offer"
-      }
+      },
+      "addSubtitle": "Track a job you applied to."
     },
     "question": {
       "title": "Q&A"
@@ -108,7 +111,15 @@
         "personalWebsite": "Personal Website"
       },
       "success": "Profile saved successfully!",
-      "error": "Failed to save the profile."
+      "error": "Failed to save the profile.",
+      "subtitle": "Used to fill in applications quickly. Copy any field.",
+      "saveButton": "Save profile",
+      "sections": {
+        "name": "Name",
+        "contact": "Contact",
+        "address": "Address",
+        "links": "Links"
+      }
     },
     "offerList": {
       "title": "Offer List",
@@ -151,7 +162,8 @@
         "appliedDateRequired": "Valid Applied Date is required."
       },
       "success": "Job application saved successfully!",
-      "error": "Failed to save the job application."
+      "error": "Failed to save the job application.",
+      "saveButton": "Save application"
     },
     "offerForm": {
       "fields": {
@@ -173,7 +185,8 @@
       "buttons": {
         "addOffer": "Add Offer",
         "delete": "Delete",
-        "confirmDelete": "Confirm Delete"
+        "confirmDelete": "Confirm Delete",
+        "saveOffer": "Save offer"
       },
       "dialogs": {
         "confirmDelete": {
@@ -248,7 +261,15 @@
     "noData": "No data available.",
     "na": "N/A",
     "errorMessage": "Something went wrong. Please try again later.",
-    "error": "Error"
+    "error": "Error",
+    "close": "Close",
+    "edit": "Edit",
+    "copy": "Copy",
+    "copied": "Copied",
+    "done": "Done",
+    "deleteNamed": "Delete {{name}}?",
+    "editItem": "Edit {{name}}",
+    "deleteItem": "Delete {{name}}"
   },
   "questionContent": {
     "messages": {
@@ -283,6 +304,7 @@
       "addError": "Error adding interview.",
       "saveError": "Error saving interview.",
       "deleteError": "Error deleting interview."
-    }
+    },
+    "autosave": "Changes save automatically"
   }
 }

@@ -2,11 +2,8 @@ import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client/react';
 import Alert from '@mui/material/Alert';
 import TextField from '@mui/material/TextField';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
-import CancelIcon from '@mui/icons-material/Cancel';
-import SaveIcon from '@mui/icons-material/Save';
 import ConfirmDialog from '../common/ConfirmDialog';
 import useAsyncAction from '../../hooks/useAsyncAction';
 import useConfirmedAction from '../../hooks/useConfirmedAction';
@@ -18,6 +15,7 @@ import { GET_OFFER, GET_ALL_OFFERS } from '../../graphql/query';
 import dayjs from 'dayjs';
 import { Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import DialogFooter from '../common/DialogFooter';
 
 export default function OfferForm({ jobApplicationId, handleClose }) {
   const [offerData, setOfferData] = useState({
@@ -267,28 +265,20 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
           )}
         </Grid>
       </DialogContent>
-      <DialogActions>
-        <Button
-          variant="outlined"
-          startIcon={<CancelIcon />}
-          onClick={handleClose}
-          disabled={isLoading}
-        >
+      <DialogFooter>
+        <Button color="inherit" onClick={handleClose} disabled={isLoading}>
           {t('common.cancel')}
         </Button>
         <Button
           variant="contained"
-          startIcon={<SaveIcon />}
           onClick={handleSave}
           disabled={isLoading || !isFormVisible}
         >
-          {t('common.save')}
+          {t('forms.offerForm.buttons.saveOffer')}
         </Button>
-      </DialogActions>
+      </DialogFooter>
       <ConfirmDialog
         {...remove.dialogProps}
-        confirmText={t('forms.offerForm.buttons.confirmDelete')}
-        confirmColor="error"
         title={t('forms.offerForm.dialogs.confirmDelete.title')}
         content={t('forms.offerForm.dialogs.confirmDelete.content')}
       />

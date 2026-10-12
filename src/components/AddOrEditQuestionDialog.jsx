@@ -35,6 +35,7 @@ export default function AddOrEditQuestionDialog({
       title={t(key(question ? 'editTitle' : 'title'))}
       successMessage={t(key('success'))}
       errorMessage={t(key('error'))}
+      saveLabel={t(key('saveButton'))}
     />
   );
 }

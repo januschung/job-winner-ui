@@ -39,7 +39,7 @@ export default function QuestionContent() {
   };
 
   return (
-    <DialogContent dividers>
+    <DialogContent>
       <AddOrEditQuestionDialog
         open={dialogOpen}
         handleClose={handleClose}
@@ -70,9 +70,10 @@ export default function QuestionContent() {
           {data.allQuestion.map(question => (
             <Accordion key={question.id}>
               <AccordionSummary
+                // A div (with button role) rather than a <button>, so the
+                // edit/delete buttons inside are valid HTML.
+                component="div"
                 expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1-content"
-                id="panel1-header"
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
@@ -89,6 +90,7 @@ export default function QuestionContent() {
                 <ActionIcons
                   onEdit={() => handleOpenEditDialog(question)}
                   onDelete={() => remove.request(question)}
+                  name={question.question}
                   stopPropagation
                 />
               </AccordionSummary>

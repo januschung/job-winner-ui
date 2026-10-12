@@ -34,6 +34,7 @@ export default function AddOrEditFrequentUrlDialog({
       title={t(key(frequentUrl ? 'editTitle' : 'addTitle'))}
       successMessage={t(key('saveSuccess'))}
       errorMessage={t(key('saveError'))}
+      saveLabel={t(key('saveButton'))}
     />
   );
 }

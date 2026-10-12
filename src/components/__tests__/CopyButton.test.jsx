@@ -1,6 +1,7 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import CopyButton from '../CopyButton';
 import { vi } from 'vitest';
+import '../../i18n';
 
 beforeAll(() => {
   // Mock the navigator.clipboard object
@@ -21,4 +22,6 @@ test('CopyButton copies text to clipboard', async () => {
   fireEvent.click(button);
 
   expect(navigator.clipboard.writeText).toHaveBeenCalledWith(text);
+  // Confirms the copy in its accessible label.
+  expect(screen.getByRole('button', { name: 'Copied' })).not.toBeNull();
 });

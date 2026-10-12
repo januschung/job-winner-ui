@@ -8,11 +8,8 @@ import {
   MenuItem,
   Select,
   Button,
-  DialogActions,
   DialogContent,
 } from '@mui/material';
-import CancelIcon from '@mui/icons-material/Cancel';
-import SaveIcon from '@mui/icons-material/Save';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -25,6 +22,7 @@ import {
 import { GET_JOB_APPLICATIONS } from '../../graphql/query';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
+import DialogFooter from '../common/DialogFooter';
 
 export default function ApplicationForm({
   jobApplication,
@@ -276,23 +274,14 @@ export default function ApplicationForm({
           </Grid>
         </Grid>
       </DialogContent>
-      <DialogActions>
-        <Button
-          variant="outlined"
-          startIcon={<CancelIcon />}
-          onClick={handleClose}
-        >
+      <DialogFooter>
+        <Button color="inherit" onClick={handleClose}>
           {t('common.cancel')}
         </Button>
-        <Button
-          variant="contained"
-          startIcon={<SaveIcon />}
-          onClick={handleSubmit}
-          disabled={saving}
-        >
-          {t('common.save')}
+        <Button variant="contained" onClick={handleSubmit} disabled={saving}>
+          {t('forms.applicationForm.saveButton')}
         </Button>
-      </DialogActions>
+      </DialogFooter>
     </>
   );
 }

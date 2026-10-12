@@ -60,7 +60,7 @@ describe('job application save', () => {
       [failing(UPDATE_JOB_APPLICATION)]
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Save application' }));
 
     expect(
       await screen.findByText('Failed to save the job application.')
@@ -86,7 +86,7 @@ describe('job application save', () => {
       ]
     );
 
-    const save = screen.getByRole('button', { name: 'Save' });
+    const save = screen.getByRole('button', { name: 'Save application' });
     fireEvent.click(save);
     // Disabled while in flight, so it cannot be submitted twice.
     expect(save.disabled).toBe(true);
@@ -109,7 +109,7 @@ describe('profile save', () => {
       [failing(UPDATE_PROFILE), failing(GET_PROFILE)]
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Save profile' }));
 
     expect(
       await screen.findByText('Failed to save the profile.')
@@ -131,7 +131,7 @@ describe('bookmark save', () => {
     );
 
     expect(screen.getByText('Edit Bookmark')).not.toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Save bookmark' }));
 
     expect(
       await screen.findByText('Failed to save the bookmark.')
@@ -152,7 +152,7 @@ describe('Q&A save', () => {
       [failing(UPDATE_QUESTION)]
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Save Q&A' }));
 
     expect(
       await screen.findByText('Error saving Q&A. Please try again.')

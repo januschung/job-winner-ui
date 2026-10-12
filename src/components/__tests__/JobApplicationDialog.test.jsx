@@ -20,7 +20,9 @@ it('Should render New Job Application Dialog', async () => {
     </MockedProvider>
   );
 
-  expect(screen.getByText('Add Job Application')).not.toBeNull();
+  expect(
+    screen.getByRole('heading', { name: 'New application' })
+  ).not.toBeNull();
   const currentDate = dayjs(new Date()).format('MM/DD/YYYY');
   expect(screen.getByDisplayValue(currentDate)).not.toBeNull();
   expect(screen.getByLabelText('Company Name *')).not.toBeNull();
@@ -50,7 +52,8 @@ it('Should render Edit Job Application Dialog', async () => {
       </SnackbarProvider>
     </MockedProvider>
   );
-  expect(screen.getByText('Edit Job Application')).not.toBeNull();
+  // The edit dialog is titled with the company name.
+  expect(screen.getByRole('heading', { name: 'a' })).not.toBeNull();
   expect(screen.getByDisplayValue('a').id).toBe('companyName');
   expect(screen.getByDisplayValue('b').id).toBe('jobTitle');
   expect(screen.getByDisplayValue('c').id).toBe('salaryRange');

@@ -16,16 +16,17 @@ export default function useConfirmedAction({
   errorMessage,
   onSuccess,
 }) {
-  // Wrapped so a falsy item (e.g. id 0) still counts as pending.
-  const [target, setTarget] = useState(null);
+  // The item stays set while the dialog closes, so its title does not change
+  // mid-animation.
+  const [state, setState] = useState({ open: false, item: null });
   const { run, pending } = useAsyncAction();
 
-  const cancel = () => setTarget(null);
+  const cancel = () => setState(prev => ({ ...prev, open: false }));
 
   const confirm = async () => {
-    if (!target) return;
-    const { item } = target;
-    setTarget(null);
+    if (!state.open) return;
+    const { item } = state;
+    cancel();
     await run(() => action(item), {
       successMessage,
       errorMessage,
@@ -34,12 +35,9 @@ export default function useConfirmedAction({
   };
 
   return {
-    request: item => setTarget({ item }),
+    request: item => setState({ open: true, item }),
+    item: state.item,
     pending,
-    dialogProps: {
-      open: target !== null,
-      onCancel: cancel,
-      onConfirm: confirm,
-    },
+    dialogProps: { open: state.open, onCancel: cancel, onConfirm: confirm },
   };
 }

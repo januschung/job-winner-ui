@@ -163,6 +163,9 @@ describe('JobApplicationList', () => {
       screen.getByRole('button', { name: 'Delete Company A' })
     );
     const confirm = await screen.findByRole('dialog');
+    expect(
+      within(confirm).getByRole('heading', { name: 'Delete Company A?' })
+    ).not.toBeNull();
     await userEvent.click(
       within(confirm).getByRole('button', { name: 'Delete' })
     );

@@ -209,7 +209,11 @@ export default function JobApplicationList({ searchTerm, onClearSearch }) {
         </Container>
         <ConfirmDialog
           {...remove.dialogProps}
-          title={t('jobApplicationList.dialogs.confirmDelete.title')}
+          title={
+            remove.item
+              ? t('common.deleteNamed', { name: remove.item.companyName })
+              : t('jobApplicationList.dialogs.confirmDelete.title')
+          }
           content={t('jobApplicationList.dialogs.confirmDelete.content')}
         />
       </main>
