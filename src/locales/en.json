@@ -204,13 +204,6 @@
       }
     }
   },
-  "stats": {
-    "label": "Summary",
-    "applications": "Applications",
-    "inProgress": "In progress",
-    "upcomingInterviews": "Upcoming interviews",
-    "offers": "Offers"
-  },
   "jobStatusBar": {
     "label": "Filter by status",
     "all": "All",
