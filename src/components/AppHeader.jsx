@@ -1,64 +1,79 @@
-import { Brightness4, Brightness7, GitHub } from '@mui/icons-material';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import React, { useEffect, useState } from 'react';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
-import { Tooltip } from '@mui/material';
+import { useMediaQuery, useTheme } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Fab from '@mui/material/Fab';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import useHeaderActions from '../hooks/useHeaderActions';
 import { useAppDialogs } from './AppDialogsContext';
 import MobileMenu from './MobileMenu';
 import SearchBar from './SearchBar';
 import { useColorMode } from './ThemeContext';
-import { useTranslation } from 'react-i18next';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import { useTheme, useMediaQuery } from '@mui/material';
+import UserMenu from './UserMenu';
+
+function Logo() {
+  const { t } = useTranslation();
+  return (
+    <Box
+      component="a"
+      href="/"
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 1.25,
+        color: 'text.primary',
+        textDecoration: 'none',
+        flexShrink: 0,
+      }}
+    >
+      <Box
+        aria-hidden
+        sx={{
+          width: 32,
+          height: 32,
+          borderRadius: 2,
+          display: 'grid',
+          placeItems: 'center',
+          color: '#FFFFFF',
+          background: theme =>
+            `linear-gradient(135deg, ${theme.vars.palette.primary.dark}, ${theme.vars.palette.secondary.main})`,
+        }}
+      >
+        <EmojiEventsIcon sx={{ fontSize: 20 }} />
+      </Box>
+      <Typography
+        component="span"
+        sx={{ fontWeight: 700, fontSize: '1.125rem', letterSpacing: '-0.01em' }}
+      >
+        {t('appHeader.appTitle')}
+      </Typography>
+    </Box>
+  );
+}
 
 export default function AppHeader({ searchTerm, onSearch }) {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const { mode, toggleColorMode } = useColorMode();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
-  const {
-    openNewJobApplication: handleOpen,
-    openFrequentUrls: handleFrequentUrlsDialogOpen,
-    openQuestions: handleQuestionDialogOpen,
-    openInterviewList: handleInterviewListDialogOpen,
-    openOfferList: handleOfferListDialogOpen,
-    openProfile: handleProfileMenuOpen,
-    interviewCount,
-    offerCount,
-    interviewsLoading,
-    offersLoading,
-  } = useAppDialogs();
+  const { openNewJobApplication } = useAppDialogs();
+  const actions = useHeaderActions();
 
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
-
-  const handleSearch = text => {
-    onSearch(text);
-  };
-
-  const handleSearchToggle = () => {
-    setIsSearchExpanded(!isSearchExpanded);
-  };
-
-  const handleLanguageChange = event => {
-    i18n.changeLanguage(event.target.value);
-  };
+  const colorModeLabel =
+    mode === 'dark' ? t('appHeader.lightMode') : t('appHeader.darkMode');
 
   useEffect(() => {
     if (isDesktop && mobileMoreAnchorEl) {
@@ -67,166 +82,92 @@ export default function AppHeader({ searchTerm, onSearch }) {
   }, [isDesktop, mobileMoreAnchorEl]);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar sx={{ position: 'relative' }}>
+    <>
+      <AppBar
+        position="sticky"
+        color="inherit"
+        sx={{
+          top: 0,
+          color: 'text.primary',
+          bgcolor: theme =>
+            `rgba(${theme.vars.palette.background.defaultChannel} / 0.8)`,
+          backdropFilter: 'blur(12px)',
+          borderBottom: 1,
+          borderColor: 'divider',
+        }}
+      >
+        <Toolbar sx={{ position: 'relative', gap: 2 }}>
+          <Logo />
           <Box
             sx={{
-              display: { xs: isSearchExpanded ? 'none' : 'flex', md: 'flex' },
-              alignItems: 'center',
+              display: { xs: 'none', md: 'flex' },
+              flex: 1,
+              maxWidth: 420,
+              ml: 2,
             }}
           >
-            <EmojiEventsIcon sx={{ color: '#FFD700', mr: 2 }} />
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="/"
-              sx={{
-                mr: 2,
-                display: 'flex',
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none',
-              }}
-            >
-              {t('appHeader.appTitle')}
-            </Typography>
-          </Box>
-          <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-            <SearchBar onSearch={handleSearch} value={searchTerm} />
+            <SearchBar onSearch={onSearch} value={searchTerm} />
           </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Box
             sx={{
-              display: { xs: isSearchExpanded ? 'none' : 'none', md: 'flex' },
+              display: { xs: 'none', md: 'flex' },
+              alignItems: 'center',
+              gap: 0.5,
             }}
           >
-            <Tooltip title={t('appHeader.newJobApplication')}>
-              <IconButton
-                size="large"
-                aria-label="New"
-                color="inherit"
-                onClick={handleOpen}
-              >
-                <AddCircleIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={t('appHeader.bookmarks')}>
-              <IconButton
-                size="large"
-                aria-label="Bookmarks"
-                color="inherit"
-                onClick={handleFrequentUrlsDialogOpen}
-              >
-                <BookmarksIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={t('appHeader.qa')}>
-              <IconButton
-                size="large"
-                aria-label="Q&A"
-                color="inherit"
-                onClick={handleQuestionDialogOpen}
-              >
-                <QuestionAnswerIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={t('appHeader.interviewList')}>
-              <IconButton
-                size="large"
-                color="inherit"
-                onClick={handleInterviewListDialogOpen}
-              >
-                <Badge
-                  badgeContent={interviewsLoading ? '...' : interviewCount}
-                  color="error"
+            {actions.map(({ key, label, icon, onClick, badge }) => (
+              <Tooltip key={key} title={label}>
+                <IconButton
+                  color="inherit"
+                  aria-label={label}
+                  onClick={onClick}
                 >
-                  <EventAvailableIcon />
-                </Badge>
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={t('appHeader.offerList')}>
+                  <Badge badgeContent={badge} color="primary">
+                    {icon}
+                  </Badge>
+                </IconButton>
+              </Tooltip>
+            ))}
+            <Tooltip title={colorModeLabel}>
               <IconButton
-                size="large"
                 color="inherit"
-                onClick={handleOfferListDialogOpen}
+                aria-label={colorModeLabel}
+                onClick={toggleColorMode}
               >
-                <Badge
-                  badgeContent={offersLoading ? '...' : offerCount}
-                  color="error"
-                >
-                  <NotificationsIcon />
-                </Badge>
+                {mode === 'dark' ? (
+                  <LightModeOutlinedIcon />
+                ) : (
+                  <DarkModeOutlinedIcon />
+                )}
               </IconButton>
             </Tooltip>
-            <Select
-              value={i18n.language}
-              onChange={handleLanguageChange}
-              sx={{
-                color: 'inherit',
-                border: 'none',
-                '& .MuiSelect-icon': { color: 'inherit' },
-              }}
+            <Button
+              variant="contained"
+              startIcon={<AddRoundedIcon />}
+              onClick={openNewJobApplication}
+              sx={{ mx: 1, whiteSpace: 'nowrap' }}
             >
-              <MenuItem value="en">EN</MenuItem>
-              <MenuItem value="es">ES</MenuItem>
-            </Select>
-            <Tooltip
-              title={
-                mode === 'dark'
-                  ? t('appHeader.lightMode')
-                  : t('appHeader.darkMode')
-              }
-            >
-              <IconButton onClick={toggleColorMode} color="inherit">
-                {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={t('appHeader.githubStar')}>
-              <IconButton
-                href="https://github.com/januschung/job-winner-ui"
-                target="_blank"
-                color="inherit"
-              >
-                <GitHub />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={t('appHeader.profile')}>
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls="primary-search-account-menu"
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            </Tooltip>
-          </Box>
-          <Box sx={{ display: { xs: 'block', md: 'none' } }}>
-            <SearchBar
-              onSearch={handleSearch}
-              isExpanded={isSearchExpanded}
-              onToggle={handleSearchToggle}
-              value={searchTerm}
-            />
+              {t('appHeader.newApplication')}
+            </Button>
+            <UserMenu />
           </Box>
           <Box
             sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}
           >
+            <SearchBar
+              onSearch={onSearch}
+              isExpanded={isSearchExpanded}
+              onToggle={() => setIsSearchExpanded(!isSearchExpanded)}
+              value={searchTerm}
+            />
             {!isSearchExpanded && (
               <IconButton
-                size="large"
-                aria-label="show more"
-                aria-controls="primary-search-account-menu-mobile"
+                color="inherit"
+                aria-label={t('appHeader.moreActions')}
+                aria-controls={mobileMoreAnchorEl ? 'mobile-menu' : undefined}
                 aria-haspopup="true"
                 onClick={event => setMobileMoreAnchorEl(event.currentTarget)}
-                color="inherit"
               >
                 <MoreIcon />
               </IconButton>
@@ -234,22 +175,24 @@ export default function AppHeader({ searchTerm, onSearch }) {
           </Box>
         </Toolbar>
         <MobileMenu
-          mobileMoreAnchorEl={mobileMoreAnchorEl}
-          isMobileMenuOpen={isMobileMenuOpen}
-          handleMobileMenuClose={handleMobileMenuClose}
-          handleProfileMenuOpen={handleProfileMenuOpen}
-          handleJobApplicationOpen={handleOpen}
-          handleFrequentUrlsDialogOpen={handleFrequentUrlsDialogOpen}
-          handleQuestionDialogOpen={handleQuestionDialogOpen}
-          handleInterviewListDialogOpen={handleInterviewListDialogOpen}
-          handleOfferListDialogOpen={handleOfferListDialogOpen}
-          interviewCount={interviewCount}
-          offerCount={offerCount}
+          anchorEl={mobileMoreAnchorEl}
+          onClose={() => setMobileMoreAnchorEl(null)}
+          actions={actions}
           colorMode={mode}
+          colorModeLabel={colorModeLabel}
           toggleColorMode={toggleColorMode}
-          i18n={i18n}
         />
       </AppBar>
-    </Box>
+      {!isDesktop && (
+        <Fab
+          color="primary"
+          aria-label={t('appHeader.newApplication')}
+          onClick={openNewJobApplication}
+          sx={{ position: 'fixed', right: 16, bottom: 16, zIndex: 'appBar' }}
+        >
+          <AddRoundedIcon />
+        </Fab>
+      )}
+    </>
   );
 }

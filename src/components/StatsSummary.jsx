@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 import { GET_ALL_INTERVIEWS, GET_ALL_OFFERS } from '../graphql/query';
 import { getFilteredInterviews } from '../utils/interviewUtil';
+import { useAppDialogs } from './AppDialogsContext';
 
 // Soft background for a palette color, e.g. tint('primary') in either scheme.
 const tint = color => theme =>
@@ -98,6 +99,8 @@ export default function StatsSummary({
   onSelectStatus,
 }) {
   const { t } = useTranslation();
+  // Optional so the summary still renders outside the app shell (e.g. tests).
+  const dialogs = useAppDialogs();
   const interviews = useQuery(GET_ALL_INTERVIEWS);
   const offers = useQuery(GET_ALL_OFFERS);
 
@@ -130,6 +133,7 @@ export default function StatsSummary({
       ),
       color: 'primary.main',
       bgcolor: tint('primary'),
+      open: dialogs?.openInterviewList,
     },
     {
       key: 'offers',
@@ -137,6 +141,7 @@ export default function StatsSummary({
       value: countOrDash(offers, offers.data?.allOffer?.length || 0),
       color: 'secondary.main',
       bgcolor: tint('secondary'),
+      open: dialogs?.openOfferList,
     },
   ];
 
@@ -148,18 +153,19 @@ export default function StatsSummary({
       aria-label={t('stats.label')}
       sx={{ mb: 3 }}
     >
-      {stats.map(({ key, filter, ...stat }) => (
-        <Grid key={key} size={{ xs: 6, md: 3 }}>
-          <StatCard
-            {...stat}
-            label={t(`stats.${key}`)}
-            selected={filter !== undefined && selectedStatus === filter}
-            onClick={
-              filter !== undefined ? () => onSelectStatus(filter) : undefined
-            }
-          />
-        </Grid>
-      ))}
+      {stats.map(({ key, filter, open, ...stat }) => {
+        const isFilter = filter !== undefined;
+        return (
+          <Grid key={key} size={{ xs: 6, md: 3 }}>
+            <StatCard
+              {...stat}
+              label={t(`stats.${key}`)}
+              selected={isFilter ? selectedStatus === filter : undefined}
+              onClick={isFilter ? () => onSelectStatus(filter) : open}
+            />
+          </Grid>
+        );
+      })}
     </Grid>
   );
 }

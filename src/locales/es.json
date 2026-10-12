@@ -1,16 +1,17 @@
 {
   "appHeader": {
-    "appTitle": "JOB WINNER",
-    "selectLanguage": "Seleccionar Idioma",
+    "appTitle": "Job Winner",
+    "newApplication": "Nueva solicitud",
+    "accountMenu": "Menú de cuenta",
+    "moreActions": "Más acciones",
+    "language": "Idioma",
     "darkMode": "Modo Oscuro",
     "lightMode": "Modo Claro",
-    "newJobApplication": "Nueva Solicitud de Empleo",
     "bookmarks": "Marcadores",
     "qa": "Preguntas y Respuestas",
     "interviewList": "Lista de Entrevistas",
     "offerList": "Lista de Ofertas",
     "profile": "Perfil",
-    "githubStar": "¿Te gusta? ¡Danos una ⭐ en GitHub!",
     "githubLink": "Danos una ⭐"
   },
   "searchBar": {

@@ -1,16 +1,17 @@
 {
   "appHeader": {
-    "appTitle": "JOB WINNER",
-    "selectLanguage": "Select Language",
+    "appTitle": "Job Winner",
+    "newApplication": "New application",
+    "accountMenu": "Account menu",
+    "moreActions": "More actions",
+    "language": "Language",
     "darkMode": "Dark Mode",
     "lightMode": "Light Mode",
-    "newJobApplication": "New Job Application",
     "bookmarks": "Bookmarks",
     "qa": "Q&A",
     "interviewList": "Interview List",
     "offerList": "Offer List",
     "profile": "Profile",
-    "githubStar": "Like it? Give us a ⭐ on GitHub!",
     "githubLink": "Give us a ⭐"
   },
   "searchBar": {

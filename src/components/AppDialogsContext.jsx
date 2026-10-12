@@ -15,7 +15,7 @@ import OfferListDialog from './OfferListDialog';
 import ProfileDialog from './ProfileDialog';
 import QuestionDialog from './QuestionDialog';
 
-const AppDialogsContext = createContext(null);
+export const AppDialogsContext = createContext(null);
 
 export const useAppDialogs = () => useContext(AppDialogsContext);
 
@@ -62,6 +62,12 @@ export function AppDialogsProvider({ children }) {
     openInterviewList: interviewList.handleOpen,
     openOfferList: offerList.handleOpen,
     openProfile,
+    profileName: [
+      profileData?.profileById?.firstName,
+      profileData?.profileById?.lastName,
+    ]
+      .filter(Boolean)
+      .join(' '),
     interviewCount:
       getFilteredInterviews(interviewsData?.allInterview)?.length || 0,
     offerCount: offersData?.allOffer?.length || 0,

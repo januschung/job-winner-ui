@@ -1,5 +1,5 @@
-import React from 'react';
-import { alpha, styled } from '@mui/material/styles';
+import React, { useEffect, useRef } from 'react';
+import { styled } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
@@ -11,42 +11,60 @@ import { useTheme, useMediaQuery } from '@mui/material';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
+  display: 'flex',
+  alignItems: 'center',
   width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
+  borderRadius: theme.shape.borderRadius,
+  border: `1px solid ${theme.vars.palette.divider}`,
+  backgroundColor: theme.vars.palette.background.default,
+  transition: theme.transitions.create(['border-color', 'box-shadow']),
+  '&:hover': {
+    borderColor: theme.vars.palette.text.secondary,
+  },
+  '&:focus-within': {
+    borderColor: theme.vars.palette.primary.main,
+    boxShadow: `0 0 0 3px rgba(${theme.vars.palette.primary.mainChannel} / 0.2)`,
   },
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
+  padding: theme.spacing(0, 1.5),
   height: '100%',
   position: 'absolute',
   pointerEvents: 'none',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center',
+  color: theme.vars.palette.text.secondary,
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
+  flex: 1,
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
+    paddingLeft: `calc(1em + ${theme.spacing(3)})`,
     width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
   },
 }));
+
+// Keyboard hint shown at the end of the desktop field.
+const ShortcutHint = styled('kbd')(({ theme }) => ({
+  marginRight: theme.spacing(1),
+  padding: theme.spacing(0, 0.75),
+  minWidth: 20,
+  textAlign: 'center',
+  borderRadius: 4,
+  border: `1px solid ${theme.vars.palette.divider}`,
+  color: theme.vars.palette.text.secondary,
+  fontFamily: 'inherit',
+  fontSize: '0.75rem',
+  lineHeight: '18px',
+}));
+
+const isTypingTarget = el =>
+  el &&
+  (el.isContentEditable ||
+    ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName));
 
 export default function SearchBar({
   onSearch,
@@ -57,27 +75,37 @@ export default function SearchBar({
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const inputRef = useRef(null);
+  const showMobile = isMobile && onToggle;
+
+  // "/" focuses the desktop search field unless the user is already typing.
+  useEffect(() => {
+    if (showMobile) return undefined;
+    const handleKeyDown = event => {
+      if (
+        event.key === '/' &&
+        !event.metaKey &&
+        !event.ctrlKey &&
+        !event.altKey &&
+        !isTypingTarget(document.activeElement)
+      ) {
+        event.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [showMobile]);
 
   const handleInputChange = event => {
-    const inputText = event.target.value;
-    onSearch(inputText);
+    onSearch(event.target.value);
   };
 
-  if (isMobile && onToggle) {
+  if (showMobile) {
     return (
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         {!isExpanded && (
-          <IconButton
-            color="inherit"
-            onClick={onToggle}
-            aria-label="search"
-            sx={{
-              backgroundColor: alpha(theme.palette.common.white, 0.15),
-              '&:hover': {
-                backgroundColor: alpha(theme.palette.common.white, 0.25),
-              },
-            }}
-          >
+          <IconButton color="inherit" onClick={onToggle} aria-label="search">
             <SearchIcon />
           </IconButton>
         )}
@@ -85,20 +113,17 @@ export default function SearchBar({
           <Box
             sx={{
               position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
+              inset: 0,
               display: 'flex',
               alignItems: 'center',
               px: 2,
               zIndex: 1,
-              backgroundColor: 'inherit',
+              bgcolor: 'background.paper',
             }}
           >
-            <Search sx={{ width: '100%', pr: 5, m: 0 }}>
+            <Search>
               <SearchIconWrapper>
-                <SearchIcon />
+                <SearchIcon fontSize="small" />
               </SearchIconWrapper>
               <StyledInputBase
                 placeholder={t('searchBar.placeholder')}
@@ -111,14 +136,7 @@ export default function SearchBar({
                 size="small"
                 onClick={onToggle}
                 aria-label="close search"
-                sx={{
-                  position: 'absolute',
-                  right: theme.spacing(0.5),
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: 'inherit',
-                  padding: theme.spacing(0.5),
-                }}
+                sx={{ mr: 0.5 }}
               >
                 <CloseIcon fontSize="small" />
               </IconButton>
@@ -132,14 +150,16 @@ export default function SearchBar({
   return (
     <Search>
       <SearchIconWrapper>
-        <SearchIcon />
+        <SearchIcon fontSize="small" />
       </SearchIconWrapper>
       <StyledInputBase
         placeholder={t('searchBar.placeholder')}
-        inputProps={{ 'aria-label': 'search' }}
+        inputRef={inputRef}
+        inputProps={{ 'aria-label': 'search', 'aria-keyshortcuts': '/' }}
         value={value}
         onChange={handleInputChange}
       />
+      {!value && <ShortcutHint aria-hidden>/</ShortcutHint>}
     </Search>
   );
 }
