@@ -3,11 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { SnackbarProvider } from '../common/SnackbarContext';
 import JobApplicationList from '../JobApplicationList';
-import {
-  GET_ALL_INTERVIEWS,
-  GET_ALL_OFFERS,
-  GET_JOB_APPLICATIONS,
-} from '../../graphql/query';
+import { GET_JOB_APPLICATIONS } from '../../graphql/query';
 import { DELETE_JOB_APPLICATION } from '../../graphql/mutation';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -41,18 +37,8 @@ const mockApplications = [
   },
 ];
 
-// Queries StatsSummary runs alongside the list.
-const statsMocks = [
-  {
-    request: { query: GET_ALL_INTERVIEWS },
-    result: { data: { allInterview: [] } },
-  },
-  { request: { query: GET_ALL_OFFERS }, result: { data: { allOffer: [] } } },
-];
-
 // Mock query
 const mocks = [
-  ...statsMocks,
   {
     request: {
       query: GET_JOB_APPLICATIONS,
@@ -67,7 +53,6 @@ const mocks = [
 
 // Mock query with error
 const errorMocks = [
-  ...statsMocks,
   {
     request: {
       query: GET_JOB_APPLICATIONS,
