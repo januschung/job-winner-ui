@@ -1,0 +1,44 @@
+name: UI tests
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  ui-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # The same image `npm run test:ui:visual` uses locally, so screenshots
+    # match the committed baselines. Browsers come preinstalled.
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.0-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Run UI, accessibility and visual tests
+        run: npx playwright test
+      - name: Upload report and diffs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+
+  docker-build:
+    # deploy.yml only builds the image after merge; catch a broken
+    # Dockerfile or build on the pull request instead.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker build -t job-winner-ui:ci .

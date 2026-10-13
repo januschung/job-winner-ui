@@ -1,0 +1,51 @@
+import { defineConfig, devices } from '@playwright/test';
+
+// UI tests: the real frontend against the in-browser mock API (`dev:mock`).
+// They prove the UI works, not the backend; see docs/next-steps.md.
+//
+// Screenshots render differently per OS, so the `visual` project only runs
+// in the Playwright Linux image (CI, or `npm run test:ui:visual` locally).
+const PORT = 5174;
+
+export default defineConfig({
+  testDir: './ui-tests',
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 1 : 0,
+  workers: process.env.CI ? 2 : undefined,
+  reporter: process.env.CI
+    ? [['list'], ['html', { open: 'never' }], ['github']]
+    : [['list'], ['html', { open: 'never' }]],
+  use: {
+    baseURL: `http://localhost:${PORT}`,
+    locale: 'en-US',
+    timezoneId: 'America/Los_Angeles',
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+  },
+  expect: {
+    toHaveScreenshot: { maxDiffPixelRatio: 0.002 },
+  },
+  snapshotPathTemplate: '{testDir}/__screenshots__/{arg}{ext}',
+  projects: [
+    {
+      name: 'chromium',
+      testIgnore: /visual\.spec/,
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1280, height: 800 },
+      },
+    },
+    {
+      name: 'visual',
+      testMatch: /visual\.spec/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
+  webServer: {
+    command: `npx vite --mode mock --port ${PORT} --strictPort`,
+    url: `http://localhost:${PORT}`,
+    reuseExistingServer: !process.env.CI,
+    timeout: 60_000,
+  },
+});

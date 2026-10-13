@@ -215,10 +215,12 @@ export default function ApplicationForm({
               }}
             >
               <FormControl fullWidth variant="outlined">
-                <InputLabel>
+                <InputLabel id="status-label">
                   {t('forms.applicationForm.fields.status')}
                 </InputLabel>
                 <Select
+                  labelId="status-label"
+                  id="status"
                   name="status"
                   label={t('forms.applicationForm.fields.status')}
                   value={formData.status}

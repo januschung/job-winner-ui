@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client/react';
 import DialogContent from '@mui/material/DialogContent';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 import ActionIcons from './common/ActionIcons';
 import Accordion from '@mui/material/Accordion';
@@ -68,32 +68,48 @@ export default function QuestionContent() {
       {!loading && !error && data?.allQuestion?.length > 0 && (
         <>
           {data.allQuestion.map(question => (
-            <Accordion key={question.id}>
-              <AccordionSummary
-                // A div (with button role) rather than a <button>, so the
-                // edit/delete buttons inside are valid HTML.
-                component="div"
-                expandIcon={<ExpandMoreIcon />}
+            <Accordion
+              key={question.id}
+              slotProps={{ heading: { component: 'div' } }}
+            >
+              {/* Edit/delete sit beside the toggle button, not inside it, so
+                  each control keeps its own name for screen readers. */}
+              <Box
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: '100%',
-                  backgroundColor: 'custom.table.header',
-                  '&:hover': {
+                  position: 'relative',
+                  '&:hover .MuiAccordionSummary-root': {
                     backgroundColor: 'custom.table.headerHover',
                   },
                 }}
               >
-                <Typography component="span" sx={{ flexGrow: 1 }}>
-                  {question.question}
-                </Typography>
-                <ActionIcons
-                  onEdit={() => handleOpenEditDialog(question)}
-                  onDelete={() => remove.request(question)}
-                  name={question.question}
-                  stopPropagation
-                />
-              </AccordionSummary>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  sx={{
+                    backgroundColor: 'custom.table.header',
+                    // Room for, and the height of, the edit/delete buttons.
+                    '& .MuiAccordionSummary-content': {
+                      pr: 9,
+                      minHeight: 30,
+                    },
+                  }}
+                >
+                  <Typography component="span">{question.question}</Typography>
+                </AccordionSummary>
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    right: 40,
+                    transform: 'translateY(-50%)',
+                  }}
+                >
+                  <ActionIcons
+                    onEdit={() => handleOpenEditDialog(question)}
+                    onDelete={() => remove.request(question)}
+                    name={question.question}
+                  />
+                </Box>
+              </Box>
               <AccordionDetails>{question.answer}</AccordionDetails>
             </Accordion>
           ))}

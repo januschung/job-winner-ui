@@ -14,7 +14,12 @@ export const LANGUAGES = [
 // sees each MenuItem directly.
 export default function languageMenuItems({ t, i18n, onSelect }) {
   return [
-    <ListSubheader key="language-header" sx={{ lineHeight: '32px' }}>
+    // Presentational: a menu may only contain menu items.
+    <ListSubheader
+      key="language-header"
+      role="presentation"
+      sx={{ lineHeight: '32px' }}
+    >
       {t('appHeader.language')}
     </ListSubheader>,
     ...LANGUAGES.map(({ code, label }) => {
@@ -23,6 +28,8 @@ export default function languageMenuItems({ t, i18n, onSelect }) {
         <MenuItem
           key={code}
           selected={selected}
+          role="menuitemradio"
+          aria-checked={selected}
           lang={code}
           onClick={() => {
             i18n.changeLanguage(code);

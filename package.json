@@ -23,10 +23,13 @@
     "rxjs": "^7.8.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^9.20.0",
+    "@playwright/test": "1.64.0",
     "@vitejs/plugin-react": "^6.0.4",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.4",
     "globals": "^15.15.0",
     "husky": "^9.1.7",
@@ -42,15 +45,21 @@
     "mock:sync": "node scripts/sync-mock-data.mjs",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix",
-    "format": "prettier --write \"src/**/*.{js,jsx,json,css,md}\"",
-    "format:check": "prettier --check \"src/**/*.{js,jsx,json,css,md}\"",
+    "lint": "eslint src ui-tests playwright.config.js",
+    "lint:fix": "eslint src ui-tests playwright.config.js --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,json,css,md}\" \"ui-tests/**/*.js\" playwright.config.js",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,json,css,md}\" \"ui-tests/**/*.js\" playwright.config.js",
     "test": "vitest --run",
+    "test:ui": "playwright test --project=chromium",
+    "test:ui:visual": "sh scripts/ui-tests-docker.sh --project=visual",
     "prepare": "husky"
   },
   "lint-staged": {
     "src/**/*.{js,jsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "ui-tests/**/*.js": [
       "prettier --write",
       "eslint --fix"
     ]

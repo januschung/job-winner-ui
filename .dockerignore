@@ -4,3 +4,8 @@ dist
 .github
 *.log
 demo.html
+
+# UI tests
+ui-tests
+test-results
+playwright-report

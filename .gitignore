@@ -24,3 +24,8 @@ yarn-debug.log*
 yarn-error.log*
 
 /public/config.js
+
+# Playwright
+/test-results
+/playwright-report
+/blob-report
