@@ -38,8 +38,8 @@ describe('AppHeader', () => {
   test.each([
     ['Bookmarks', 'openFrequentUrls'],
     ['Q&A', 'openQuestions'],
-    ['Interview List', 'openInterviewList'],
-    ['Offer List', 'openOfferList'],
+    ['Interview list', 'openInterviewList'],
+    ['Offer list', 'openOfferList'],
   ])('%s button opens its dialog', (label, opener) => {
     const { dialogs } = renderHeader();
     fireEvent.click(button(label));

@@ -5,12 +5,12 @@
     "accountMenu": "Account menu",
     "moreActions": "More actions",
     "language": "Language",
-    "darkMode": "Dark Mode",
-    "lightMode": "Light Mode",
+    "darkMode": "Dark mode",
+    "lightMode": "Light mode",
     "bookmarks": "Bookmarks",
     "qa": "Q&A",
-    "interviewList": "Interview List",
-    "offerList": "Offer List",
+    "interviewList": "Interview list",
+    "offerList": "Offer list",
     "profile": "Profile",
     "githubLink": "Give us a ⭐"
   },
@@ -19,14 +19,14 @@
   },
   "dialogs": {
     "confirmDeletion": {
-      "title": "Confirm Deletion",
+      "title": "Confirm deletion",
       "content": "Are you sure you want to delete this bookmark? This action cannot be undone.",
       "cancel": "Cancel",
       "delete": "Delete"
     },
     "addBookmark": {
       "title": "Bookmarks",
-      "editTitle": "Edit Bookmark",
+      "editTitle": "Edit bookmark",
       "fields": {
         "title": "Title",
         "url": "URL"
@@ -38,7 +38,7 @@
       "success": "Bookmark deleted successfully!",
       "error": "Failed to delete the bookmark.",
       "noUrls": "No URLs",
-      "addTitle": "Add Bookmark",
+      "addTitle": "Add bookmark",
       "saveSuccess": "Bookmark saved successfully!",
       "saveError": "Failed to save the bookmark.",
       "saveButton": "Save bookmark"
@@ -59,31 +59,31 @@
       "saveButton": "Save Q&A"
     },
     "addApplication": {
-      "title": "Add Job Application",
-      "editTitle": "Edit Job Application"
+      "title": "Add job application",
+      "editTitle": "Edit job application"
     },
     "editApplication": {
-      "title": "Edit Job Application"
+      "title": "Edit job application"
     },
     "applicationTabs": {
       "details": "Details",
       "notes": "Notes"
     },
     "interviewList": {
-      "title": "Interview List",
+      "title": "Interview list",
       "columns": {
-        "companyName": "Company Name",
-        "interviewDate": "Interview Date",
+        "companyName": "Company name",
+        "interviewDate": "Interview date",
         "interviewer": "Interviewer",
         "note": "Note",
         "status": "Status",
-        "jobApplication": "Job Application"
+        "jobApplication": "Job application"
       },
-      "jobDetails": "Job Details"
+      "jobDetails": "Job details"
     },
     "jobApplication": {
       "addTitle": "New application",
-      "editTitle": "Edit Job Application",
+      "editTitle": "Edit job application",
       "tabs": {
         "application": "Application",
         "interviews": "Interviews",
@@ -97,18 +97,18 @@
     "profile": {
       "title": "Profile",
       "fields": {
-        "firstName": "First Name",
-        "lastName": "Last Name",
-        "addressStreet1": "Address Line 1",
-        "addressStreet2": "Address Line 2",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "addressStreet1": "Address line 1",
+        "addressStreet2": "Address line 2",
         "addressCity": "City",
         "addressState": "State",
-        "addressZip": "ZIP Code",
+        "addressZip": "ZIP code",
         "email": "Email",
-        "telephone": "Phone Number",
+        "telephone": "Phone number",
         "linkedin": "LinkedIn",
         "github": "GitHub",
-        "personalWebsite": "Personal Website"
+        "personalWebsite": "Personal website"
       },
       "success": "Profile saved successfully!",
       "error": "Failed to save the profile.",
@@ -122,32 +122,32 @@
       }
     },
     "offerList": {
-      "title": "Offer List",
+      "title": "Offer list",
       "columns": {
-        "companyName": "Company Name",
-        "offerDate": "Offer Date",
-        "salaryOffered": "Salary Offered",
+        "companyName": "Company name",
+        "offerDate": "Offer date",
+        "salaryOffered": "Salary offered",
         "note": "Note",
-        "jobApplication": "Job Application"
+        "jobApplication": "Job application"
       },
-      "jobDetails": "Job Details"
+      "jobDetails": "Job details"
     },
     "confirmInterviewDeletion": {
-      "title": "Confirm Deletion",
+      "title": "Confirm deletion",
       "content": "Are you sure you want to delete this interview? This action cannot be undone."
     }
   },
   "forms": {
     "applicationForm": {
       "fields": {
-        "companyName": "Company Name",
-        "jobTitle": "Job Title",
-        "salaryRange": "Salary Range",
+        "companyName": "Company name",
+        "jobTitle": "Job title",
+        "salaryRange": "Salary range",
         "description": "Description",
         "note": "Note",
-        "jobUrl": "Job Link",
+        "jobUrl": "Job link",
         "status": "Status",
-        "appliedDate": "Applied Date"
+        "appliedDate": "Applied date"
       },
       "status": {
         "open": "Open",
@@ -156,10 +156,10 @@
         "rejected": "Rejected"
       },
       "errors": {
-        "companyNameRequired": "Company Name is required.",
-        "jobTitleRequired": "Job Title is required.",
-        "salaryRangeRequired": "Salary Range is required.",
-        "appliedDateRequired": "Valid Applied Date is required."
+        "companyNameRequired": "Company name is required.",
+        "jobTitleRequired": "Job title is required.",
+        "salaryRangeRequired": "Salary range is required.",
+        "appliedDateRequired": "Valid applied date is required."
       },
       "success": "Job application saved successfully!",
       "error": "Failed to save the job application.",
@@ -167,13 +167,13 @@
     },
     "offerForm": {
       "fields": {
-        "offerDate": "Offer Date",
-        "salaryOffered": "Salary Offered",
+        "offerDate": "Offer date",
+        "salaryOffered": "Salary offered",
         "description": "Description"
       },
       "errors": {
-        "offerDateRequired": "Offer Date is required.",
-        "salaryOfferedRequired": "Salary Offered is required."
+        "offerDateRequired": "Offer date is required.",
+        "salaryOfferedRequired": "Salary offered is required."
       },
       "messages": {
         "addSuccess": "Offer added successfully!",
@@ -183,27 +183,27 @@
         "error": "An error occurred. Please try again."
       },
       "buttons": {
-        "addOffer": "Add Offer",
+        "addOffer": "Add offer",
         "delete": "Delete",
-        "confirmDelete": "Confirm Delete",
+        "confirmDelete": "Confirm delete",
         "saveOffer": "Save offer"
       },
       "dialogs": {
         "confirmDelete": {
-          "title": "Confirm Deletion",
+          "title": "Confirm deletion",
           "content": "Are you sure you want to delete this offer? This action cannot be undone."
         }
       }
     },
     "interviewsForm": {
       "fields": {
-        "interviewDate": "Interview Date",
+        "interviewDate": "Interview date",
         "interviewer": "Interviewer",
         "description": "Description",
         "status": "Status"
       },
       "errors": {
-        "interviewDateRequired": "Valid Interview Date is required."
+        "interviewDateRequired": "Valid interview date is required."
       }
     }
   },
@@ -217,7 +217,7 @@
     },
     "dialogs": {
       "confirmDelete": {
-        "title": "Confirm Deletion",
+        "title": "Confirm deletion",
         "content": "Are you sure you want to delete this job application? This action cannot be undone."
       }
     },
@@ -279,13 +279,13 @@
     },
     "dialogs": {
       "confirmDelete": {
-        "title": "Confirm Deletion",
+        "title": "Confirm deletion",
         "content": "Are you sure you want to delete this Q&A? This action cannot be undone."
       }
     }
   },
   "interviews": {
-    "date": "Interview Date",
+    "date": "Interview date",
     "interviewer": "Interviewer",
     "status": "Status",
     "statuses": {
@@ -296,7 +296,7 @@
       "expired": "Expired"
     },
     "description": "Description",
-    "add": "Add Interview",
+    "add": "Add interview",
     "messages": {
       "addSuccess": "Interview added successfully!",
       "saveSuccess": "Interview saved successfully!",

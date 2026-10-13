@@ -49,7 +49,7 @@ const desktopViews = {
   },
   'job-application': async page => {
     const job = await openJob(page, 'Stripe');
-    await expect(job.getByLabel('Company Name')).toHaveValue('Stripe');
+    await expect(job.getByLabel('Company name')).toHaveValue('Stripe');
   },
   'job-interviews': async page => {
     const job = await openJob(page, 'Stripe', /Interviews/);
@@ -57,7 +57,7 @@ const desktopViews = {
   },
   'job-offer': async page => {
     const job = await openJob(page, 'Stripe', 'Offer');
-    await expect(job.getByLabel('Salary Offered')).toHaveValue(/215k/);
+    await expect(job.getByLabel('Salary offered')).toHaveValue(/215k/);
   },
   'new-application': async page => {
     await openApp(page, { 'mock-delay': '0' });
@@ -81,8 +81,8 @@ const desktopViews = {
   },
   'interview-list': async page => {
     await openApp(page, { 'mock-delay': '0' });
-    await page.getByRole('button', { name: 'Interview List' }).click();
-    await expect(dialog(page, 'Interview List').getByRole('row')).toHaveCount(
+    await page.getByRole('button', { name: 'Interview list' }).click();
+    await expect(dialog(page, 'Interview list').getByRole('row')).toHaveCount(
       7
     );
   },

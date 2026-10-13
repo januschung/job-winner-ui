@@ -15,7 +15,7 @@ import { STATUS_SORT_ORDER } from '../config/status';
 import { DELETE_JOB_APPLICATION } from '../graphql/mutation';
 import { GET_JOB_APPLICATIONS } from '../graphql/query';
 import useConfirmedAction from '../hooks/useConfirmedAction';
-import useJobApplicationDialog from '../hooks/useJobApplicationDialog';
+import useDialog from '../hooks/useDialog';
 import useJobApplications from '../hooks/useJobApplications';
 import { useAppDialogs } from './AppDialogsContext';
 import ConfirmDialog from './common/ConfirmDialog';
@@ -46,8 +46,7 @@ export default function JobApplicationList({ searchTerm, onClearSearch }) {
   const { data, loading, error, refetch } = useJobApplications();
   // Optional so the list still renders outside the app shell (e.g. tests).
   const dialogs = useAppDialogs();
-  const { open, jobApplication, handleOpen, handleClose } =
-    useJobApplicationDialog();
+  const { open, item: jobApplication, handleOpen, handleClose } = useDialog();
   const { t } = useTranslation();
 
   // Resolves once the list has refetched, so the card is already gone when

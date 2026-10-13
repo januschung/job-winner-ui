@@ -45,9 +45,9 @@ test.describe('job applications', () => {
     // New applications have no status field or tabs.
     await expect(form.getByRole('tab')).toHaveCount(0);
 
-    await form.getByLabel('Company Name').fill('Acme Robotics');
-    await form.getByLabel('Job Title').fill('Frontend Engineer');
-    await form.getByLabel('Salary Range').fill('150k-180k');
+    await form.getByLabel('Company name').fill('Acme Robotics');
+    await form.getByLabel('Job title').fill('Frontend Engineer');
+    await form.getByLabel('Salary range').fill('150k-180k');
     await form.getByLabel('Description').fill('Robot fleet dashboards');
     await form.getByRole('button', { name: 'Save application' }).click();
 
@@ -67,9 +67,9 @@ test.describe('job applications', () => {
     const form = dialog(page, 'New application');
     await form.getByRole('button', { name: 'Save application' }).click();
 
-    await expect(form).toContainText('Company Name is required.');
-    await expect(form).toContainText('Job Title is required.');
-    await expect(form).toContainText('Salary Range is required.');
+    await expect(form).toContainText('Company name is required.');
+    await expect(form).toContainText('Job title is required.');
+    await expect(form).toContainText('Salary range is required.');
     expect(await operationsNamed(page, 'AddJobApplication')).toHaveLength(0);
   });
 
@@ -79,9 +79,9 @@ test.describe('job applications', () => {
       .getByRole('button', { name: 'Edit Anthropic' })
       .click();
     const form = dialog(page, 'Anthropic');
-    await expect(form.getByLabel('Company Name')).toHaveValue('Anthropic');
+    await expect(form.getByLabel('Company name')).toHaveValue('Anthropic');
 
-    await form.getByLabel('Job Title').fill('Member of Technical Staff');
+    await form.getByLabel('Job title').fill('Member of Technical Staff');
     await form.getByRole('combobox', { name: 'Status' }).click();
     await page.getByRole('option', { name: 'Active' }).click();
     await form.getByRole('button', { name: 'Save application' }).click();
@@ -100,14 +100,14 @@ test.describe('job applications', () => {
       .getByRole('button', { name: 'Edit Figma' })
       .click();
     const form = dialog(page, 'Figma');
-    await form.getByLabel('Job Title').fill('Infrastructure Engineer');
+    await form.getByLabel('Job title').fill('Infrastructure Engineer');
     await form.getByRole('button', { name: 'Save application' }).click();
 
     await expect(
       snackbar(page, 'Failed to save the job application.')
     ).toBeVisible();
     await expect(form).toBeVisible();
-    await expect(form.getByLabel('Job Title')).toHaveValue(
+    await expect(form.getByLabel('Job title')).toHaveValue(
       'Infrastructure Engineer'
     );
   });
@@ -118,7 +118,7 @@ test.describe('job applications', () => {
       .getByRole('button', { name: 'Edit Notion' })
       .click();
     const form = dialog(page, 'Notion');
-    await form.getByLabel('Job Title').fill('Changed');
+    await form.getByLabel('Job title').fill('Changed');
     await form.getByRole('button', { name: 'Cancel' }).click();
 
     await expect(form).toBeHidden();

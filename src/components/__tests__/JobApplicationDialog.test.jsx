@@ -7,7 +7,7 @@ import '../../i18n';
 
 const mocks = [];
 
-it('Should render New Job Application Dialog', async () => {
+it('Should render New Job application Dialog', async () => {
   render(
     <MockedProvider mocks={mocks}>
       <SnackbarProvider>
@@ -25,14 +25,14 @@ it('Should render New Job Application Dialog', async () => {
   ).not.toBeNull();
   const currentDate = dayjs(new Date()).format('MM/DD/YYYY');
   expect(screen.getByDisplayValue(currentDate)).not.toBeNull();
-  expect(screen.getByLabelText('Company Name *')).not.toBeNull();
-  expect(screen.getByLabelText('Job Title *')).not.toBeNull();
-  expect(screen.getByLabelText('Salary Range *')).not.toBeNull();
+  expect(screen.getByLabelText('Company name *')).not.toBeNull();
+  expect(screen.getByLabelText('Job title *')).not.toBeNull();
+  expect(screen.getByLabelText('Salary range *')).not.toBeNull();
   expect(screen.getByLabelText('Description')).not.toBeNull();
-  expect(screen.getByLabelText('Job Link')).not.toBeNull();
+  expect(screen.getByLabelText('Job link')).not.toBeNull();
 });
 
-it('Should render Edit Job Application Dialog', async () => {
+it('Should render Edit job application Dialog', async () => {
   render(
     <MockedProvider mocks={mocks}>
       <SnackbarProvider>

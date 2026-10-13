@@ -130,7 +130,7 @@ describe('bookmark save', () => {
       [failing(UPDATE_FREQUENT_URL)]
     );
 
-    expect(screen.getByText('Edit Bookmark')).not.toBeNull();
+    expect(screen.getByText('Edit bookmark')).not.toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Save bookmark' }));
 
     expect(
@@ -183,7 +183,7 @@ describe('record form dialog', () => {
         </MockedProvider>
       </ThemeContextProvider>
     );
-    expect(screen.getByText('Add Bookmark')).not.toBeNull();
+    expect(screen.getByText('Add bookmark')).not.toBeNull();
     expect(screen.getByLabelText('Title').value).toBe('');
     expect(screen.getByLabelText('URL').value).toBe('');
   });
