@@ -3,6 +3,7 @@
 
 const pluginJs = require('@eslint/js');
 const reactPlugin = require('eslint-plugin-react');
+const jsxA11y = require('eslint-plugin-jsx-a11y');
 const globals = require('globals');
 const prettierConfig = require('eslint-config-prettier');
 
@@ -10,6 +11,7 @@ module.exports = [
   pluginJs.configs.recommended,
   reactPlugin.configs.flat.recommended, // This is not a plugin object, but a shareable config object
   reactPlugin.configs.flat['jsx-runtime'], // Add this if you are using React 17+
+  jsxA11y.flatConfigs.recommended,
   {
     plugins: {
       js: pluginJs,
@@ -41,6 +43,15 @@ module.exports = [
     ],
     languageOptions: {
       globals: { ...globals.vitest, ...globals.node },
+    },
+  },
+  {
+    // Playwright UI tests: Node, plus browser code inside page.evaluate().
+    files: ['ui-tests/**/*.js', 'playwright.config.js'],
+    settings: { react: { version: 'detect' } },
+    languageOptions: {
+      sourceType: 'module',
+      globals: { ...globals.node, ...globals.browser },
     },
   },
   {

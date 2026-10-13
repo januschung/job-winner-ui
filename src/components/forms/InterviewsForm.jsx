@@ -272,8 +272,11 @@ export default function InterviewsForm({ jobApplicationId, handleClose }) {
               </Grid>
               <Grid size={{ xs: 12, sm: 4 }}>
                 <FormControl fullWidth>
-                  <InputLabel>{t('interviews.status')}</InputLabel>
+                  <InputLabel id={`interview-${interview.id}-status-label`}>
+                    {t('interviews.status')}
+                  </InputLabel>
                   <Select
+                    labelId={`interview-${interview.id}-status-label`}
                     label={t('interviews.status')}
                     value={interview.status}
                     onChange={e => {

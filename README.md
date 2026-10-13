@@ -114,6 +114,7 @@ npm run dev:mock
 - `?mock-delay=1500` slows every request (default 250 ms), to see loading states.
 - `?mock-fail=UpdateJobApplication` makes the named operations fail
   (comma-separated), to see error handling.
+- `?mock-data=empty` starts with no records, to see the empty states.
 - Production builds never include the stub.
 
 The schema and data are copied from the backend repo. To refresh them after
@@ -125,6 +126,30 @@ npm run mock:sync -- /path/to/job-winner
 
 A test also checks every query and mutation in `src/graphql` against that
 schema, so UI/backend mismatches fail in CI.
+
+### Tests
+
+```console
+npm test              # unit tests (Vitest)
+npm run test:ui       # UI tests in a real browser, against the mock API
+npm run test:ui:visual
+```
+
+The UI tests (`ui-tests/`, Playwright) cover the main flows, accessibility
+(axe, WCAG 2.1 AA) and the console staying free of errors. They run against
+`dev:mock`, so they prove the UI works, not the backend.
+
+`test:ui:visual` compares about 17 views, in light and dark, against
+screenshots in `ui-tests/__screenshots__`. It runs in Docker, in the same
+Linux image as CI, because screenshots render differently on each OS. After an
+intended visual change, update the baselines and review them in the diff:
+
+```console
+npm run test:ui:visual -- --update-snapshots
+```
+
+On a failed CI run, the `playwright-report` artifact has the trace and the
+screenshot diffs.
 
 ## Contributing
 

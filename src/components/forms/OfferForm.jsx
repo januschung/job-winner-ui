@@ -254,7 +254,7 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
               >
                 <Button
                   variant="outlined"
-                  color="warning"
+                  color="error"
                   onClick={handleDelete}
                   disabled={isLoading}
                 >

@@ -130,6 +130,8 @@ export default function SearchBar({
                 inputProps={{ 'aria-label': 'search' }}
                 value={value}
                 onChange={handleInputChange}
+                // Shown only after the user taps the search icon.
+                // eslint-disable-next-line jsx-a11y/no-autofocus
                 autoFocus
               />
               <IconButton

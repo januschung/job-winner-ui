@@ -89,6 +89,13 @@ const colorSchemes = {
         dark: '#7C3AED',
         contrastText: '#0B1020',
       },
+      // MUI's default dark red fails contrast with white button text.
+      error: {
+        main: '#F87171',
+        light: '#FCA5A5',
+        dark: '#DC2626',
+        contrastText: '#0B1020',
+      },
       background: { default: '#0B1120', paper: '#111827' },
       text: { primary: '#E2E8F0', secondary: '#94A3B8' },
       divider: '#1F2937',

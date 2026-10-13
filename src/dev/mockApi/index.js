@@ -6,6 +6,11 @@
 // Dev knobs (URL query params):
 //   ?mock-delay=1500                 latency per request in ms (default 250)
 //   ?mock-fail=UpdateJobApplication  comma-separated operations that error
+//   ?mock-data=empty                 start with no records (profile kept)
+//
+// Every operation sent is recorded in `window.__mockApi.operations` as
+// { operationName, variables }, so UI tests can check what was saved.
+// `window.__mockApi.fail` is the live set of failing operations.
 import { ApolloLink } from '@apollo/client';
 import { Observable } from 'rxjs';
 import { buildSchema, graphql, print } from 'graphql';
@@ -140,9 +145,19 @@ export function createResolvers(store) {
 
 const schema = buildSchema(schemaSource);
 
+const EMPTY_DATA = {
+  profile: demoData.profile,
+  jobApplications: [],
+  interviews: [],
+  offers: [],
+  frequentUrls: [],
+  questions: [],
+};
+
 const readParams = () => {
   const params = new URLSearchParams(globalThis.location?.search ?? '');
   return {
+    data: params.get('mock-data') === 'empty' ? EMPTY_DATA : demoData,
     delayMs: Number(params.get('mock-delay') ?? 250),
     fail: new Set(
       (params.get('mock-fail') ?? '')
@@ -153,15 +168,21 @@ const readParams = () => {
   };
 };
 
-export function createMockLink({ store = createStore(), delayMs, fail } = {}) {
+export function createMockLink({ store, delayMs, fail } = {}) {
   const params = readParams();
   const latency = delayMs ?? params.delayMs;
   const failing = fail ?? params.fail;
-  const rootValue = createResolvers(store);
+  const rootValue = createResolvers(store ?? createStore(params.data));
+  const log = { operations: [], fail: failing };
+  if (globalThis.window) globalThis.window.__mockApi = log;
 
   return new ApolloLink(
     operation =>
       new Observable(observer => {
+        log.operations.push({
+          operationName: operation.operationName,
+          variables: operation.variables,
+        });
         const timer = setTimeout(async () => {
           try {
             const result = failing.has(operation.operationName)

@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 const CopyButton = ({ text }) => {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
     if (!copied) return undefined;
@@ -23,7 +24,13 @@ const CopyButton = ({ text }) => {
 
   const label = t(copied ? 'common.copied' : 'common.copy');
   return (
-    <Tooltip title={label} open={copied || undefined}>
+    // Controlled throughout, so "Copied" can stay up without hover.
+    <Tooltip
+      title={label}
+      open={copied || hovered}
+      onOpen={() => setHovered(true)}
+      onClose={() => setHovered(false)}
+    >
       <IconButton
         onClick={handleCopy}
         size="small"
