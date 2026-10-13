@@ -10,11 +10,7 @@ export const test = base.extend({
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     page.on('console', message => {
-      // /config.js is generated only by the Docker entrypoint; dev 404s it.
-      const isConfig404 = message.location().url.endsWith('/config.js');
-      if (message.type() === 'error' && !isConfig404) {
-        errors.push(message.text());
-      }
+      if (message.type() === 'error') errors.push(message.text());
     });
     await page.clock.setFixedTime(NOW);
     await use(page);

@@ -4,6 +4,7 @@
 const pluginJs = require('@eslint/js');
 const reactPlugin = require('eslint-plugin-react');
 const jsxA11y = require('eslint-plugin-jsx-a11y');
+const reactHooks = require('eslint-plugin-react-hooks');
 const globals = require('globals');
 const prettierConfig = require('eslint-config-prettier');
 
@@ -43,6 +44,16 @@ module.exports = [
     ],
     languageOptions: {
       globals: { ...globals.vitest, ...globals.node },
+    },
+  },
+  {
+    // The two classic hooks rules. Effects that leave out a dependency on
+    // purpose say why in an eslint-disable comment.
+    files: ['src/**/*.{js,jsx}'],
+    plugins: { 'react-hooks': reactHooks },
+    rules: {
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'error',
     },
   },
   {

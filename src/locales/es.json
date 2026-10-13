@@ -5,12 +5,12 @@
     "accountMenu": "Menú de cuenta",
     "moreActions": "Más acciones",
     "language": "Idioma",
-    "darkMode": "Modo Oscuro",
-    "lightMode": "Modo Claro",
+    "darkMode": "Modo oscuro",
+    "lightMode": "Modo claro",
     "bookmarks": "Marcadores",
-    "qa": "Preguntas y Respuestas",
-    "interviewList": "Lista de Entrevistas",
-    "offerList": "Lista de Ofertas",
+    "qa": "Preguntas y respuestas",
+    "interviewList": "Lista de entrevistas",
+    "offerList": "Lista de ofertas",
     "profile": "Perfil",
     "githubLink": "Danos una ⭐"
   },
@@ -19,14 +19,14 @@
   },
   "dialogs": {
     "confirmDeletion": {
-      "title": "Confirmar Eliminación",
+      "title": "Confirmar eliminación",
       "content": "¿Está seguro de que desea eliminar este marcador? Esta acción no se puede deshacer.",
       "cancel": "Cancelar",
       "delete": "Eliminar"
     },
     "addBookmark": {
       "title": "Marcadores",
-      "editTitle": "Editar Marcador",
+      "editTitle": "Editar marcador",
       "fields": {
         "title": "Título",
         "url": "URL"
@@ -38,14 +38,14 @@
       "success": "¡Marcador eliminado con éxito!",
       "error": "Error al eliminar el marcador.",
       "noUrls": "No hay URLs",
-      "addTitle": "Agregar Marcador",
+      "addTitle": "Agregar marcador",
       "saveSuccess": "¡Marcador guardado con éxito!",
       "saveError": "No se pudo guardar el marcador.",
       "saveButton": "Guardar marcador"
     },
     "addQuestion": {
-      "title": "Agregar Pregunta y Respuesta",
-      "editTitle": "Editar Pregunta y Respuesta",
+      "title": "Agregar pregunta y respuesta",
+      "editTitle": "Editar pregunta y respuesta",
       "fields": {
         "question": "Pregunta",
         "answer": "Respuesta"
@@ -59,31 +59,31 @@
       "saveButton": "Guardar pregunta"
     },
     "addApplication": {
-      "title": "Agregar Solicitud de Empleo",
-      "editTitle": "Editar Solicitud de Empleo"
+      "title": "Agregar solicitud de empleo",
+      "editTitle": "Editar solicitud de empleo"
     },
     "editApplication": {
-      "title": "Editar Solicitud de Empleo"
+      "title": "Editar solicitud de empleo"
     },
     "applicationTabs": {
       "details": "Detalles",
       "notes": "Notas"
     },
     "interviewList": {
-      "title": "Lista de Entrevistas",
+      "title": "Lista de entrevistas",
       "columns": {
-        "companyName": "Nombre de la Empresa",
-        "interviewDate": "Fecha de Entrevista",
+        "companyName": "Nombre de la empresa",
+        "interviewDate": "Fecha de entrevista",
         "interviewer": "Entrevistador",
         "note": "Nota",
         "status": "Estado",
-        "jobApplication": "Solicitud de Empleo"
+        "jobApplication": "Solicitud de empleo"
       },
-      "jobDetails": "Detalles del Trabajo"
+      "jobDetails": "Detalles del trabajo"
     },
     "jobApplication": {
       "addTitle": "Nueva solicitud",
-      "editTitle": "Editar Solicitud de Empleo",
+      "editTitle": "Editar solicitud de empleo",
       "tabs": {
         "application": "Solicitud",
         "interviews": "Entrevistas",
@@ -92,23 +92,23 @@
       "addSubtitle": "Registre un empleo al que se postuló."
     },
     "question": {
-      "title": "Preguntas y Respuestas"
+      "title": "Preguntas y respuestas"
     },
     "profile": {
       "title": "Perfil",
       "fields": {
         "firstName": "Nombre",
         "lastName": "Apellido",
-        "addressStreet1": "Dirección Línea 1",
-        "addressStreet2": "Dirección Línea 2",
+        "addressStreet1": "Dirección línea 1",
+        "addressStreet2": "Dirección línea 2",
         "addressCity": "Ciudad",
         "addressState": "Estado",
-        "addressZip": "Código Postal",
-        "email": "Correo Electrónico",
-        "telephone": "Número de Teléfono",
+        "addressZip": "Código postal",
+        "email": "Correo electrónico",
+        "telephone": "Número de teléfono",
         "linkedin": "LinkedIn",
         "github": "GitHub",
-        "personalWebsite": "Sitio Web Personal"
+        "personalWebsite": "Sitio web personal"
       },
       "success": "¡Perfil guardado con éxito!",
       "error": "No se pudo guardar el perfil.",
@@ -122,37 +122,37 @@
       }
     },
     "offerList": {
-      "title": "Lista de Ofertas",
+      "title": "Lista de ofertas",
       "columns": {
-        "companyName": "Nombre de la Empresa",
-        "offerDate": "Fecha de Oferta",
-        "salaryOffered": "Salario Ofrecido",
+        "companyName": "Nombre de la empresa",
+        "offerDate": "Fecha de oferta",
+        "salaryOffered": "Salario ofrecido",
         "note": "Nota",
-        "jobApplication": "Solicitud de Empleo"
+        "jobApplication": "Solicitud de empleo"
       },
-      "jobDetails": "Detalles del Trabajo"
+      "jobDetails": "Detalles del trabajo"
     },
     "confirmInterviewDeletion": {
-      "title": "Confirmar Eliminación",
+      "title": "Confirmar eliminación",
       "content": "¿Está seguro de que desea eliminar esta entrevista? Esta acción no se puede deshacer."
     }
   },
   "forms": {
     "applicationForm": {
       "fields": {
-        "companyName": "Nombre de la Empresa",
-        "jobTitle": "Título del Trabajo",
-        "salaryRange": "Rango Salarial",
+        "companyName": "Nombre de la empresa",
+        "jobTitle": "Título del trabajo",
+        "salaryRange": "Rango salarial",
         "description": "Descripción",
         "note": "Nota",
-        "jobUrl": "Enlace del Trabajo",
+        "jobUrl": "Enlace del trabajo",
         "status": "Estado",
-        "appliedDate": "Fecha de Aplicación"
+        "appliedDate": "Fecha de aplicación"
       },
       "status": {
         "open": "Abierto",
         "active": "Activo",
-        "ghosted": "Sin Respuesta",
+        "ghosted": "Sin respuesta",
         "rejected": "Rechazado"
       },
       "errors": {
@@ -167,13 +167,13 @@
     },
     "offerForm": {
       "fields": {
-        "offerDate": "Fecha de Oferta",
-        "salaryOffered": "Salario Ofrecido",
+        "offerDate": "Fecha de oferta",
+        "salaryOffered": "Salario ofrecido",
         "description": "Descripción"
       },
       "errors": {
-        "offerDateRequired": "La Fecha de Oferta es obligatoria.",
-        "salaryOfferedRequired": "El Salario Ofrecido es obligatorio."
+        "offerDateRequired": "La fecha de oferta es obligatoria.",
+        "salaryOfferedRequired": "El salario ofrecido es obligatorio."
       },
       "messages": {
         "addSuccess": "¡Oferta agregada con éxito!",
@@ -183,21 +183,21 @@
         "error": "Ocurrió un error. Por favor, inténtelo de nuevo."
       },
       "buttons": {
-        "addOffer": "Agregar Oferta",
+        "addOffer": "Agregar oferta",
         "delete": "Eliminar",
-        "confirmDelete": "Confirmar Eliminación",
+        "confirmDelete": "Confirmar eliminación",
         "saveOffer": "Guardar oferta"
       },
       "dialogs": {
         "confirmDelete": {
-          "title": "Confirmar Eliminación",
+          "title": "Confirmar eliminación",
           "content": "¿Está seguro de que desea eliminar esta oferta? Esta acción no se puede deshacer."
         }
       }
     },
     "interviewsForm": {
       "fields": {
-        "interviewDate": "Fecha de Entrevista",
+        "interviewDate": "Fecha de entrevista",
         "interviewer": "Entrevistador",
         "description": "Descripción",
         "status": "Estado"
@@ -217,7 +217,7 @@
     },
     "dialogs": {
       "confirmDelete": {
-        "title": "Confirmar Eliminación",
+        "title": "Confirmar eliminación",
         "content": "¿Está seguro de que desea eliminar esta solicitud de empleo? Esta acción no se puede deshacer."
       }
     },
@@ -247,7 +247,7 @@
     "all": "Todos",
     "open": "Abierto",
     "active": "Activo",
-    "ghosted": "Sin Respuesta",
+    "ghosted": "Sin respuesta",
     "rejected": "Rechazado",
     "clear": "Borrar",
     "clearLabel": "Quitar filtro de estado"
@@ -279,13 +279,13 @@
     },
     "dialogs": {
       "confirmDelete": {
-        "title": "Confirmar Eliminación",
+        "title": "Confirmar eliminación",
         "content": "¿Está seguro de que desea eliminar esta pregunta y respuesta? Esta acción no se puede deshacer."
       }
     }
   },
   "interviews": {
-    "date": "Fecha de Entrevista",
+    "date": "Fecha de entrevista",
     "interviewer": "Entrevistador",
     "status": "Estado",
     "statuses": {
@@ -296,7 +296,7 @@
       "expired": "Expirado"
     },
     "description": "Descripción",
-    "add": "Agregar Entrevista",
+    "add": "Agregar entrevista",
     "messages": {
       "addSuccess": "¡Entrevista agregada con éxito!",
       "saveSuccess": "¡Entrevista guardada con éxito!",

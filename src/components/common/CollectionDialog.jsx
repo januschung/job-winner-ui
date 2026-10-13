@@ -18,9 +18,9 @@ export default function CollectionDialog({
       onClose={handleClose}
       onCancel={handleClose}
       title={title}
-      onAdd={add.handleOpen}
+      onAdd={() => add.handleOpen()}
     >
-      <FormDialog open={add.dialogOpen} handleClose={add.handleClose} />
+      <FormDialog open={add.open} handleClose={add.handleClose} />
       {children}
     </CustomDialog>
   );

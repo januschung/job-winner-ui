@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client/react';
 import DialogContent from '@mui/material/DialogContent';
 import Skeleton from '@mui/material/Skeleton';
@@ -22,8 +21,7 @@ import AddOrEditFrequentUrlDialog from './AddOrEditFrequentUrlDialog';
 import { useTranslation } from 'react-i18next';
 
 export default function FrequentUrlContent() {
-  const [frequentUrl, setFrequentUrl] = useState(null);
-  const { dialogOpen, handleOpen, handleClose } = useDialog();
+  const edit = useDialog();
   const { data, loading, error } = useQuery(GET_FREQUENT_URLS, {
     fetchPolicy: 'network-only',
   });
@@ -38,17 +36,12 @@ export default function FrequentUrlContent() {
     errorMessage: t('dialogs.addBookmark.error'),
   });
 
-  const handleOpenEditDialog = frequentUrl => {
-    setFrequentUrl(frequentUrl);
-    handleOpen();
-  };
-
   return (
     <DialogContent>
       <AddOrEditFrequentUrlDialog
-        open={dialogOpen}
-        handleClose={handleClose}
-        frequentUrl={frequentUrl}
+        open={edit.open}
+        handleClose={edit.handleClose}
+        frequentUrl={edit.item}
       />
       <Grid
         container
@@ -159,7 +152,7 @@ export default function FrequentUrlContent() {
                         </Link>
                       </Box>
                       <ActionIcons
-                        onEdit={() => handleOpenEditDialog(frequentUrl)}
+                        onEdit={() => edit.handleOpen(frequentUrl)}
                         onDelete={() => remove.request(frequentUrl)}
                         name={frequentUrl.title}
                         stopPropagation

@@ -6,7 +6,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import DialogContent from '@mui/material/DialogContent';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
-import useJobApplicationDialog from '../../hooks/useJobApplicationDialog';
+import useDialog from '../../hooks/useDialog';
 import useSortableTable from '../../hooks/useSortableTable';
 import { JobApplicationDialog } from '../lazyDialogs';
 import MountOnFirstOpen from './MountOnFirstOpen';
@@ -36,10 +36,10 @@ export default function RecordListDialog({
 
   const {
     open: jobDialogOpen,
-    jobApplication,
+    item: jobApplication,
     handleOpen: handleJobDialogOpen,
     handleClose: handleJobDialogClose,
-  } = useJobApplicationDialog(() => refetch());
+  } = useDialog(() => refetch());
 
   const allColumns = [
     ...columns,

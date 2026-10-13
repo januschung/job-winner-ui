@@ -42,6 +42,9 @@ export default function RecordFormDialog({
         : blankForm(fields)
     );
     setErrors({});
+    // Not `fields`: callers pass a new array every render, and resetting on
+    // each one would wipe what the user is typing.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [record, open]);
 
   const validate = () => {

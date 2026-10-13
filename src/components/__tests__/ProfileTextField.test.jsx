@@ -15,7 +15,7 @@ describe('ProfileTextField', () => {
     render(
       <ProfileTextField
         id="firstName"
-        label="First Name"
+        label="First name"
         value="John"
         onChange={mockOnChange}
       />
@@ -23,13 +23,13 @@ describe('ProfileTextField', () => {
   });
 
   test('renders the TextField with the correct label and value', () => {
-    const textField = screen.getByLabelText(/First Name/i);
+    const textField = screen.getByLabelText(/First name/i);
     expect(textField).not.toBeNull();
     expect(textField.value).toBe('John');
   });
 
   test('calls onChange when the TextField value changes', () => {
-    const textField = screen.getByLabelText(/First Name/i);
+    const textField = screen.getByLabelText(/First name/i);
     fireEvent.change(textField, { target: { value: 'Doe' } });
     expect(mockOnChange).toHaveBeenCalled();
   });

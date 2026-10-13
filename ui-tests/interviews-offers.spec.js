@@ -55,7 +55,7 @@ test.describe('interviews', () => {
   test('a date picked from the calendar saves once', async ({ page }) => {
     const job = await openStripe(page, /Interviews/);
     await job
-      .getByRole('group', { name: 'Interview Date' })
+      .getByRole('group', { name: 'Interview date' })
       .first()
       .getByRole('button', { name: /Choose date/ })
       .click();
@@ -79,7 +79,7 @@ test.describe('interviews', () => {
     page,
   }) => {
     const job = await openStripe(page, /Interviews/);
-    const date = job.getByRole('group', { name: 'Interview Date' }).first();
+    const date = job.getByRole('group', { name: 'Interview date' }).first();
     await date.getByRole('spinbutton', { name: 'Month' }).click();
     await page.keyboard.type('06252026');
     expect(await updates(page)).toHaveLength(0);
@@ -113,7 +113,7 @@ test.describe('interviews', () => {
 
   test('adds an interview dated today', async ({ page }) => {
     const job = await openStripe(page, /Interviews/);
-    await job.getByRole('button', { name: 'Add Interview' }).click();
+    await job.getByRole('button', { name: 'Add interview' }).click();
 
     await expect(snackbar(page, 'Interview added')).toBeVisible();
     await expect(job.getByLabel('Interviewer')).toHaveCount(3);
@@ -127,7 +127,7 @@ test.describe('interviews', () => {
     const job = await openStripe(page, /Interviews/);
     await job.getByRole('button', { name: 'Delete' }).first().click();
     await page
-      .getByRole('dialog', { name: 'Confirm Deletion' })
+      .getByRole('dialog', { name: 'Confirm deletion' })
       .getByRole('button', { name: 'Delete' })
       .click();
 
@@ -142,7 +142,7 @@ test.describe('interviews', () => {
     });
     await job.getByRole('button', { name: 'Delete' }).first().click();
     await page
-      .getByRole('dialog', { name: 'Confirm Deletion' })
+      .getByRole('dialog', { name: 'Confirm deletion' })
       .getByRole('button', { name: 'Delete' })
       .click();
 
@@ -150,10 +150,10 @@ test.describe('interviews', () => {
     await expect(job.getByLabel('Interviewer')).toHaveCount(2);
   });
 
-  test('Interview List shows upcoming open interviews', async ({ page }) => {
+  test('Interview list shows upcoming open interviews', async ({ page }) => {
     await openApp(page);
-    await page.getByRole('button', { name: 'Interview List' }).click();
-    const list = dialog(page, 'Interview List');
+    await page.getByRole('button', { name: 'Interview list' }).click();
+    const list = dialog(page, 'Interview list');
     // Past and expired interviews are left out: 6 of 12.
     await expect(list.getByRole('row')).toHaveCount(7);
     await expect(list).toContainText('Morgan Diaz');
@@ -161,7 +161,7 @@ test.describe('interviews', () => {
 
     await list
       .getByRole('row', { name: /Morgan Diaz/ })
-      .getByRole('button', { name: 'Job Details' })
+      .getByRole('button', { name: 'Job details' })
       .click();
     await expect(dialog(page, 'Stripe')).toBeVisible();
   });
@@ -170,7 +170,7 @@ test.describe('interviews', () => {
 test.describe('offers', () => {
   test('updates an existing offer', async ({ page }) => {
     const job = await openStripe(page, 'Offer');
-    const salary = job.getByLabel('Salary Offered');
+    const salary = job.getByLabel('Salary offered');
     await expect(salary).toHaveValue('215k + equity');
     await salary.fill('225k + equity');
     await job.getByRole('button', { name: 'Save offer' }).click();
@@ -182,11 +182,11 @@ test.describe('offers', () => {
       .click();
     await dialog(page, 'Stripe').getByRole('tab', { name: 'Offer' }).click();
     await expect(
-      dialog(page, 'Stripe').getByLabel('Salary Offered')
+      dialog(page, 'Stripe').getByLabel('Salary offered')
     ).toHaveValue('225k + equity');
   });
 
-  test('adds an offer, which then shows in the Offer List', async ({
+  test('adds an offer, which then shows in the Offer list', async ({
     page,
   }) => {
     await openApp(page);
@@ -199,52 +199,52 @@ test.describe('offers', () => {
       job.getByRole('button', { name: 'Save offer' })
     ).toBeDisabled();
 
-    await job.getByRole('button', { name: 'Add Offer' }).click();
+    await job.getByRole('button', { name: 'Add offer' }).click();
     await job.getByRole('button', { name: 'Save offer' }).click();
-    await expect(job).toContainText('Salary Offered is required.');
+    await expect(job).toContainText('Salary offered is required.');
 
-    await job.getByLabel('Salary Offered').fill('250k + equity');
+    await job.getByLabel('Salary offered').fill('250k + equity');
     await job.getByLabel('Description').fill('Verbal offer');
     await job.getByRole('button', { name: 'Save offer' }).click();
     await expect(snackbar(page, 'Offer added')).toBeVisible();
 
     await expect(
-      page.getByRole('button', { name: 'Offer List' })
+      page.getByRole('button', { name: 'Offer list' })
     ).toContainText('4');
-    await page.getByRole('button', { name: 'Offer List' }).click();
-    await expect(dialog(page, 'Offer List')).toContainText('250k + equity');
+    await page.getByRole('button', { name: 'Offer list' }).click();
+    await expect(dialog(page, 'Offer list')).toContainText('250k + equity');
   });
 
   test('deletes a saved offer after confirming', async ({ page }) => {
     const job = await openStripe(page, 'Offer');
     await job.getByRole('button', { name: 'Delete' }).click();
     await page
-      .getByRole('dialog', { name: 'Confirm Deletion' })
+      .getByRole('dialog', { name: 'Confirm deletion' })
       .getByRole('button', { name: 'Delete' })
       .click();
 
     await expect(snackbar(page, 'Offer deleted')).toBeVisible();
-    await expect(job.getByRole('button', { name: 'Add Offer' })).toBeVisible();
-    await expect(job.getByLabel('Salary Offered')).toHaveCount(0);
+    await expect(job.getByRole('button', { name: 'Add offer' })).toBeVisible();
+    await expect(job.getByLabel('Salary offered')).toHaveCount(0);
   });
 
-  test('no "Add Offer" until the saved offer has loaded', async ({ page }) => {
+  test('no "Add offer" until the saved offer has loaded', async ({ page }) => {
     const job = await openStripe(page, 'Offer', { 'mock-delay': '1500' });
     await expect(job.getByText('Loading...')).toBeVisible();
-    await expect(job.getByRole('button', { name: 'Add Offer' })).toHaveCount(0);
-    await expect(job.getByLabel('Salary Offered')).toHaveValue('215k + equity');
-    await expect(job.getByRole('button', { name: 'Add Offer' })).toHaveCount(0);
+    await expect(job.getByRole('button', { name: 'Add offer' })).toHaveCount(0);
+    await expect(job.getByLabel('Salary offered')).toHaveValue('215k + equity');
+    await expect(job.getByRole('button', { name: 'Add offer' })).toHaveCount(0);
   });
 
-  test('Offer List sorts by column', async ({ page }) => {
+  test('Offer list sorts by column', async ({ page }) => {
     await openApp(page);
-    await page.getByRole('button', { name: 'Offer List' }).click();
-    const list = dialog(page, 'Offer List');
+    await page.getByRole('button', { name: 'Offer list' }).click();
+    const list = dialog(page, 'Offer list');
     await expect(list.getByRole('row')).toHaveCount(4);
 
-    await list.getByRole('button', { name: 'Salary Offered' }).click();
+    await list.getByRole('button', { name: 'Salary offered' }).click();
     await expect(list.getByRole('row').nth(1)).toContainText('195k + bonus');
-    await list.getByRole('button', { name: 'Salary Offered' }).click();
+    await list.getByRole('button', { name: 'Salary offered' }).click();
     await expect(list.getByRole('row').nth(1)).toContainText('215k + equity');
   });
 });

@@ -12,10 +12,10 @@ test.describe('header', () => {
   test('badges count upcoming interviews and offers', async ({ page }) => {
     await openApp(page);
     await expect(
-      page.getByRole('button', { name: 'Interview List' })
+      page.getByRole('button', { name: 'Interview list' })
     ).toContainText('6');
     await expect(
-      page.getByRole('button', { name: 'Offer List' })
+      page.getByRole('button', { name: 'Offer list' })
     ).toContainText('3');
   });
 
@@ -23,10 +23,10 @@ test.describe('header', () => {
     await openApp(page);
     const html = page.locator('html');
     await expect(html).toHaveClass(/light/);
-    await page.getByRole('button', { name: 'Dark Mode' }).click();
+    await page.getByRole('button', { name: 'Dark mode' }).click();
     await expect(html).toHaveClass(/dark/);
     await expect(
-      page.getByRole('button', { name: 'Light Mode' })
+      page.getByRole('button', { name: 'Light mode' })
     ).toBeVisible();
 
     await page.reload();
@@ -104,9 +104,9 @@ test.describe('mobile', () => {
     for (const item of [
       'Bookmarks',
       'Q&A',
-      'Interview List',
-      'Offer List',
-      'Dark Mode',
+      'Interview list',
+      'Offer list',
+      'Dark mode',
       'Profile',
     ]) {
       await expect(menu.getByRole('menuitem', { name: item })).toBeVisible();

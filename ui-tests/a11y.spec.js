@@ -51,13 +51,13 @@ for (const colorScheme of ['light', 'dark']) {
         .getByRole('button', { name: 'Edit Stripe' })
         .click();
       const job = dialog(page, 'Stripe');
-      await expect(job.getByLabel('Company Name')).toHaveValue('Stripe');
+      await expect(job.getByLabel('Company name')).toHaveValue('Stripe');
       await expectAccessible(page);
       await job.getByRole('tab', { name: /Interviews/ }).click();
       await expect(job.getByText('Changes save automatically')).toBeVisible();
       await expectAccessible(page);
       await job.getByRole('tab', { name: 'Offer' }).click();
-      await expect(job.getByLabel('Salary Offered')).toBeVisible();
+      await expect(job.getByLabel('Salary offered')).toBeVisible();
       await expectAccessible(page);
     });
 
@@ -71,8 +71,8 @@ for (const colorScheme of ['light', 'dark']) {
     for (const [button, title, ready] of [
       ['Bookmarks', 'Bookmarks', 'LinkedIn Jobs'],
       ['Q&A', 'Q&A', 'Why are you interested'],
-      ['Interview List', 'Interview List', 'Morgan Diaz'],
-      ['Offer List', 'Offer List', '215k + equity'],
+      ['Interview list', 'Interview list', 'Morgan Diaz'],
+      ['Offer list', 'Offer list', '215k + equity'],
     ]) {
       test(`${title} dialog`, async ({ page }) => {
         await openApp(page);
@@ -89,7 +89,7 @@ for (const colorScheme of ['light', 'dark']) {
       await expectAccessible(page);
       await page.getByRole('menuitem', { name: 'Profile' }).click();
       await expect(
-        dialog(page, 'Profile').getByLabel('First Name')
+        dialog(page, 'Profile').getByLabel('First name')
       ).not.toHaveValue('');
       await expectAccessible(page);
     });

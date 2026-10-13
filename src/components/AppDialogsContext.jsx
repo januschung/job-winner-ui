@@ -6,7 +6,6 @@ import {
   GET_PROFILE,
 } from '../graphql/query';
 import useDialog from '../hooks/useDialog';
-import useJobApplicationDialog from '../hooks/useJobApplicationDialog';
 import { getFilteredInterviews } from '../utils/interviewUtil';
 import MountOnFirstOpen from './common/MountOnFirstOpen';
 import {
@@ -47,7 +46,7 @@ export function AppDialogsProvider({ children }) {
     variables: { id: 1 },
   });
 
-  const newJobApplication = useJobApplicationDialog(refetchOffers);
+  const newJobApplication = useDialog(refetchOffers);
   const offerList = useDialog(refetchOffers);
   const interviewList = useDialog(refetchInterviews);
   const frequentUrls = useDialog();
@@ -59,11 +58,12 @@ export function AppDialogsProvider({ children }) {
   };
 
   const value = {
-    openNewJobApplication: newJobApplication.handleOpen,
-    openFrequentUrls: frequentUrls.handleOpen,
-    openQuestions: questions.handleOpen,
-    openInterviewList: interviewList.handleOpen,
-    openOfferList: offerList.handleOpen,
+    // Wrapped so click events passed by onClick are not taken as the item.
+    openNewJobApplication: () => newJobApplication.handleOpen(),
+    openFrequentUrls: () => frequentUrls.handleOpen(),
+    openQuestions: () => questions.handleOpen(),
+    openInterviewList: () => interviewList.handleOpen(),
+    openOfferList: () => offerList.handleOpen(),
     openProfile,
     profileName: [
       profileData?.profileById?.firstName,
@@ -88,15 +88,15 @@ export function AppDialogsProvider({ children }) {
           isNew
         />
       </MountOnFirstOpen>
-      <MountOnFirstOpen open={frequentUrls.dialogOpen}>
+      <MountOnFirstOpen open={frequentUrls.open}>
         <FrequentUrlDialog
-          open={frequentUrls.dialogOpen}
+          open={frequentUrls.open}
           handleClose={frequentUrls.handleClose}
         />
       </MountOnFirstOpen>
-      <MountOnFirstOpen open={questions.dialogOpen}>
+      <MountOnFirstOpen open={questions.open}>
         <QuestionDialog
-          open={questions.dialogOpen}
+          open={questions.open}
           handleClose={questions.handleClose}
         />
       </MountOnFirstOpen>
@@ -107,15 +107,15 @@ export function AppDialogsProvider({ children }) {
           handleClose={() => setProfileOpen(false)}
         />
       </MountOnFirstOpen>
-      <MountOnFirstOpen open={interviewList.dialogOpen}>
+      <MountOnFirstOpen open={interviewList.open}>
         <InterviewListDialog
-          open={interviewList.dialogOpen}
+          open={interviewList.open}
           handleClose={interviewList.handleClose}
         />
       </MountOnFirstOpen>
-      <MountOnFirstOpen open={offerList.dialogOpen}>
+      <MountOnFirstOpen open={offerList.open}>
         <OfferListDialog
-          open={offerList.dialogOpen}
+          open={offerList.open}
           handleClose={offerList.handleClose}
         />
       </MountOnFirstOpen>

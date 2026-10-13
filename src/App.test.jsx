@@ -9,7 +9,7 @@ import JobApplicationList from './components/JobApplicationList';
 vi.mock('./components/AppHeader');
 vi.mock('./components/JobApplicationList');
 
-it('Should render Job Application list on default route', async () => {
+it('Should render Job application list on default route', async () => {
   AppHeader.mockImplementation(() => <div>AppHeaderMock</div>);
   JobApplicationList.mockImplementation(() => (
     <div>JobApplicationListrMock</div>

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client/react';
 import DialogContent from '@mui/material/DialogContent';
 import { Box, Typography } from '@mui/material';
@@ -19,8 +18,7 @@ import { useTranslation } from 'react-i18next';
 export default function QuestionContent() {
   const { t } = useTranslation();
 
-  const [question, setQuestion] = useState(null);
-  const { dialogOpen, handleOpen, handleClose } = useDialog();
+  const edit = useDialog();
   const { data, loading, error } = useQuery(GET_QUESTIONS, {
     fetchPolicy: 'network-only',
   });
@@ -33,17 +31,12 @@ export default function QuestionContent() {
     errorMessage: t('questionContent.messages.deleteError'),
   });
 
-  const handleOpenEditDialog = question => {
-    setQuestion(question);
-    handleOpen();
-  };
-
   return (
     <DialogContent>
       <AddOrEditQuestionDialog
-        open={dialogOpen}
-        handleClose={handleClose}
-        question={question}
+        open={edit.open}
+        handleClose={edit.handleClose}
+        question={edit.item}
       />
       {loading &&
         Array.from(new Array(4)).map((_, index) => (
@@ -104,7 +97,7 @@ export default function QuestionContent() {
                   }}
                 >
                   <ActionIcons
-                    onEdit={() => handleOpenEditDialog(question)}
+                    onEdit={() => edit.handleOpen(question)}
                     onDelete={() => remove.request(question)}
                     name={question.question}
                   />

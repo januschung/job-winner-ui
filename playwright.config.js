@@ -24,7 +24,10 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   expect: {
-    toHaveScreenshot: { maxDiffPixelRatio: 0.002 },
+    // Baselines and runs share one Linux image and render identically, so
+    // keep this tight: a ratio lets small text changes (one letter's case)
+    // slip through.
+    toHaveScreenshot: { maxDiffPixels: 20 },
   },
   snapshotPathTemplate: '{testDir}/__screenshots__/{arg}{ext}',
   projects: [

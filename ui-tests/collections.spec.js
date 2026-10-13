@@ -18,7 +18,7 @@ test.describe('bookmarks', () => {
   test('adds, edits and deletes a bookmark', async ({ page }) => {
     const list = dialog(page, 'Bookmarks');
     await list.getByRole('button', { name: 'Add', exact: true }).click();
-    const add = dialog(page, 'Add Bookmark');
+    const add = dialog(page, 'Add bookmark');
     await add.getByLabel('Title').fill('Hacker News Jobs');
     await add.getByLabel('URL').fill('https://news.ycombinator.com/jobs');
     await add.getByRole('button', { name: 'Save bookmark' }).click();
@@ -28,7 +28,7 @@ test.describe('bookmarks', () => {
     ).toHaveAttribute('href', 'https://news.ycombinator.com/jobs');
 
     await list.getByRole('button', { name: 'Edit Hacker News Jobs' }).click();
-    const edit = dialog(page, 'Edit Bookmark');
+    const edit = dialog(page, 'Edit bookmark');
     await expect(edit.getByLabel('Title')).toHaveValue('Hacker News Jobs');
     await edit.getByLabel('Title').fill('HN Jobs');
     await edit.getByRole('button', { name: 'Save bookmark' }).click();
@@ -47,12 +47,12 @@ test.describe('bookmarks', () => {
   }) => {
     const list = dialog(page, 'Bookmarks');
     await list.getByRole('button', { name: 'Edit Indeed' }).click();
-    const edit = dialog(page, 'Edit Bookmark');
+    const edit = dialog(page, 'Edit bookmark');
     await expect(edit.getByLabel('Title')).toHaveValue('Indeed');
     await edit.getByRole('button', { name: 'Cancel' }).click();
 
     await list.getByRole('button', { name: 'Add', exact: true }).click();
-    const add = dialog(page, 'Add Bookmark');
+    const add = dialog(page, 'Add bookmark');
     await expect(add.getByLabel('Title')).toHaveValue('');
     await expect(add.getByLabel('URL')).toHaveValue('');
   });
@@ -61,7 +61,7 @@ test.describe('bookmarks', () => {
     await dialog(page, 'Bookmarks')
       .getByRole('button', { name: 'Add', exact: true })
       .click();
-    const add = dialog(page, 'Add Bookmark');
+    const add = dialog(page, 'Add bookmark');
     await add.getByRole('button', { name: 'Save bookmark' }).click();
     await expect(add).toContainText('Title is required.');
     await expect(add).toContainText('URL is required.');
@@ -112,7 +112,7 @@ test.describe('Q&A', () => {
       .getByRole('button', { name: 'Delete What is your notice period?' })
       .click();
     await page
-      .getByRole('dialog', { name: 'Confirm Deletion' })
+      .getByRole('dialog', { name: 'Confirm deletion' })
       .getByRole('button', { name: 'Delete' })
       .click();
     await expect(snackbar(page, 'Question deleted')).toBeVisible();

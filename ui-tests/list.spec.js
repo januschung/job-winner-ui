@@ -117,7 +117,7 @@ test.describe('search', () => {
 
     // Inside a form field "/" is just a character.
     await page.getByRole('button', { name: 'New application' }).click();
-    const company = page.getByLabel('Company Name');
+    const company = page.getByLabel('Company name');
     await company.click();
     await page.keyboard.type('A/B');
     await expect(company).toHaveValue('A/B');
@@ -143,9 +143,9 @@ test.describe('page states', () => {
 
     await empty.getByRole('button', { name: 'New application' }).click();
     const form = page.getByRole('dialog', { name: 'New application' });
-    await form.getByLabel('Company Name').fill('Acme');
-    await form.getByLabel('Job Title').fill('Engineer');
-    await form.getByLabel('Salary Range').fill('100k');
+    await form.getByLabel('Company name').fill('Acme');
+    await form.getByLabel('Job title').fill('Engineer');
+    await form.getByLabel('Salary range').fill('100k');
     await form.getByRole('button', { name: 'Save application' }).click();
 
     await expect(card(page, 'Acme')).toBeVisible();
