@@ -29,3 +29,6 @@ yarn-error.log*
 /test-results
 /playwright-report
 /blob-report
+
+# README media sources (npm run docs:media)
+/readme-img/src

@@ -11,6 +11,7 @@ VERSION=$(node -p "require('@playwright/test/package.json').version")
 IMAGE="mcr.microsoft.com/playwright:v${VERSION}-noble"
 
 docker run --rm --ipc=host \
+  -e DOCS_MEDIA \
   -v "$PWD":/work \
   -v job-winner-ui-linux-node-modules:/work/node_modules \
   -w /work \

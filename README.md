@@ -1,5 +1,9 @@
 # Job Winner
 
+<p align="center">
+      <img alt="Adding an application, filtering by status, adding an interview, checking upcoming interviews, then switching to dark mode" src="readme-img/hero.gif" width="800">
+</p>
+
 ## Live Demo
 
 🚀 Check out the live demo! 👉 https://jobwinner.duckdns.org
@@ -30,53 +34,78 @@ One of the handy features is the Profile Page. This is where you can store all t
 
 ## Features
 
-Key Functions:
-1. __Index Page:__
+Screenshots below follow your GitHub theme (light or dark).
 
-    View a list of all your job applications in one place, with easy access to each application’s details and status.
-    ![index](readme-img/index.png)
-1. __Create New Job Application:__
+1. **Board:**
 
-    Easily add new job applications to your list with a user-friendly form.
-    ![new](readme-img/add.png)
-1. __Delete Job Application:__
+   All your applications in one place, most actionable first. Filter by status with the chips, or search by company, job title or description (press `/` to jump to search). Light and dark mode.
 
-    Remove any applications you no longer need with a simple delete option.
-1. __Edit Job Application:__
+   <img alt="The board in light and dark mode" src="readme-img/board-split.webp" width="900">
 
-    Make updates to your existing job applications as the status of your applications change or new information becomes available.
-    ![edit](readme-img/edit.png)
-    - __Manage Interview:__
+1. **Add, edit and delete applications:**
 
-      Keep track of your interviews with the ability to add and manage interview details.
-      ![edit](readme-img/interview.png)
-    - __Manage Offer:__
+   Track the company, title, salary range, applied date, status, job link and notes.
 
-      Track any job offers you’ve received, including details about the salary and offer date.
-      ![edit](readme-img/offer.png)
-1. __Profile Page:__
-    
-    Store and manage all your personal information in one spot
-    ![profile](readme-img/profile.png)
-1. __Interview List:__
-  
-    Keep track of all your interviews in one place, with easy-to-view details and statuses plus sortable headers.
-    ![profile](readme-img/interview-list.png)
-1. __Offer List:__
-    
-    Track all job offers you’ve received with sortable headers.
-    ![profile](readme-img/offer-list.png)
+   <picture>
+     <source media="(prefers-color-scheme: dark)" srcset="readme-img/application-dark.webp">
+     <img alt="Editing an application" src="readme-img/application-light.webp" width="720">
+   </picture>
 
-1. __Search and Filter:__
-    
-    Quickly search for specific job applications based on keywords to help you stay organized. Whether it's the company name, job title, or description, finding the right job application is easy.
-1. __Interview and Offer Count:__
-    
-    Stay on top of your job search with an overview of how many interviews and offers you currently have, making it easier to manage multiple opportunities.
+1. **Interviews:**
+
+   Each application keeps its interviews: date, interviewer, status and notes. Changes save automatically.
+
+   <picture>
+     <source media="(prefers-color-scheme: dark)" srcset="readme-img/interviews-dark.webp">
+     <img alt="The interviews of an application" src="readme-img/interviews-light.webp" width="720">
+   </picture>
+
+1. **Offer:**
+
+   Record an offer's date, salary and details against the application.
+
+   <picture>
+     <source media="(prefers-color-scheme: dark)" srcset="readme-img/offer-dark.webp">
+     <img alt="An offer on an application" src="readme-img/offer-light.webp" width="720">
+   </picture>
+
+1. **Interview list and offer list:**
+
+   Upcoming interviews and all offers across applications, with sortable columns. The header badges show how many of each you have.
+
+   <picture>
+     <source media="(prefers-color-scheme: dark)" srcset="readme-img/interview-list-dark.webp">
+     <img alt="Upcoming interviews across applications" src="readme-img/interview-list-light.webp" width="720">
+   </picture>
+
+1. **Profile:**
+
+   Store the personal details applications keep asking for (address, phone, LinkedIn and more) and copy any field with one click.
+
+   <picture>
+     <source media="(prefers-color-scheme: dark)" srcset="readme-img/profile-dark.webp">
+     <img alt="The profile, with a copy button on every field" src="readme-img/profile-light.webp" width="720">
+   </picture>
+
+1. **Bookmarks and Q&A:**
+
+   Keep your favourite job boards a click away, and your answers to common interview questions ready to reuse.
+
+   <picture>
+     <source media="(prefers-color-scheme: dark)" srcset="readme-img/collections-dark.webp">
+     <img alt="Bookmarks and Q&A" src="readme-img/collections-light.webp" width="720">
+   </picture>
+
+1. **Mobile, and in Spanish:**
+
+   Works on phones, and the whole app is available in English and Spanish.
+
+   <img alt="The board, menu and an application on phones, in light and dark mode" src="readme-img/mobile-split.webp" width="900">
 
 ## Components
 
 Job Winner has two components
+
 1. UI (this repo)
 1. [Backend](https://github.com/januschung/job-winner)
 
@@ -84,18 +113,21 @@ Job Winner has two components
 
 This is the UI for Job Winner and here is the stack:
 
-1. React
-1. Apollo Client
-1. Material UI
+1. React 19
+1. Apollo Client 4
+1. Material UI 9
+1. Vite
 
-## To build 
+## To build
 
 Please follow the build instruction from the [Backend repo](https://github.com/januschung/job-winner) to bring up the backend.
 
 ```console
 npm run dev
 ```
+
 or use docker
+
 ```console
 docker build -t job-winner-ui .
 docker run -p 3000:3000 -d job-winner-ui
@@ -150,6 +182,20 @@ npm run test:ui:visual -- --update-snapshots
 
 On a failed CI run, the `playwright-report` artifact has the trace and the
 screenshot diffs.
+
+### README media
+
+The screenshots and the clip above are generated from the demo data. After a
+visual change, regenerate them all (Docker required):
+
+```console
+npm run docs:media
+```
+
+### Architecture
+
+[docs/architecture.md](docs/architecture.md) maps the app shell, theme and
+status colors, shared dialog pieces, save hooks, mock API and tests.
 
 ## Contributing
 
