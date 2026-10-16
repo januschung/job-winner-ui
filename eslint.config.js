@@ -66,6 +66,14 @@ module.exports = [
     },
   },
   {
+    files: ['scripts/**/*.mjs'],
+    settings: { react: { version: 'detect' } },
+    languageOptions: {
+      sourceType: 'module',
+      globals: { ...globals.node },
+    },
+  },
+  {
     // Plain JS project without the prop-types package; prop checking would
     // come from TypeScript rather than runtime PropTypes.
     rules: { 'react/prop-types': 'off' },

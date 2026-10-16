@@ -46,13 +46,14 @@
     "mock:sync": "node scripts/sync-mock-data.mjs",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint src ui-tests playwright.config.js",
-    "lint:fix": "eslint src ui-tests playwright.config.js --fix",
-    "format": "prettier --write \"src/**/*.{js,jsx,json,css,md}\" \"ui-tests/**/*.js\" playwright.config.js",
-    "format:check": "prettier --check \"src/**/*.{js,jsx,json,css,md}\" \"ui-tests/**/*.js\" playwright.config.js",
+    "lint": "eslint src ui-tests scripts/*.mjs playwright.config.js",
+    "lint:fix": "eslint src ui-tests scripts/*.mjs playwright.config.js --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,json,css,md}\" \"ui-tests/**/*.js\" \"scripts/**/*.mjs\" docs/architecture.md README.md playwright.config.js",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,json,css,md}\" \"ui-tests/**/*.js\" \"scripts/**/*.mjs\" docs/architecture.md README.md playwright.config.js",
     "test": "vitest --run",
     "test:ui": "playwright test --project=chromium",
     "test:ui:visual": "sh scripts/ui-tests-docker.sh --project=visual",
+    "docs:media": "sh scripts/docs-media.sh",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -63,6 +64,13 @@
     "ui-tests/**/*.js": [
       "prettier --write",
       "eslint --fix"
+    ],
+    "scripts/**/*.mjs": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "{README.md,docs/**/*.md}": [
+      "prettier --write"
     ]
   }
 }
