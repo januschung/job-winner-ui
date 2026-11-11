@@ -40,6 +40,10 @@ export const dialog = (page, name) => page.getByRole('dialog', { name });
 export const snackbar = (page, text) =>
   page.getByRole('alert').filter({ hasText: text });
 
+// The autosave status line in a dialog footer ("Saving…", "All changes
+// saved").
+export const saveStatus = scope => scope.getByRole('status');
+
 // Operations the app sent to the mock API since the page loaded.
 export const operations = page =>
   page.evaluate(() => window.__mockApi.operations);

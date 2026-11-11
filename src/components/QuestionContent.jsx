@@ -27,8 +27,8 @@ export default function QuestionContent() {
   });
   const remove = useConfirmedAction({
     action: item => deleteQuestion({ variables: { id: item.id } }),
-    successMessage: t('questionContent.messages.deleteSuccess'),
-    errorMessage: t('questionContent.messages.deleteError'),
+    successToast: t('questionContent.messages.deleteSuccess'),
+    errorToast: t('questionContent.messages.deleteError'),
   });
 
   return (

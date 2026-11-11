@@ -40,7 +40,7 @@ export default function ApplicationForm({
     appliedDate: dayjs().format('YYYY-MM-DD'),
   });
   const [errors, setErrors] = useState({});
-  const { run, pending: saving } = useAsyncAction();
+  const { run, pending: saving, error, clearError } = useAsyncAction();
   const { t } = useTranslation();
 
   const [newJobApplication] = useMutation(ADD_JOB_APPLICATION, {
@@ -107,9 +107,9 @@ export default function ApplicationForm({
       ...formData,
       ...(jobApplication && { id: jobApplication.id }),
     };
-    // On failure the dialog stays open so nothing typed is lost.
+    // On failure the dialog stays open so nothing typed is lost, with the
+    // error in its footer.
     run(() => mutationFn({ variables }), {
-      successMessage: t('forms.applicationForm.success'),
       errorMessage: t('forms.applicationForm.error'),
       onSuccess: handleClose,
     });
@@ -276,7 +276,7 @@ export default function ApplicationForm({
           </Grid>
         </Grid>
       </DialogContent>
-      <DialogFooter>
+      <DialogFooter error={error} onErrorClose={clearError}>
         <Button color="inherit" onClick={handleClose}>
           {t('common.cancel')}
         </Button>

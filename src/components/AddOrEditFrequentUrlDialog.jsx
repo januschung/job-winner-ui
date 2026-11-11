@@ -32,7 +32,6 @@ export default function AddOrEditFrequentUrlDialog({
       updateMutation={UPDATE_FREQUENT_URL}
       refetchQueries={[{ query: GET_FREQUENT_URLS }]}
       title={t(key(frequentUrl ? 'editTitle' : 'addTitle'))}
-      successMessage={t(key('saveSuccess'))}
       errorMessage={t(key('saveError'))}
       saveLabel={t(key('saveButton'))}
     />

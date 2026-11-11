@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
-import SnackbarComponent from '../SnackbarComponent';
+import SnackbarComponent, { AUTO_HIDE_MS } from '../SnackbarComponent';
 
 describe('SnackbarComponent', () => {
   it('renders the Snackbar with the provided message and severity', () => {
@@ -19,7 +19,7 @@ describe('SnackbarComponent', () => {
 
     // Assert that the Snackbar has the correct severity
     const alert = screen.getByRole('alert');
-    expect(alert.classList.contains('MuiAlert-filled')).toBe(true);
+    expect(alert.classList.contains('MuiAlert-outlined')).toBe(true);
     expect(alert.classList.contains('MuiAlert-colorError')).toBe(true); // Check MUI class for "error"
   });
 
@@ -69,11 +69,29 @@ describe('SnackbarComponent', () => {
     );
 
     // Fast-forward the timer to trigger auto-close
-    vi.advanceTimersByTime(3000);
+    vi.advanceTimersByTime(AUTO_HIDE_MS);
 
     // Assert that the onClose handler was called
     expect(handleClose).toHaveBeenCalledTimes(1);
 
+    vi.useRealTimers();
+  });
+
+  it('keeps an error up until it is dismissed', () => {
+    vi.useFakeTimers();
+    const handleClose = vi.fn();
+    render(
+      <SnackbarComponent
+        open={true}
+        message="Delete failed"
+        severity="error"
+        onClose={handleClose}
+      />
+    );
+
+    vi.advanceTimersByTime(AUTO_HIDE_MS * 5);
+
+    expect(handleClose).not.toHaveBeenCalled();
     vi.useRealTimers();
   });
 });

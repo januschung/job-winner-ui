@@ -50,15 +50,15 @@ export default function JobApplicationList({ searchTerm, onClearSearch }) {
   const { t } = useTranslation();
 
   // Resolves once the list has refetched, so the card is already gone when
-  // the success message shows.
+  // the toast shows.
   const [deleteJobApplication] = useMutation(DELETE_JOB_APPLICATION, {
     refetchQueries: [{ query: GET_JOB_APPLICATIONS }],
     awaitRefetchQueries: true,
   });
   const remove = useConfirmedAction({
     action: item => deleteJobApplication({ variables: { id: item.id } }),
-    successMessage: t('jobApplicationList.messages.deleteSuccess'),
-    errorMessage: t('jobApplicationList.messages.deleteError'),
+    successToast: t('jobApplicationList.messages.deleteSuccess'),
+    errorToast: t('jobApplicationList.messages.deleteError'),
   });
 
   useEffect(() => {

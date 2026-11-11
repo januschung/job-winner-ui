@@ -22,7 +22,7 @@ test.describe('bookmarks', () => {
     await add.getByLabel('Title').fill('Hacker News Jobs');
     await add.getByLabel('URL').fill('https://news.ycombinator.com/jobs');
     await add.getByRole('button', { name: 'Save bookmark' }).click();
-    await expect(snackbar(page, 'Bookmark saved')).toBeVisible();
+    await expect(add).toBeHidden();
     await expect(
       list.getByRole('link', { name: 'Hacker News Jobs' })
     ).toHaveAttribute('href', 'https://news.ycombinator.com/jobs');
@@ -93,7 +93,7 @@ test.describe('Q&A', () => {
     await add.getByLabel('Question').fill('What is your notice period?');
     await add.getByLabel('Answer').fill('Two weeks.');
     await add.getByRole('button', { name: 'Save Q&A' }).click();
-    await expect(snackbar(page, 'Q&A updated')).toBeVisible();
+    await expect(add).toBeHidden();
     await expect(qa).toContainText('What is your notice period?');
 
     await qa

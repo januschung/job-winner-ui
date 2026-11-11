@@ -35,13 +35,12 @@
         "titleRequired": "El título es obligatorio.",
         "urlRequired": "La URL es obligatoria."
       },
-      "success": "¡Marcador eliminado con éxito!",
-      "error": "Error al eliminar el marcador.",
       "noUrls": "No hay URLs",
       "addTitle": "Agregar marcador",
-      "saveSuccess": "¡Marcador guardado con éxito!",
       "saveError": "No se pudo guardar el marcador.",
-      "saveButton": "Guardar marcador"
+      "saveButton": "Guardar marcador",
+      "deleteSuccess": "Marcador eliminado",
+      "deleteError": "Error al eliminar el marcador."
     },
     "addQuestion": {
       "title": "Agregar pregunta y respuesta",
@@ -54,7 +53,6 @@
         "questionRequired": "La pregunta es obligatoria.",
         "answerRequired": "La respuesta es obligatoria."
       },
-      "success": "¡Pregunta y respuesta actualizadas con éxito!",
       "error": "Error al guardar la pregunta y respuesta. Por favor, inténtelo de nuevo.",
       "saveButton": "Guardar pregunta"
     },
@@ -110,7 +108,7 @@
         "github": "GitHub",
         "personalWebsite": "Sitio web personal"
       },
-      "success": "¡Perfil guardado con éxito!",
+      "success": "Perfil guardado",
       "error": "No se pudo guardar el perfil.",
       "subtitle": "Úselo para completar solicitudes rápidamente. Copie cualquier campo.",
       "saveButton": "Guardar perfil",
@@ -161,7 +159,6 @@
         "salaryRangeRequired": "El rango salarial es obligatorio.",
         "appliedDateRequired": "Se requiere una fecha de aplicación válida."
       },
-      "success": "¡Solicitud de empleo guardada con éxito!",
       "error": "No se pudo guardar la solicitud de empleo.",
       "saveButton": "Guardar solicitud"
     },
@@ -176,9 +173,6 @@
         "salaryOfferedRequired": "El salario ofrecido es obligatorio."
       },
       "messages": {
-        "addSuccess": "¡Oferta agregada con éxito!",
-        "updateSuccess": "¡Oferta actualizada con éxito!",
-        "deleteSuccess": "¡Oferta eliminada con éxito!",
         "deleteError": "Error al eliminar la oferta.",
         "error": "Ocurrió un error. Por favor, inténtelo de nuevo."
       },
@@ -209,7 +203,7 @@
   },
   "jobApplicationList": {
     "messages": {
-      "deleteSuccess": "¡Solicitud de empleo eliminada con éxito!",
+      "deleteSuccess": "Solicitud de empleo eliminada",
       "deleteError": "Error al eliminar la solicitud de empleo.",
       "fetchError": "Error al obtener los datos. Por favor, verifique su conexión a la red e inténtelo de nuevo.",
       "fetchErrorTitle": "No se pudieron cargar las solicitudes.",
@@ -269,11 +263,12 @@
     "done": "Listo",
     "deleteNamed": "¿Eliminar {{name}}?",
     "editItem": "Editar {{name}}",
-    "deleteItem": "Eliminar {{name}}"
+    "deleteItem": "Eliminar {{name}}",
+    "retry": "Reintentar"
   },
   "questionContent": {
     "messages": {
-      "deleteSuccess": "¡Pregunta eliminada con éxito!",
+      "deleteSuccess": "Pregunta eliminada",
       "deleteError": "Error al eliminar la pregunta.",
       "noQuestions": "No hay preguntas y respuestas disponibles."
     },
@@ -298,13 +293,14 @@
     "description": "Descripción",
     "add": "Agregar entrevista",
     "messages": {
-      "addSuccess": "¡Entrevista agregada con éxito!",
-      "saveSuccess": "¡Entrevista guardada con éxito!",
-      "deleteSuccess": "¡Entrevista eliminada con éxito!",
       "addError": "Error al agregar la entrevista.",
       "saveError": "Error al guardar la entrevista.",
       "deleteError": "Error al eliminar la entrevista."
     },
-    "autosave": "Los cambios se guardan automáticamente"
+    "autosave": "Los cambios se guardan automáticamente",
+    "saveStatus": {
+      "saving": "Guardando…",
+      "saved": "Todos los cambios guardados"
+    }
   }
 }

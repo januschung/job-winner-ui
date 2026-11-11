@@ -5,13 +5,14 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import DialogContent from '@mui/material/DialogContent';
+import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useQuery, useMutation } from '@apollo/client/react';
 import ConfirmDialog from '../common/ConfirmDialog';
-import useAsyncAction from '../../hooks/useAsyncAction';
+import useAutosave from '../../hooks/useAutosave';
 import useConfirmedAction from '../../hooks/useConfirmedAction';
 import {
   ADD_INTERVIEW,
@@ -27,6 +28,7 @@ import { Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -40,8 +42,16 @@ import StatusBadge from '../common/StatusBadge';
 
 export default function InterviewsForm({ jobApplicationId, handleClose }) {
   const [interviews, setInterviews] = useState([]);
-  const { run } = useAsyncAction();
+  // Saves report in the footer status line, not one message each.
+  const autosave = useAutosave();
   const { t, i18n } = useTranslation();
+
+  // Latest edits, for retries of a failed save: they send what is on screen
+  // now, not what was there when the save failed.
+  const interviewsRef = useRef(interviews);
+  useEffect(() => {
+    interviewsRef.current = interviews;
+  }, [interviews]);
 
   // Last values the server confirmed, per interview id, so leaving a field
   // without changing anything does not trigger a save.
@@ -77,16 +87,19 @@ export default function InterviewsForm({ jobApplicationId, handleClose }) {
   const [updateInterview] = useMutation(UPDATE_INTERVIEW, { refetchQueries });
   const [deleteInterview] = useMutation(DELETE_INTERVIEW, { refetchQueries });
 
+  // The card disappearing confirms a delete; a failure shows in the footer.
   const remove = useConfirmedAction({
-    action: id => deleteInterview({ variables: { id } }),
-    successMessage: t('interviews.messages.deleteSuccess'),
-    errorMessage: t('interviews.messages.deleteError'),
-    onSuccess: id =>
-      setInterviews(prev => prev.filter(interview => interview.id !== id)),
+    action: id =>
+      autosave.track(id, () => deleteInterview({ variables: { id } }), {
+        errorMessage: t('interviews.messages.deleteError'),
+        onSuccess: () =>
+          setInterviews(prev => prev.filter(interview => interview.id !== id)),
+      }),
   });
 
   const handleAddInterview = () =>
-    run(
+    autosave.track(
+      'add',
       () =>
         addInterview({
           variables: {
@@ -100,7 +113,6 @@ export default function InterviewsForm({ jobApplicationId, handleClose }) {
           },
         }),
       {
-        successMessage: t('interviews.messages.addSuccess'),
         errorMessage: t('interviews.messages.addError'),
         onSuccess: ({ data }) => {
           if (!data?.addInterview) return;
@@ -121,7 +133,7 @@ export default function InterviewsForm({ jobApplicationId, handleClose }) {
   // Saves one interview. `changes` carries values set in the same event,
   // which are not in `interviews` state yet.
   const handleSaveInline = (id, changes = {}) => {
-    const current = interviews.find(item => item.id === id);
+    const current = interviewsRef.current.find(item => item.id === id);
     if (!current) return;
     const interview = { ...current, ...changes };
     // Skip half-typed dates; the field saves again once it is valid.
@@ -130,7 +142,8 @@ export default function InterviewsForm({ jobApplicationId, handleClose }) {
     const fields = ['interviewDate', 'interviewer', 'description', 'status'];
     if (saved && fields.every(f => saved[f] === interview[f])) return;
 
-    run(
+    autosave.track(
+      id,
       () =>
         updateInterview({
           variables: {
@@ -143,9 +156,9 @@ export default function InterviewsForm({ jobApplicationId, handleClose }) {
           },
         }),
       {
-        successMessage: t('interviews.messages.saveSuccess'),
         errorMessage: t('interviews.messages.saveError'),
         onSuccess: () => remember([interview]),
+        retry: () => handleSaveInline(id),
       }
     );
   };
@@ -322,11 +335,12 @@ export default function InterviewsForm({ jobApplicationId, handleClose }) {
         </Button>
       </DialogContent>
       <DialogFooter
-        note={
-          <>
-            <CheckCircleOutlineRoundedIcon sx={{ fontSize: 16 }} />
-            {t('interviews.autosave')}
-          </>
+        note={<SaveStatus status={autosave.status} />}
+        error={autosave.error}
+        errorAction={
+          <Button color="inherit" size="small" onClick={autosave.retryAll}>
+            {t('common.retry')}
+          </Button>
         }
       >
         <Button color="inherit" onClick={handleClose}>
@@ -340,5 +354,33 @@ export default function InterviewsForm({ jobApplicationId, handleClose }) {
         content={t('dialogs.confirmInterviewDeletion.content')}
       />
     </>
+  );
+}
+
+// Footer status for autosave. A live region, so screen readers hear
+// "Saving…" and "All changes saved" without moving focus. Failures show in
+// the footer's error alert instead.
+function SaveStatus({ status }) {
+  const { t } = useTranslation();
+  const icon = {
+    saving: <CircularProgress size={14} color="inherit" />,
+    saved: (
+      <CheckCircleRoundedIcon sx={{ fontSize: 16, color: 'success.main' }} />
+    ),
+  }[status] ?? <CheckCircleOutlineRoundedIcon sx={{ fontSize: 16 }} />;
+  const text =
+    {
+      saving: t('interviews.saveStatus.saving'),
+      saved: t('interviews.saveStatus.saved'),
+    }[status] ?? t('interviews.autosave');
+
+  return (
+    <Box
+      role="status"
+      sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}
+    >
+      {icon}
+      {text}
+    </Box>
   );
 }

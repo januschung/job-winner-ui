@@ -35,13 +35,12 @@
         "titleRequired": "Title is required.",
         "urlRequired": "URL is required."
       },
-      "success": "Bookmark deleted successfully!",
-      "error": "Failed to delete the bookmark.",
       "noUrls": "No URLs",
       "addTitle": "Add bookmark",
-      "saveSuccess": "Bookmark saved successfully!",
       "saveError": "Failed to save the bookmark.",
-      "saveButton": "Save bookmark"
+      "saveButton": "Save bookmark",
+      "deleteSuccess": "Bookmark deleted",
+      "deleteError": "Failed to delete the bookmark."
     },
     "addQuestion": {
       "title": "Add Q&A",
@@ -54,7 +53,6 @@
         "questionRequired": "Question is required.",
         "answerRequired": "Answer is required."
       },
-      "success": "Q&A updated successfully!",
       "error": "Error saving Q&A. Please try again.",
       "saveButton": "Save Q&A"
     },
@@ -110,7 +108,7 @@
         "github": "GitHub",
         "personalWebsite": "Personal website"
       },
-      "success": "Profile saved successfully!",
+      "success": "Profile saved",
       "error": "Failed to save the profile.",
       "subtitle": "Used to fill in applications quickly. Copy any field.",
       "saveButton": "Save profile",
@@ -161,7 +159,6 @@
         "salaryRangeRequired": "Salary range is required.",
         "appliedDateRequired": "Valid applied date is required."
       },
-      "success": "Job application saved successfully!",
       "error": "Failed to save the job application.",
       "saveButton": "Save application"
     },
@@ -176,9 +173,6 @@
         "salaryOfferedRequired": "Salary offered is required."
       },
       "messages": {
-        "addSuccess": "Offer added successfully!",
-        "updateSuccess": "Offer updated successfully!",
-        "deleteSuccess": "Offer deleted successfully!",
         "deleteError": "Failed to delete the offer.",
         "error": "An error occurred. Please try again."
       },
@@ -209,7 +203,7 @@
   },
   "jobApplicationList": {
     "messages": {
-      "deleteSuccess": "Job application deleted successfully!",
+      "deleteSuccess": "Job application deleted",
       "deleteError": "Failed to delete the job application.",
       "fetchError": "Failed to fetch data. Please check your network connection and try again.",
       "fetchErrorTitle": "Couldn't load applications.",
@@ -269,11 +263,12 @@
     "done": "Done",
     "deleteNamed": "Delete {{name}}?",
     "editItem": "Edit {{name}}",
-    "deleteItem": "Delete {{name}}"
+    "deleteItem": "Delete {{name}}",
+    "retry": "Retry"
   },
   "questionContent": {
     "messages": {
-      "deleteSuccess": "Question deleted successfully!",
+      "deleteSuccess": "Question deleted",
       "deleteError": "Failed to delete the question.",
       "noQuestions": "No Q&A available."
     },
@@ -298,13 +293,14 @@
     "description": "Description",
     "add": "Add interview",
     "messages": {
-      "addSuccess": "Interview added successfully!",
-      "saveSuccess": "Interview saved successfully!",
-      "deleteSuccess": "Interview deleted successfully!",
       "addError": "Error adding interview.",
       "saveError": "Error saving interview.",
       "deleteError": "Error deleting interview."
     },
-    "autosave": "Changes save automatically"
+    "autosave": "Changes save automatically",
+    "saveStatus": {
+      "saving": "Saving…",
+      "saved": "All changes saved"
+    }
   }
 }

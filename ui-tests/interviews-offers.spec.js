@@ -4,6 +4,7 @@ import {
   expect,
   openApp,
   operationsNamed,
+  saveStatus,
   settle,
   snackbar,
   test,
@@ -43,7 +44,7 @@ test.describe('interviews', () => {
     await job.getByRole('combobox', { name: 'Status' }).first().click();
     await page.getByRole('option', { name: 'Pending' }).click();
 
-    await expect(snackbar(page, 'Interview saved')).toBeVisible();
+    await expect(saveStatus(job)).toHaveText('All changes saved');
     const sent = await updates(page);
     expect(sent).toHaveLength(1);
     expect(sent[0].variables.interview).toMatchObject({
@@ -69,7 +70,7 @@ test.describe('interviews', () => {
     await calendar.getByRole('gridcell', { name: '20' }).click();
     await expect(calendar).toBeHidden();
 
-    await expect(snackbar(page, 'Interview saved')).toBeVisible();
+    await expect(saveStatus(job)).toHaveText('All changes saved');
     const sent = await updates(page);
     expect(sent).toHaveLength(1);
     expect(sent[0].variables.interview.interviewDate).toBe('2026-06-20');
@@ -85,7 +86,7 @@ test.describe('interviews', () => {
     expect(await updates(page)).toHaveLength(0);
 
     await job.getByRole('heading', { name: 'Stripe' }).click();
-    await expect(snackbar(page, 'Interview saved')).toBeVisible();
+    await expect(saveStatus(job)).toHaveText('All changes saved');
     const sent = await updates(page);
     expect(sent).toHaveLength(1);
     expect(sent[0].variables.interview.interviewDate).toBe('2026-06-25');
@@ -104,7 +105,7 @@ test.describe('interviews', () => {
 
     await interviewer.fill('Morgan Díaz');
     await job.getByRole('heading', { name: 'Stripe' }).click();
-    await expect(snackbar(page, 'Interview saved')).toBeVisible();
+    await expect(saveStatus(job)).toHaveText('All changes saved');
     const sent = await updates(page);
     expect(sent).toHaveLength(1);
     expect(sent[0].variables.interview.interviewer).toBe('Morgan Díaz');
@@ -115,8 +116,8 @@ test.describe('interviews', () => {
     const job = await openStripe(page, /Interviews/);
     await job.getByRole('button', { name: 'Add interview' }).click();
 
-    await expect(snackbar(page, 'Interview added')).toBeVisible();
     await expect(job.getByLabel('Interviewer')).toHaveCount(3);
+    await expect(saveStatus(job)).toHaveText('All changes saved');
     await expect(job).toContainText('Jun 15, 2026');
     await expect(job.getByRole('tab', { name: /Interviews/ })).toHaveText(
       'Interviews 3'
@@ -131,8 +132,8 @@ test.describe('interviews', () => {
       .getByRole('button', { name: 'Delete' })
       .click();
 
-    await expect(snackbar(page, 'Interview deleted')).toBeVisible();
     await expect(job.getByLabel('Interviewer')).toHaveCount(1);
+    await expect(saveStatus(job)).toHaveText('All changes saved');
     await expect(job.getByLabel('Interviewer')).toHaveValue('Morgan Diaz');
   });
 
@@ -146,8 +147,51 @@ test.describe('interviews', () => {
       .getByRole('button', { name: 'Delete' })
       .click();
 
-    await expect(snackbar(page, 'Error deleting interview.')).toBeVisible();
+    await expect(
+      job.getByRole('alert').filter({ hasText: 'Error deleting interview.' })
+    ).toBeVisible();
     await expect(job.getByLabel('Interviewer')).toHaveCount(2);
+  });
+
+  test('saves never pop a toast', async ({ page }) => {
+    const job = await openStripe(page, /Interviews/);
+    await expect(saveStatus(job)).toHaveText('Changes save automatically');
+    for (const name of ['Pending', 'Open']) {
+      await job.getByRole('combobox', { name: 'Status' }).first().click();
+      await page.getByRole('option', { name }).click();
+      await expect(saveStatus(job)).toHaveText('All changes saved');
+    }
+    await job.getByRole('button', { name: 'Add interview' }).click();
+    await expect(job.getByLabel('Interviewer')).toHaveCount(3);
+
+    expect(await updates(page)).toHaveLength(2);
+    await expect(page.getByRole('alert')).toHaveCount(0);
+  });
+
+  test('a failed save shows in the footer and Retry sends the latest values', async ({
+    page,
+  }) => {
+    const job = await openStripe(page, /Interviews/, {
+      'mock-fail': 'UpdateInterview',
+    });
+    const interviewer = job.getByLabel('Interviewer').first();
+    await interviewer.fill('Riley C.');
+    await job.getByRole('heading', { name: 'Stripe' }).click();
+
+    const failed = job
+      .getByRole('alert')
+      .filter({ hasText: 'Error saving interview.' });
+    await expect(failed).toBeVisible();
+
+    // Kept editing before retrying: Retry sends what is on screen now.
+    await interviewer.fill('Riley Chen-Park');
+    await page.evaluate(() => window.__mockApi.fail.clear());
+    await failed.getByRole('button', { name: 'Retry' }).click();
+
+    await expect(failed).toBeHidden();
+    await expect(saveStatus(job)).toHaveText('All changes saved');
+    const sent = await updates(page);
+    expect(sent.at(-1).variables.interview.interviewer).toBe('Riley Chen-Park');
   });
 
   test('Interview list shows upcoming open interviews', async ({ page }) => {
@@ -175,8 +219,8 @@ test.describe('offers', () => {
     await salary.fill('225k + equity');
     await job.getByRole('button', { name: 'Save offer' }).click();
 
-    await expect(snackbar(page, 'Offer updated')).toBeVisible();
     await expect(job).toBeHidden();
+    await expect(snackbar(page, 'Offer')).toHaveCount(0);
     await card(page, 'Stripe')
       .getByRole('button', { name: 'Edit Stripe' })
       .click();
@@ -206,7 +250,7 @@ test.describe('offers', () => {
     await job.getByLabel('Salary offered').fill('250k + equity');
     await job.getByLabel('Description').fill('Verbal offer');
     await job.getByRole('button', { name: 'Save offer' }).click();
-    await expect(snackbar(page, 'Offer added')).toBeVisible();
+    await expect(job).toBeHidden();
 
     await expect(
       page.getByRole('button', { name: 'Offer list' })
@@ -223,7 +267,6 @@ test.describe('offers', () => {
       .getByRole('button', { name: 'Delete' })
       .click();
 
-    await expect(snackbar(page, 'Offer deleted')).toBeVisible();
     await expect(job.getByRole('button', { name: 'Add offer' })).toBeVisible();
     await expect(job.getByLabel('Salary offered')).toHaveCount(0);
   });
