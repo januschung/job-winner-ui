@@ -33,7 +33,6 @@ export default function AddOrEditQuestionDialog({
       updateMutation={UPDATE_QUESTION}
       refetchQueries={[{ query: GET_QUESTIONS }]}
       title={t(key(question ? 'editTitle' : 'title'))}
-      successMessage={t(key('success'))}
       errorMessage={t(key('error'))}
       saveLabel={t(key('saveButton'))}
     />

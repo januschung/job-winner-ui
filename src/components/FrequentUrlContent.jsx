@@ -32,8 +32,8 @@ export default function FrequentUrlContent() {
   });
   const remove = useConfirmedAction({
     action: item => deleteFrequentUrl({ variables: { id: item.id } }),
-    successMessage: t('dialogs.addBookmark.success'),
-    errorMessage: t('dialogs.addBookmark.error'),
+    successToast: t('dialogs.addBookmark.deleteSuccess'),
+    errorToast: t('dialogs.addBookmark.deleteError'),
   });
 
   return (

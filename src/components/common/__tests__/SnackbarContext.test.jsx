@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SnackbarProvider, useSnackbar } from '../SnackbarContext';
+import { AUTO_HIDE_MS } from '../SnackbarComponent';
 import { vi } from 'vitest';
 
 const TestComponent = () => {
@@ -47,7 +48,7 @@ describe('SnackbarContext', () => {
     userEvent.click(button);
 
     // Fast-forward the timer to simulate auto-hide
-    vi.advanceTimersByTime(3000);
+    vi.advanceTimersByTime(AUTO_HIDE_MS);
 
     // Assert that the Snackbar is no longer visible
     expect(screen.queryByText('Test message')).toBeNull();

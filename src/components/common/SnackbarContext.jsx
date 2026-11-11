@@ -3,6 +3,8 @@ import SnackbarComponent from './SnackbarComponent';
 
 const SnackbarContext = createContext();
 
+// One app-wide toast, for results with nothing else on screen to show them.
+// Most outcomes belong inline instead; see useAsyncAction.
 export const SnackbarProvider = ({ children }) => {
   const [snackbarState, setSnackbarState] = useState({
     open: false,
@@ -15,7 +17,7 @@ export const SnackbarProvider = ({ children }) => {
   };
 
   const handleCloseSnackbar = () => {
-    setSnackbarState({ ...snackbarState, open: false });
+    setSnackbarState(prev => ({ ...prev, open: false }));
   };
 
   return (

@@ -51,7 +51,6 @@ test.describe('job applications', () => {
     await form.getByLabel('Description').fill('Robot fleet dashboards');
     await form.getByRole('button', { name: 'Save application' }).click();
 
-    await expect(snackbar(page, 'Job application saved')).toBeVisible();
     await expect(form).toBeHidden();
     const acme = card(page, 'Acme Robotics');
     await expect(acme).toContainText('Open');
@@ -86,7 +85,7 @@ test.describe('job applications', () => {
     await page.getByRole('option', { name: 'Active' }).click();
     await form.getByRole('button', { name: 'Save application' }).click();
 
-    await expect(snackbar(page, 'Job application saved')).toBeVisible();
+    await expect(form).toBeHidden();
     const anthropic = card(page, 'Anthropic');
     await expect(anthropic).toContainText('Member of Technical Staff');
     await expect(anthropic).toContainText('Active');
@@ -103,8 +102,11 @@ test.describe('job applications', () => {
     await form.getByLabel('Job title').fill('Infrastructure Engineer');
     await form.getByRole('button', { name: 'Save application' }).click();
 
+    // Shown in the dialog, by its Save button.
     await expect(
-      snackbar(page, 'Failed to save the job application.')
+      form
+        .getByRole('alert')
+        .filter({ hasText: 'Failed to save the job application.' })
     ).toBeVisible();
     await expect(form).toBeVisible();
     await expect(form.getByLabel('Job title')).toHaveValue(

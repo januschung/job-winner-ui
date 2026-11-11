@@ -177,9 +177,7 @@ describe('JobApplicationList', () => {
 
     // Check that the success message appears
     await waitFor(() => {
-      expect(
-        screen.getByText('Job application deleted successfully!')
-      ).not.toBeNull();
+      expect(screen.getByText('Job application deleted')).not.toBeNull();
     });
   });
   describe('list states', () => {

@@ -1,6 +1,6 @@
-// Saves must report what actually happened: success only after the server
-// confirms it, an error (with the dialog still open) when it fails.
-import { fireEvent, render, screen } from '@testing-library/react';
+// Saves must report what actually happened: the dialog closes only after the
+// server confirms, and a failure shows in the dialog, which stays open.
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { vi } from 'vitest';
 import '../../i18n';
@@ -62,16 +62,13 @@ describe('job application save', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Save application' }));
 
-    expect(
-      await screen.findByText('Failed to save the job application.')
-    ).not.toBeNull();
-    expect(
-      screen.queryByText('Job application saved successfully!')
-    ).toBeNull();
+    expect((await screen.findByRole('alert')).textContent).toContain(
+      'Failed to save the job application.'
+    );
     expect(handleClose).not.toHaveBeenCalled();
   });
 
-  test('a successful save confirms and closes', async () => {
+  test('a successful save closes without a toast', async () => {
     const handleClose = vi.fn();
     renderWith(
       <ApplicationForm
@@ -91,10 +88,8 @@ describe('job application save', () => {
     // Disabled while in flight, so it cannot be submitted twice.
     expect(save.disabled).toBe(true);
 
-    expect(
-      await screen.findByText('Job application saved successfully!')
-    ).not.toBeNull();
-    expect(handleClose).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(handleClose).toHaveBeenCalledTimes(1));
+    expect(screen.queryByRole('alert')).toBeNull();
   });
 });
 
@@ -114,7 +109,7 @@ describe('profile save', () => {
     expect(
       await screen.findByText('Failed to save the profile.')
     ).not.toBeNull();
-    expect(screen.queryByText('Profile saved successfully!')).toBeNull();
+    expect(screen.queryByText('Profile saved')).toBeNull();
   });
 });
 
@@ -157,7 +152,6 @@ describe('Q&A save', () => {
     expect(
       await screen.findByText('Error saving Q&A. Please try again.')
     ).not.toBeNull();
-    expect(screen.queryByText('Q&A updated successfully!')).toBeNull();
     expect(handleClose).not.toHaveBeenCalled();
   });
 });

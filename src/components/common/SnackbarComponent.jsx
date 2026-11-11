@@ -3,6 +3,10 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Portal from '@mui/material/Portal';
 
+// How long a message stays up. Errors stay until dismissed, so one is never
+// missed (WCAG 2.2.1: no time limit on reading what went wrong).
+export const AUTO_HIDE_MS = 4000;
+
 export default function SnackbarComponent({
   open,
   message,
@@ -10,6 +14,7 @@ export default function SnackbarComponent({
   onClose,
 }) {
   const ref = useRef(null);
+  const persistent = severity === 'error';
 
   // Dialogs hide the rest of the page from screen readers, and re-hide it
   // whenever one of them opens or closes, which can catch a message already
@@ -30,17 +35,36 @@ export default function SnackbarComponent({
     return () => observer.disconnect();
   }, [open, message]);
 
+  // A click elsewhere dismisses a passing message, but not an error.
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway' && persistent) return;
+    onClose?.(event, reason);
+  };
+
   // Portaled to the end of <body>, after any dialog, for the same reason.
+  // Bottom-left keeps it clear of dialog headers. On phones it spans the
+  // width, so it sits above the "New application" button there.
   return (
     <Portal>
       <Snackbar
         ref={ref}
         open={open}
-        autoHideDuration={3000}
-        onClose={onClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        autoHideDuration={persistent ? null : AUTO_HIDE_MS}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        sx={{ bottom: { xs: 88, sm: 24 } }}
       >
-        <Alert severity={severity} onClose={onClose} variant="filled">
+        <Alert
+          severity={severity}
+          onClose={onClose}
+          variant="outlined"
+          sx={{
+            bgcolor: 'background.paper',
+            boxShadow: 3,
+            alignItems: 'center',
+            minWidth: { sm: 288 },
+          }}
+        >
           {message}
         </Alert>
       </Snackbar>

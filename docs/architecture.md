@@ -10,7 +10,8 @@ The stack is React 19, Apollo Client 4, MUI 9 and Vite, in plain JavaScript.
 - `ThemeContextProvider`: MUI theme, light/dark mode (saved under the
   `theme` localStorage key; `index.html` applies it before React loads, so
   there is no light flash).
-- `SnackbarProvider`: the one app-wide message (`useSnackbar().showSnackbar`).
+- `SnackbarProvider`: the one app-wide toast (`useSnackbar().showSnackbar`),
+  for results with nothing else on screen to show them.
 - `AppDialogsProvider`: owns the header's dialogs (new application, bookmarks,
   Q&A, profile, interview list, offer list) and the header badge counts. Open
   them with `useAppDialogs()`, e.g. `openNewJobApplication()`.
@@ -55,21 +56,34 @@ the chunks when the browser is idle.
 
 ## Saving and confirming
 
+Show outcomes where they happen, not in a toast. A dialog closing or a list
+updating already says a save worked; a failure shows in the dialog's footer,
+by the button that caused it, and the dialog stays open so nothing typed is
+lost. Toasts are for what has nowhere else to show: a delete from a list (its
+confirm dialog has closed) and saving the profile (its dialog stays open).
+Errors in a toast stay up until dismissed.
+
 Use these hooks rather than calling mutations and the snackbar by hand:
 
-- `useAsyncAction()` → `run(action, { successMessage, errorMessage, onSuccess })`.
-  It shows the success message only after the action resolves, the error
-  message if it throws, and exposes `pending` for disabling buttons. On
-  failure, dialogs stay open so nothing typed is lost.
-- `useConfirmedAction({ action, successMessage, errorMessage, onSuccess })`
+- `useAsyncAction()` → `run(action, { errorMessage, successToast, errorToast, onSuccess })`,
+  plus `pending`, `error` and `clearError`. A failure sets `error` to
+  `errorMessage`; pass it to `CustomDialog`'s or `DialogFooter`'s `error`.
+  `successToast` / `errorToast` show a toast instead, only when asked.
+- `useConfirmedAction({ action, onSuccess, ...same options })`
   → `request(item)` opens the confirmation; spread `dialogProps` onto
-  `ConfirmDialog`.
+  `ConfirmDialog`. Also exposes `error` and `clearError`.
+- `useAutosave()` → `track(key, action, { errorMessage, onSuccess, retry })`,
+  `status` (`idle`, `saving`, `saved`, `error`), `error` and `retryAll()`.
+  For forms that save as you go: one footer status line instead of a
+  message per save, and a footer error with Retry.
 - `useDialog(refetch?)` → `{ open, item, handleOpen(item), handleClose }`.
   The item stays set while the dialog closes, so its content does not blank
   out mid-animation.
 
 Interviews save inline: a status change or calendar pick saves at once, typed
-text and dates save on blur, and fields left unchanged send nothing.
+text and dates save on blur, and fields left unchanged send nothing. The
+footer shows "Saving…" / "All changes saved"; a failed save, add or delete
+shows there with Retry, which sends the values on screen at that moment.
 
 ## Text and languages
 

@@ -57,7 +57,7 @@ export default function ProfileDialog({ profile, handleClose, open }) {
     );
 
   const [formData, setFormData] = useState(initialFormData);
-  const { run, pending: saving } = useAsyncAction();
+  const { run, pending: saving, error, clearError } = useAsyncAction();
 
   useEffect(() => {
     if (profile) {
@@ -81,8 +81,9 @@ export default function ProfileDialog({ profile, handleClose, open }) {
 
   const handleUpdateProfile = event => {
     event?.preventDefault();
+    // The dialog stays open after saving, so success needs a toast.
     run(() => updateProfile({ variables: { id: 1, ...formData } }), {
-      successMessage: t('dialogs.profile.success'),
+      successToast: t('dialogs.profile.success'),
       errorMessage: t('dialogs.profile.error'),
     });
   };
@@ -98,6 +99,8 @@ export default function ProfileDialog({ profile, handleClose, open }) {
       subtitle={t('dialogs.profile.subtitle')}
       saving={saving}
       title={t('dialogs.profile.title')}
+      error={error}
+      onErrorClose={clearError}
     >
       <DialogContent>
         {sections.map(section => (

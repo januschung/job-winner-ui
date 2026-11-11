@@ -22,13 +22,12 @@ export default function RecordFormDialog({
   updateMutation,
   refetchQueries,
   title,
-  successMessage,
   errorMessage,
   saveLabel,
 }) {
   const [formData, setFormData] = useState(() => blankForm(fields));
   const [errors, setErrors] = useState({});
-  const { run, pending } = useAsyncAction();
+  const { run, pending, error, clearError } = useAsyncAction();
   const [add] = useMutation(addMutation, { refetchQueries });
   const [update] = useMutation(updateMutation);
 
@@ -42,6 +41,7 @@ export default function RecordFormDialog({
         : blankForm(fields)
     );
     setErrors({});
+    clearError();
     // Not `fields`: callers pass a new array every render, and resetting on
     // each one would wipe what the user is typing.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,8 +67,8 @@ export default function RecordFormDialog({
     if (!validate()) return;
     const mutate = record ? update : add;
     const variables = { ...formData, ...(record && { id: record.id }) };
+    // On failure the dialog stays open, with the error in its footer.
     run(() => mutate({ variables }), {
-      successMessage,
       errorMessage,
       onSuccess: handleClose,
     });
@@ -83,6 +83,8 @@ export default function RecordFormDialog({
       saving={pending}
       saveLabel={saveLabel}
       title={title}
+      error={error}
+      onErrorClose={clearError}
     >
       <DialogContent>
         <Grid container spacing={2} sx={{ alignItems: 'center' }}>

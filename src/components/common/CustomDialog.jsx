@@ -28,6 +28,9 @@ export default function CustomDialog({
   saving = false,
   saveLabel,
   addLabel,
+  // A failed save, shown in the footer above the actions.
+  error = null,
+  onErrorClose,
 }) {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -87,7 +90,7 @@ export default function CustomDialog({
       </Box>
       {children}
       {(onCancel || onAdd || onSave) && (
-        <DialogFooter>
+        <DialogFooter error={error} onErrorClose={onErrorClose}>
           {onCancel && (
             <Button color="inherit" onClick={onClose}>
               {t(onSave ? 'common.cancel' : 'common.close')}

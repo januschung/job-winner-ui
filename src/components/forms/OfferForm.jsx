@@ -25,7 +25,12 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
   });
   const [errors, setErrors] = useState({});
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const { run, pending: saving } = useAsyncAction();
+  const {
+    run,
+    pending: saving,
+    error: saveError,
+    clearError,
+  } = useAsyncAction();
   const { t } = useTranslation();
 
   const {
@@ -101,11 +106,6 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
           ? updateOffer({ variables: { id: savedOffer.id, ...fields } })
           : addOffer({ variables: fields }),
       {
-        successMessage: t(
-          savedOffer
-            ? 'forms.offerForm.messages.updateSuccess'
-            : 'forms.offerForm.messages.addSuccess'
-        ),
         errorMessage: t('forms.offerForm.messages.error'),
         onSuccess: handleClose,
       }
@@ -124,7 +124,6 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
 
   const remove = useConfirmedAction({
     action: id => deleteOffer({ variables: { id } }),
-    successMessage: t('forms.offerForm.messages.deleteSuccess'),
     errorMessage: t('forms.offerForm.messages.deleteError'),
     onSuccess: resetForm,
   });
@@ -265,7 +264,13 @@ export default function OfferForm({ jobApplicationId, handleClose }) {
           )}
         </Grid>
       </DialogContent>
-      <DialogFooter>
+      <DialogFooter
+        error={saveError ?? remove.error}
+        onErrorClose={() => {
+          clearError();
+          remove.clearError();
+        }}
+      >
         <Button color="inherit" onClick={handleClose} disabled={isLoading}>
           {t('common.cancel')}
         </Button>
